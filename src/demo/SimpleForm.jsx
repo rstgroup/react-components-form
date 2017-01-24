@@ -7,7 +7,8 @@ const testSchema = new Schema({
         type: String
     },
     message:{
-        type: String
+        type: String,
+        required: true
     }
 });
 

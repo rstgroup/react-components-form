@@ -3,6 +3,7 @@ import { pick, difference } from 'lodash';
 const defaultMessages = {
     notDefinedKey(key) { return `Key "${key}" is not defined in schema`; },
     modelIsUndefined() { return `Validated model is undefined`; },
+    validateRequired(key) { return `Field "${key}" is required`; },
     validateString(key) { return `Field "${key}" is not a String`; },
     validateNumber(key) { return `Field "${key}" is not a Number`; },
     validateObject(key) { return `Field "${key}" is not a Object`; },
@@ -85,11 +86,17 @@ class Schema {
             } else {
                 this.validateType(fieldType, value, key);
             }
-            this.validateRequired()
+            this.validateRequired(fieldSchema, value, key);
             if (fieldSchema.validators) {
                 console.log('field has validators', fieldSchema.validators);
             }
         })
+    }
+
+    validateRequired(fieldSchema, value, key) {
+        if (fieldSchema.required && (!value || value.length === 0)) {
+            this.setError(key, this.messages.validateRequired(key));
+        }
     }
 
     validateType(type, value, key) {
