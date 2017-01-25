@@ -1,7 +1,7 @@
 import React from 'react';
 import FieldConnect from './FieldConnect';
 
-const TextField = ({
+const CheckboxField = ({
     className,
     onChange,
     name,
@@ -14,12 +14,13 @@ const TextField = ({
     <div className={className}>
         {label && <label>{label}</label>}
         <input
-            type={type}
+            type="checkbox"
+            checked={value}
             name={name}
-            onChange={(e) => onChange(e.target.value)}
-            value={value}
+            onChange={(e) => onChange(!e.target.value)}
+            value={value ? 'true' : false}
         />
     </div>
 );
 
-export default FieldConnect(TextField);
+export default FieldConnect(CheckboxField);

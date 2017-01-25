@@ -1,5 +1,12 @@
 import React from 'react';
-import { Form, TextField, ObjectField, SubmitField } from '../components';
+import {
+    Form,
+    TextField,
+    NumberField,
+    SelectField,
+    SubmitField,
+    CheckboxField
+} from '../components';
 import Schema from '../schema';
 
 const testSchema = new Schema({
@@ -12,27 +19,40 @@ const testSchema = new Schema({
     }
 });
 
-console.log(testSchema.name);
-
 const simpleSchema = new Schema({
-    title:{
+    textField:{
         type: String,
-        label: 'Title'
+        label: 'Text'
     },
-    description:{
+    numberField:{
+        type: Number,
+        label: 'Number'
+    },
+    hiddenField:{
         type: String,
-        label: 'Description'
+        label: 'Hidden'
     },
-    test:{
-        type: testSchema,
-        label: 'Test'
+    dateField:{
+        type: String,
+        label: 'Date'
+    },
+    selectField:{
+        type: String,
+        label: 'Select',
+        options: [
+            'test1',
+            'test2',
+            'test3',
+            'test4',
+            'test5'
+        ]
+    },
+    checkboxField:{
+        type: Boolean,
+        label: 'Checkbox'
     }
 });
 
-const model = {
-    title: 'test',
-    description: 'dddddd'
-};
 
 class SimpleForm extends React.Component {
     constructor(props) {
@@ -43,14 +63,16 @@ class SimpleForm extends React.Component {
         return (
             <Form
                 schema={simpleSchema}
-                model={model}
                 onSubmit={(data) => console.log('success', data)}
-                onError={(data) => console.log('error', data)}
+                onError={(errors, data) => console.log('error', errors, data)}
             >
-                <TextField name="title" />
-                <TextField name="description" />
-                <ObjectField name="test" />
-                <SubmitField value="Sumit" />
+                <TextField name="textField" type="text" />
+                <NumberField name="numberField" />
+                <TextField name="hiddenField" type="hidden" value="test" />
+                <TextField name="dateField" type="date" />
+                <SelectField name="selectField" />
+                <CheckboxField name="checkboxField" />
+                <SubmitField value="Submit" />
             </Form>
         );
     }

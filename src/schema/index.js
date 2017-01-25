@@ -7,7 +7,8 @@ const defaultMessages = {
     validateString(key) { return `Field "${key}" is not a String`; },
     validateNumber(key) { return `Field "${key}" is not a Number`; },
     validateObject(key) { return `Field "${key}" is not a Object`; },
-    validateArray(key) { return `Field "${key}" is not a Array`; }
+    validateArray(key) { return `Field "${key}" is not a Array`; },
+    validateBoolean(key) { return `Field "${key}" is not a Boolean`; }
 };
 
 class Schema {
@@ -20,14 +21,46 @@ class Schema {
         this.validateTypeNumber = this.validateTypeNumber.bind(this);
         this.validateTypeObject = this.validateTypeObject.bind(this);
         this.validateTypeArray = this.validateTypeArray.bind(this);
+        this.validateTypeBoolean = this.validateTypeBoolean.bind(this);
         this.validateTypeSchema = this.validateTypeSchema.bind(this);
 
         this.typesValidators = {
             String: this.validateTypeString,
             Number: this.validateTypeNumber,
             Object: this.validateTypeObject,
-            Array: this.validateTypeArray
+            Array: this.validateTypeArray,
+            Boolean: this.validateTypeBoolean
         };
+    }
+
+    getDefaultValues() {
+        const fieldsKeys = Object.keys(this.schema);
+        const model = {};
+        fieldsKeys.forEach(key => {
+            const field = this.getField(key);
+            if (field.type.constructor.name === 'Schema') {
+                model[key] = field.type.getDefaultValues();
+                return;
+            }
+            if (field.defaultValue){
+                model[key] = field.defaultValue;
+                return;
+            }
+            if (field.options){
+                model[key] = field.options[0];
+                return;
+            }
+            if (field.type.name === 'Number'){
+                model[key] = NaN;
+                return;
+            }
+            if (field.type.name === 'Boolean'){
+                model[key] = false;
+                return;
+            }
+            model[key] = '';
+        });
+        return model;
     }
 
     getField(name) {
@@ -130,6 +163,12 @@ class Schema {
     validateTypeArray(value, key) {
         if (Array.isArray(value)) return true;
         this.setError(key, this.messages.validateArray(key));
+        return false;
+    }
+
+    validateTypeBoolean(value, key) {
+        if(typeof value === 'boolean') return true;
+        this.setError(key, this.messages.validateBoolean(key));
         return false;
     }
 

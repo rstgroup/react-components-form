@@ -11,6 +11,13 @@ const FieldConnect = (Component) => {
             this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
         }
 
+        componentWillMount() {
+            const { name, value, options } = this.props;
+            const { setModel } = this.context;
+            if (name && value) setModel(name, value);
+            if (name && !value && options) setModel(name, options[0]);
+        }
+
         onChangeData(value) {
             const { name } = this.props;
             const { setModel } = this.context;

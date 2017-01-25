@@ -1,11 +1,10 @@
 import React from 'react';
 import FieldConnect from './FieldConnect';
 
-const TextField = ({
+const NumberField = ({
     className,
     onChange,
     name,
-    type = 'text',
     errors,
     error,
     value,
@@ -14,12 +13,12 @@ const TextField = ({
     <div className={className}>
         {label && <label>{label}</label>}
         <input
-            type={type}
+            type="number"
             name={name}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onChange(parseInt(e.target.value))}
             value={value}
         />
     </div>
 );
 
-export default FieldConnect(TextField);
+export default FieldConnect(NumberField);

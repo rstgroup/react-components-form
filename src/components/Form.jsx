@@ -4,8 +4,8 @@ class Form extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            model: props.model || {},
             schema: props.schema || {},
+            model: props.model || props.schema.getDefaultValues(),
             errors: {}
         };
         this.setModel = this.setModel.bind(this);
@@ -40,7 +40,7 @@ class Form extends React.Component {
         this.setState({ errors });
 
         if (Object.keys(errors).length > 0) {
-            if (this.props.onError) this.props.onError(errors);
+            if (this.props.onError) this.props.onError(errors, model);
             return;
         }
         if (this.props.onSubmit) this.props.onSubmit(model);
