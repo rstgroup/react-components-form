@@ -1,14 +1,15 @@
-import { pick, difference } from 'lodash';
+import { pick, difference, find } from 'lodash';
 
 const defaultMessages = {
-    notDefinedKey(key) { return `Key "${key}" is not defined in schema`; },
-    modelIsUndefined() { return `Validated model is undefined`; },
-    validateRequired(key) { return `Field "${key}" is required`; },
-    validateString(key) { return `Field "${key}" is not a String`; },
-    validateNumber(key) { return `Field "${key}" is not a Number`; },
-    validateObject(key) { return `Field "${key}" is not a Object`; },
-    validateArray(key) { return `Field "${key}" is not a Array`; },
-    validateBoolean(key) { return `Field "${key}" is not a Boolean`; }
+    notDefinedKey(key) { return `Key '${key}' is not defined in schema`; },
+    modelIsUndefined() { return 'Validated model is undefined'; },
+    validateRequired(key) { return `Field '${key}' is required`; },
+    validateString(key) { return `Field '${key}' is not a String`; },
+    validateNumber(key) { return `Field '${key}' is not a Number`; },
+    validateObject(key) { return `Field '${key}' is not a Object`; },
+    validateArray(key) { return `Field '${key}' is not a Array`; },
+    validateBoolean(key) { return `Field '${key}' is not a Boolean`; },
+    validateDate(key) { return `Field '${key}' is not a Date`; },
 };
 
 class Schema {
@@ -22,6 +23,7 @@ class Schema {
         this.validateTypeObject = this.validateTypeObject.bind(this);
         this.validateTypeArray = this.validateTypeArray.bind(this);
         this.validateTypeBoolean = this.validateTypeBoolean.bind(this);
+        this.validateTypeDate = this.validateTypeDate.bind(this);
         this.validateTypeSchema = this.validateTypeSchema.bind(this);
 
         this.typesValidators = {
@@ -29,14 +31,15 @@ class Schema {
             Number: this.validateTypeNumber,
             Object: this.validateTypeObject,
             Array: this.validateTypeArray,
-            Boolean: this.validateTypeBoolean
+            Boolean: this.validateTypeBoolean,
+            Date: this.validateTypeDate,
         };
     }
 
     getDefaultValues() {
         const fieldsKeys = Object.keys(this.schema);
         const model = {};
-        fieldsKeys.forEach(key => {
+        fieldsKeys.forEach((key) => {
             const field = this.getField(key);
             if (field.type.constructor.name === 'Schema') {
                 model[key] = field.type.getDefaultValues();
@@ -107,7 +110,7 @@ class Schema {
     checkTypesAndValidators(model) {
         const schemaKeys = Object.keys(this.schema);
         const validatedObject = pick(model, schemaKeys);
-        schemaKeys.forEach(key => {
+        schemaKeys.forEach((key) => {
             const value = validatedObject[key];
             const fieldSchema = this.schema[key];
             const isArrayOfType = Array.isArray(fieldSchema.type);
@@ -121,7 +124,11 @@ class Schema {
             }
             this.validateRequired(fieldSchema, value, key);
             if (fieldSchema.validators) {
-                console.log('field has validators', fieldSchema.validators);
+                const failedValidator = find(
+                    fieldSchema.validators,
+                    v => !v.validator(value, fieldSchema.type)
+                );
+                if (failedValidator) this.setError(key, failedValidator.errorMessage);
             }
         })
     }
@@ -172,17 +179,23 @@ class Schema {
         return false;
     }
 
+    validateTypeDate(value, key) {
+        if(value instanceof Date) return true;
+        this.setError(key, this.messages.validateDate(key));
+        return false;
+    }
+
     validateTypeSchema(value, subSchemaKey, type) {
-        if(typeof type.validate === 'function'){
+        if (typeof type.validate === 'function') {
             const errors = type.validate(value) || {};
             const keys = Object.keys(errors) || [];
-            if(keys.length === 0) return true;
-            keys.forEach(key => {
+            if (keys.length === 0) return true;
+            keys.forEach((key) => {
                 errors[key].forEach(error => this.setError(subSchemaKey, error));
             });
             return false;
         }
-        throw Error(`SubSchema on key "${subSchemaKey}" don't have validate method`);
+        throw Error(`SubSchema on key '${subSchemaKey}' don't have validate method`);
     }
 }
 
