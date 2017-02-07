@@ -9,7 +9,7 @@ const defaultMessages = {
     validateObject(key) { return `Field '${key}' is not a Object`; },
     validateArray(key) { return `Field '${key}' is not a Array`; },
     validateBoolean(key) { return `Field '${key}' is not a Boolean`; },
-    validateDate(key) { return `Field '${key}' is not a Date`; },
+    validateDate(key) { return `Field '${key}' is not a Date`; }
 };
 
 class Schema {
@@ -41,7 +41,7 @@ class Schema {
         const model = {};
         fieldsKeys.forEach((key) => {
             const field = this.getField(key);
-            if (field.type.constructor.name === 'Schema') {
+            if (field.type instanceof Schema) {
                 model[key] = field.type.getDefaultValues();
                 return;
             }
@@ -99,7 +99,7 @@ class Schema {
     checkKeysDiff(model) {
         const modelKeys = Object.keys(model);
         const schemaKeys = Object.keys(this.schema);
-        const keysDiff = difference(modelKeys, schemaKeys) || [];
+        const keysDiff = difference(modelKeys, schemaKeys);
         if (keysDiff.length > 0) {
             keysDiff.forEach(key => {
                 this.setError(key, this.messages.notDefinedKey(key));
@@ -143,10 +143,10 @@ class Schema {
         if (typeof this.typesValidators[type.name] === 'function') {
             return this.typesValidators[type.name](value, key, type);
         }
-        if (type.constructor.name === 'Schema') {
+        if (type instanceof Schema) {
             return this.validateTypeSchema(value, key, type)
         }
-        throw Error(`Unrecognized type ${type.name}`);
+        throw new Error(`Unrecognized type ${type.name}`);
     }
 
     validateTypeString(value, key) {
@@ -186,16 +186,13 @@ class Schema {
     }
 
     validateTypeSchema(value, subSchemaKey, type) {
-        if (typeof type.validate === 'function') {
-            const errors = type.validate(value) || {};
-            const keys = Object.keys(errors) || [];
-            if (keys.length === 0) return true;
-            keys.forEach((key) => {
-                errors[key].forEach(error => this.setError(subSchemaKey, error));
-            });
-            return false;
-        }
-        throw Error(`SubSchema on key '${subSchemaKey}' don't have validate method`);
+        const errors = type.validate(value);
+        const keys = Object.keys(errors);
+        if (keys.length === 0) return true;
+        keys.forEach((key) => {
+            errors[key].forEach(error => this.setError(subSchemaKey, error));
+        });
+        return false;
     }
 }
 

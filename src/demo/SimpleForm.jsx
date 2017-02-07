@@ -9,16 +9,6 @@ import {
 } from '../components';
 import Schema from '../schema';
 
-const testSchema = new Schema({
-    data:{
-        type: String
-    },
-    message:{
-        type: String,
-        required: true
-    }
-});
-
 const simpleSchema = new Schema({
     textField:{
         type: String,
@@ -49,7 +39,8 @@ const simpleSchema = new Schema({
     },
     checkboxField:{
         type: Boolean,
-        label: 'Checkbox'
+        label: 'Checkbox',
+        required: true
     }
 });
 
