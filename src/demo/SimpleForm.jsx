@@ -7,7 +7,7 @@ import {
     SubmitField,
     CheckboxField
 } from '../components';
-import Schema from '../schema';
+import Schema from 'form-schema-validation';
 
 const simpleSchema = new Schema({
     textField:{
