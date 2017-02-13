@@ -6,3 +6,4 @@ export { default as NumberField } from './NumberField';
 export { default as SubmitField } from './SubmitField';
 export { default as SelectField } from './SelectField';
 export { default as CheckboxField } from './CheckboxField';
+export { default as ObjectField } from './ObjectField';

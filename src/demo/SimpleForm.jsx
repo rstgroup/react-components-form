@@ -7,9 +7,20 @@ import {
     DateField,
     SelectField,
     SubmitField,
-    CheckboxField
+    CheckboxField,
+    ObjectField
 } from '../components';
 import Schema from 'form-schema-validation';
+
+const personSchema = new Schema({
+    name:{
+        type: String,
+        required: true
+    },
+    surname: {
+        type: String
+    }
+});
 
 const simpleSchema = new Schema({
     textField:{
@@ -31,6 +42,10 @@ const simpleSchema = new Schema({
     dateField:{
         type: Date,
         label: 'Date'
+    },
+    person:{
+        type: personSchema,
+        label: 'Person'
     },
     selectField:{
         type: String,
@@ -73,6 +88,10 @@ class SimpleForm extends React.Component {
                 <DateField name="dateField" />
                 <SelectField name="selectField" />
                 <CheckboxField name="checkboxField" />
+                <ObjectField name="person">
+                    <TextField name="name" />
+                    <TextField name="surname" />
+                </ObjectField>
                 <SubmitField value="Submit" />
                 <div>
                     <h4>Saved data:</h4>

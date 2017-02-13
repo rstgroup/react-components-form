@@ -18,6 +18,12 @@ const FieldConnect = (Component) => {
             if (name && !value && options) setModel(name, options[0]);
         }
 
+        getChildContext() {
+            return {
+                getSchema: this.context.getSchema
+            }
+        }
+
         onChangeData(value) {
             const { name } = this.props;
             const { setModel } = this.context;
@@ -70,6 +76,10 @@ const FieldConnect = (Component) => {
         getSchema: PropTypes.func,
         submitForm: PropTypes.func,
         getErrors: PropTypes.func
+    };
+
+    FieldConnector.childContextTypes = {
+        getSchema: PropTypes.func
     };
 
     return FieldConnector;
