@@ -1,12 +1,12 @@
 {
-  "name": "mprzodala-react-forms",
+  "name": "react-components-form",
   "version": "1.0.0",
-  "description": "React forms components",
+  "description": "React form components",
   "main": "./libs/main.js",
   "scripts": {
     "start": "webpack-dev-server --hot --progress --colors",
     "test": "jest",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack -p --config webpack.config.js"
   },
   "keywords": [
     "react",
@@ -25,15 +25,15 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "css-loader": "^0.26.1",
-    "form-schema-validation": "^1.0.5",
+    "form-schema-validation": "^1.0.9",
     "lodash": "^4.17.3",
     "moment": "^2.17.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "style-loader": "^0.13.1",
     "uniqid": "^4.1.0",
-    "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2"
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.21.0",
@@ -50,8 +50,8 @@
     "react-dom": "^15.4.1",
     "react-test-renderer": "^15.4.1",
     "style-loader": "^0.13.1",
-    "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2"
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.2.0"
   },
   "jest": {
     "verbose": true,

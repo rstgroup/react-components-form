@@ -2,7 +2,9 @@ import React from 'react';
 import {
     Form,
     TextField,
+    TextareaField,
     NumberField,
+    DateField,
     SelectField,
     SubmitField,
     CheckboxField
@@ -14,6 +16,10 @@ const simpleSchema = new Schema({
         type: String,
         label: 'Text'
     },
+    textareaField:{
+        type: String,
+        label: 'Textarea'
+    },
     numberField:{
         type: Number,
         label: 'Number'
@@ -23,7 +29,7 @@ const simpleSchema = new Schema({
         label: 'Hidden'
     },
     dateField:{
-        type: String,
+        type: Date,
         label: 'Date'
     },
     selectField:{
@@ -48,22 +54,30 @@ const simpleSchema = new Schema({
 class SimpleForm extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            data: {}
+        };
     }
 
     render() {
         return (
             <Form
                 schema={simpleSchema}
-                onSubmit={(data) => console.log('success', data)}
+                onSubmit={data => this.setState({data})}
                 onError={(errors, data) => console.log('error', errors, data)}
             >
                 <TextField name="textField" type="text" />
+                <TextareaField name="textareaField" />
                 <NumberField name="numberField" />
                 <TextField name="hiddenField" type="hidden" value="test" />
-                <TextField name="dateField" type="date" />
+                <DateField name="dateField" />
                 <SelectField name="selectField" />
                 <CheckboxField name="checkboxField" />
                 <SubmitField value="Submit" />
+                <div>
+                    <h4>Saved data:</h4>
+                    {JSON.stringify(this.state.data)}
+                </div>
             </Form>
         );
     }

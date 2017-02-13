@@ -1,14 +1,13 @@
 var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: ['babel-polyfill', "./src/index.js"],
     output: {
-        path: './libs/',
+        path: '/libs/',
         filename: "main.js"
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['.js', '.jsx']
     },
     module: {
         loaders: [
@@ -26,9 +25,6 @@ module.exports = {
             }
         ]
     },
-    plugins: [
-        new ExtractTextPlugin("[name].css")
-    ],
     devServer: {
         historyApiFallback: true
     }
