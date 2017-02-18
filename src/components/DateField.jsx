@@ -1,5 +1,6 @@
 import React from 'react';
 import FieldConnect from './FieldConnect';
+import ErrorField from './ErrorField';
 
 const getDateString = (date = new Date()) => {
     const day = date.getDate();
@@ -34,6 +35,7 @@ const TextField = ({
             placeholder={placeholder}
             className={className}
         />
+        {error && <ErrorField errors={errors} />}
     </div>
 );
 

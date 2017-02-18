@@ -8,8 +8,7 @@ import fields,{
     SubmitField,
 } from '../../components/styled/Bootstrap';
 import Schema from 'form-schema-validation';
-
-console.log(TextField);
+import { listWrapper, objectFormField, objectFieldClassName } from '../demo.css';
 
 const personSchema = new Schema({
     name:{
@@ -71,12 +70,17 @@ class SimpleForm extends React.Component {
                 onError={(errors, data) => console.log('error', errors, data)}
                 className={this.props.className}
             >
+                <h2>POST FORM</h2>
                 <TextField name="title" type="text" />
                 <SelectField name="category" options={options} />
-                <ListField name="authors">
-                    <ObjectField>
-                        <TextField name="name" />
-                        <TextField name="surname" />
+                <ListField name="authors" className={listWrapper}>
+                    <ObjectField wrapperClassName={objectFieldClassName}>
+                        <div className={objectFormField}>
+                            <TextField name="name" placeholder="name"/>
+                        </div>
+                        <div>
+                            <TextField name="surname" placeholder="surname"/>
+                        </div>
                     </ObjectField>
                 </ListField>
                 <SubmitField value="Submit" />

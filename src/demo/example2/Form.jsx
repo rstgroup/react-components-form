@@ -82,6 +82,7 @@ class Example2 extends React.Component {
                 onError={(errors, data) => console.log('error', errors, data)}
                 className={this.props.className}
             >
+                <h2>ALL FIELDS FORM</h2>
                 <TextField name="textField" type="text" />
                 <TextareaField name="textareaField" />
                 <NumberField name="numberField" />
@@ -90,8 +91,8 @@ class Example2 extends React.Component {
                 <SelectField name="selectField" />
                 <CheckboxField name="checkboxField" />
                 <ObjectField name="person">
-                    <TextField name="name" />
-                    <TextField name="surname" />
+                    <TextField name="name" placeholder="name"/>
+                    <TextField name="surname" placeholder="surname"/>
                 </ObjectField>
                 <SubmitField value="Submit" />
                 <div>

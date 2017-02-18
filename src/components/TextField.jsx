@@ -1,5 +1,6 @@
 import React from 'react';
 import FieldConnect from './FieldConnect';
+import ErrorField from './ErrorField';
 
 const TextField = ({
     wrapperClassName,
@@ -23,6 +24,7 @@ const TextField = ({
             placeholder={placeholder}
             className={className}
         />
+        {error && <ErrorField errors={errors} />}
     </div>
 );
 

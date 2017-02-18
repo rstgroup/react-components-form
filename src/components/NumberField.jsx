@@ -1,5 +1,6 @@
 import React from 'react';
 import FieldConnect from './FieldConnect';
+import ErrorField from './ErrorField';
 
 const NumberField = ({
     wrapperClassName,
@@ -22,6 +23,7 @@ const NumberField = ({
             placeholder={placeholder}
             className={className}
         />
+        {error && <ErrorField errors={errors} />}
     </div>
 );
 

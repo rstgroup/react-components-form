@@ -1,6 +1,7 @@
 import React from 'react';
 import Example1 from './example1/Form';
 import Example2 from './example2/Form';
+import Example3 from './example3/Form';
 import { row, column, form } from './demo.css';
 
 const Demo = () => (
@@ -9,6 +10,11 @@ const Demo = () => (
             <div className={column}>
                 <Example1 className={form} />
             </div>
+            <div className={column}>
+                <Example3 className={form} />
+            </div>
+        </div>
+        <div className={row}>
             <div className={column}>
                 <Example2 className={form} />
             </div>

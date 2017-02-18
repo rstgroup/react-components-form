@@ -1,9 +1,9 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ['babel-polyfill', "./src/demo/index.jsx"],
+    entry: ['babel-polyfill', "./src/index.js"],
     output: {
-        path: '/libs/',
+        path: 'libs/',
         filename: "main.js"
     },
     resolve: {

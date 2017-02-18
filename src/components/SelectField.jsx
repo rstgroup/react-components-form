@@ -1,5 +1,6 @@
 import React from 'react';
 import FieldConnect from './FieldConnect';
+import ErrorField from './ErrorField';
 
 const SelectField = ({
     wrapperClassName,
@@ -31,6 +32,7 @@ const SelectField = ({
                 </option>
             ))}
         </select>
+        {error && <ErrorField errors={errors} />}
     </div>
 );
 

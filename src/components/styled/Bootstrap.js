@@ -21,6 +21,9 @@ const Fields = FieldRestyle({
     },
     CheckboxField: {
         className: 'form-control'
+    },
+    ListField: {
+        className: 'form-control'
     }
 });
 

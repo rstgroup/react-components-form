@@ -1,5 +1,6 @@
 import React from 'react';
 import FieldConnect from './FieldConnect';
+import ErrorField from './ErrorField';
 
 class CheckboxField extends React.Component {
     constructor(props) {
@@ -42,6 +43,7 @@ class CheckboxField extends React.Component {
                     placeholder={placeholder}
                     className={className}
                 />
+                {error && <ErrorField errors={errors} />}
             </div>
         );
     }

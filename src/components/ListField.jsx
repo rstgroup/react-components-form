@@ -68,10 +68,14 @@ class ListField extends React.Component {
 
     getList(children) {
         const list = [];
+        const {
+            name,
+            removeButton: {className, value} = {}
+        } = this.props;
 
         for(let key = 0; key < this.state.listLength; key += 1){
             const child = React.cloneElement(children, {
-                name: `${this.props.name}-${key}`,
+                name: `${name}-${key}`,
                 value: this.state.model[key],
                 key
             });
@@ -79,7 +83,13 @@ class ListField extends React.Component {
             list.push(
                <div key={key}>
                    <div>{child}</div>
-                   <div><span onClick={() => this.removeListElement(key)}>remove</span></div>
+                   <div>
+                       <span
+                           onClick={() => this.removeListElement(key)}
+                           className={className}
+                       >
+                           {value || 'Remove'}
+                       </span></div>
                </div>
             );
         }
@@ -87,12 +97,23 @@ class ListField extends React.Component {
     }
 
     render() {
-        const { children, className, wrapperClassName, label } = this.props;
+        const {
+            children,
+            className,
+            wrapperClassName,
+            label,
+            addButton = {}
+        } = this.props;
         return (
             <div className={wrapperClassName}>
                 {label && <label>{label}</label>}
                 <div className={className}>{this.getList(children)}</div>
-                <span onClick={this.addListElement}>dodaj</span>
+                <span
+                    onClick={this.addListElement}
+                    className={addButton.className}
+                >
+                    {addButton.value || 'Add'}
+                </span>
             </div>
         );
     }
