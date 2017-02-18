@@ -22,21 +22,25 @@ class CheckboxField extends React.Component {
 
     render(){
         const {
+            wrapperClassName,
             className,
             name,
             errors,
             error,
             value,
-            label
+            label,
+            placeholder
         } = this.props;
         return (
-            <div className={className}>
+            <div className={wrapperClassName}>
                 {label && <label>{label}</label>}
                 <input
                     type="checkbox"
                     checked={!!value}
                     name={name}
                     onClick={this.toggleValue}
+                    placeholder={placeholder}
+                    className={className}
                 />
             </div>
         );

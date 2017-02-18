@@ -2,6 +2,7 @@ import React from 'react';
 import FieldConnect from './FieldConnect';
 
 const TextField = ({
+    wrapperClassName,
     className,
     onChange,
     name,
@@ -9,15 +10,18 @@ const TextField = ({
     errors,
     error,
     value,
-    label
+    label,
+    placeholder
 }) => (
-    <div className={className}>
+    <div className={wrapperClassName}>
         {label && <label>{label}</label>}
         <input
             type={type}
             name={name}
             onChange={(e) => onChange(e.target.value)}
             value={value}
+            placeholder={placeholder}
+            className={className}
         />
     </div>
 );

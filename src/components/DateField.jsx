@@ -13,6 +13,7 @@ const getDateString = (date = new Date()) => {
 };
 
 const TextField = ({
+    wrapperClassName,
     className,
     onChange,
     name,
@@ -20,15 +21,18 @@ const TextField = ({
     errors,
     error,
     value,
-    label
+    label,
+    placeholder
 }) => (
-    <div className={className}>
+    <div className={wrapperClassName}>
         {label && <label>{label}</label>}
         <input
             type='date'
             name={name}
             onChange={(e) => onChange(new Date(e.target.value))}
             value={getDateString(value)}
+            placeholder={placeholder}
+            className={className}
         />
     </div>
 );

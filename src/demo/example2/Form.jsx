@@ -9,7 +9,7 @@ import {
     SubmitField,
     CheckboxField,
     ObjectField
-} from '../components';
+} from '../../components';
 import Schema from 'form-schema-validation';
 
 const personSchema = new Schema({
@@ -22,7 +22,7 @@ const personSchema = new Schema({
     }
 });
 
-const simpleSchema = new Schema({
+const exampleSchema = new Schema({
     textField:{
         type: String,
         label: 'Text'
@@ -66,7 +66,7 @@ const simpleSchema = new Schema({
 });
 
 
-class SimpleForm extends React.Component {
+class Example2 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -77,9 +77,10 @@ class SimpleForm extends React.Component {
     render() {
         return (
             <Form
-                schema={simpleSchema}
+                schema={exampleSchema}
                 onSubmit={data => this.setState({data})}
                 onError={(errors, data) => console.log('error', errors, data)}
+                className={this.props.className}
             >
                 <TextField name="textField" type="text" />
                 <TextareaField name="textareaField" />
@@ -102,4 +103,4 @@ class SimpleForm extends React.Component {
     }
 }
 
-export default SimpleForm;
+export default Example2;

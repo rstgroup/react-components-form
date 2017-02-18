@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom';
-import SimpleForm from './SimpleForm';
+import Demo from './Demo';
 
 ReactDOM.render(
-    <SimpleForm />,
+    <Demo />,
     document.getElementById('app')
 );

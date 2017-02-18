@@ -2,6 +2,7 @@ import React from 'react';
 import FieldConnect from './FieldConnect';
 
 const SelectField = ({
+    wrapperClassName,
     className,
     onChange,
     name,
@@ -9,14 +10,17 @@ const SelectField = ({
     error,
     options = [],
     value,
-    label
+    label,
+    placeholder
 }) => (
-    <div className={className}>
+    <div className={wrapperClassName}>
         {label && <label>{label}</label>}
         <select
             name={name}
             onChange={(e) => onChange(e.target.value)}
             value={value}
+            placeholder={placeholder}
+            className={className}
         >
             {options.map(option => (
                 <option

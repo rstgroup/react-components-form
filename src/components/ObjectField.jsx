@@ -33,7 +33,8 @@ class ObjectField extends React.Component {
     }
 
     getSchema(name) {
-        return this.state.schema.getField(name);
+        if(!Array.isArray(this.state.schema)) return this.state.schema.getField(name);
+        return this.state.schema[0].getField(name);
     }
 
     getErrors(name) {
@@ -50,9 +51,9 @@ class ObjectField extends React.Component {
     }
 
     render() {
-        const { children, className } = this.props;
+        const { children, wrapperClassName } = this.props;
         return (
-            <div className={className}>
+            <div className={wrapperClassName}>
                 {children}
             </div>
         );

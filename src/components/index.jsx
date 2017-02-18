@@ -7,3 +7,4 @@ export { default as SubmitField } from './SubmitField';
 export { default as SelectField } from './SelectField';
 export { default as CheckboxField } from './CheckboxField';
 export { default as ObjectField } from './ObjectField';
+export { default as ListField } from './ListField';
