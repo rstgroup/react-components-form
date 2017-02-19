@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-    Form,
-    TextField,
-    SubmitField,
-} from '../../components/styled/Bootstrap';
 import Schema from 'form-schema-validation';
+import { Form, TextField, SubmitField } from '../../components/styled/Bootstrap';
 
 const loginSchema = new Schema({
     login:{
@@ -17,22 +13,16 @@ const loginSchema = new Schema({
     }
 });
 
-const model = {
-    login: 'maniek',
-    password: 'maniek123'
-};
-
 const LoginForm  = () => (
     <Form
         schema={loginSchema}
-        model={model}
         onSubmit={data => console.log(data)}
         onError={(errors, data) => console.log('error', errors, data)}
     >
-        <h2>LOGIN FORM</h2>
+        <h4>LOGIN FORM</h4>
         <TextField name="login" label="Login" type="text" />
-        <TextField name="password" label="Login" type="text" />
-        <SubmitField value="Submit" />
+        <TextField name="password" label="Password" type="text" />
+        <SubmitField value="Login" />
     </Form>
 );
 

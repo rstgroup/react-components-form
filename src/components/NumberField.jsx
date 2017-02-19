@@ -11,7 +11,8 @@ const NumberField = ({
     error,
     value,
     label,
-    placeholder
+    placeholder,
+    errorStyles = {}
 }) => (
     <div className={wrapperClassName}>
         {label && <label>{label}</label>}
@@ -23,7 +24,7 @@ const NumberField = ({
             placeholder={placeholder}
             className={className}
         />
-        {error && <ErrorField errors={errors} />}
+        {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
 );
 

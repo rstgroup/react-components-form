@@ -80,9 +80,8 @@ class Example2 extends React.Component {
                 schema={exampleSchema}
                 onSubmit={data => this.setState({data})}
                 onError={(errors, data) => console.log('error', errors, data)}
-                className={this.props.className}
             >
-                <h2>ALL FIELDS FORM</h2>
+                <h4>ALL FIELDS FORM</h4>
                 <TextField name="textField" type="text" />
                 <TextareaField name="textareaField" />
                 <NumberField name="numberField" />

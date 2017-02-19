@@ -30,20 +30,23 @@ class CheckboxField extends React.Component {
             error,
             value,
             label,
-            placeholder
+            placeholder,
+            errorStyles = {}
         } = this.props;
         return (
             <div className={wrapperClassName}>
-                {label && <label>{label}</label>}
-                <input
-                    type="checkbox"
-                    checked={!!value}
-                    name={name}
-                    onClick={this.toggleValue}
-                    placeholder={placeholder}
-                    className={className}
-                />
-                {error && <ErrorField errors={errors} />}
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={!!value}
+                        name={name}
+                        onClick={this.toggleValue}
+                        placeholder={placeholder}
+                        className={className}
+                    />
+                    {label}
+                </label>
+                {error && <ErrorField errors={errors} {...errorStyles} />}
             </div>
         );
     }

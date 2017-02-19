@@ -1,29 +1,47 @@
 import FieldRestyle from '../FieldsRestyle';
 
+const errorStyles = {
+    className: 'alert alert-danger'
+};
+
 const Fields = FieldRestyle({
     TextField: {
-        className: 'form-control'
+        className: 'form-control',
+        errorStyles
     },
     DateField: {
-        className: 'form-control'
+        className: 'form-control',
+        errorStyles
     },
     TextareaField: {
-        className: 'form-control'
+        className: 'form-control',
+        errorStyles
     },
     NumberField: {
-        className: 'form-control'
+        className: 'form-control',
+        errorStyles
     },
     SubmitField: {
-        className: 'btn btn-primary'
+        className: 'btn btn-primary',
+        errorStyles
     },
     SelectField: {
-        className: 'form-control'
+        className: 'form-control',
+        errorStyles
     },
     CheckboxField: {
-        className: 'form-control'
+        wrapperClassName: 'checkbox',
+        errorStyles
     },
     ListField: {
-        className: 'form-control'
+        className: 'form-control',
+        errorStyles,
+        addButton: {
+            className: 'btn btn-success btn-xs'
+        },
+        removeButton: {
+            className: 'btn btn-danger btn-xs pull-right'
+        }
     }
 });
 

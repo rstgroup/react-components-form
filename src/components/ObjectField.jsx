@@ -61,7 +61,8 @@ class ObjectField extends React.Component {
 }
 
 ObjectField.contextTypes = {
-    getSchema: PropTypes.func
+    getSchema: PropTypes.func,
+    getErrors: PropTypes.func
 };
 
 ObjectField.childContextTypes = {

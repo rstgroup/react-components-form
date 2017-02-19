@@ -12,7 +12,8 @@ const TextField = ({
     error,
     value,
     label,
-    placeholder
+    placeholder,
+    errorStyles = {}
 }) => (
     <div className={wrapperClassName}>
         {label && <label>{label}</label>}
@@ -24,7 +25,7 @@ const TextField = ({
             placeholder={placeholder}
             className={className}
         />
-        {error && <ErrorField errors={errors} />}
+        {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
 );
 

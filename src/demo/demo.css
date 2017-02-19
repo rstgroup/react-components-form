@@ -8,8 +8,9 @@
 
 .column{
     display: inline-block;
-    width: 49%;
+    width: calc(49% - 300px);
     vertical-align: top;
+    margin: 0px 150px;
 }
 
 .form{
