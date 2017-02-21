@@ -43,7 +43,10 @@ class ListField extends React.Component {
     }
 
     getErrors(name) {
-        return this.state.errors[name] || [];
+        const [fieldName, key] = name.split('-');
+        const { getErrors } = this.context;
+        const errors = getErrors(fieldName);
+        return errors[parseInt(key)] || [];
     }
 
     addListElement(){
@@ -120,7 +123,8 @@ class ListField extends React.Component {
 }
 
 ListField.contextTypes = {
-    getSchema: PropTypes.func
+    getSchema: PropTypes.func,
+    getErrors: PropTypes.func
 };
 
 ListField.childContextTypes = {

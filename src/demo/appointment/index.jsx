@@ -49,7 +49,8 @@ const services = [
 const appointmentSchema = new Schema({
     date:{
         type: Date,
-        required: true
+        required: true,
+        defaultValue: new Date()
     },
     time:{
         type: String,

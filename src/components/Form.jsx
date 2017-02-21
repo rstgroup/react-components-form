@@ -30,7 +30,7 @@ class Form extends React.Component {
     }
 
     getErrors(name) {
-        return this.state.errors[name] || [];
+        return this.state.errors[name] || {};
     }
 
     submitForm() {

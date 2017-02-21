@@ -21,7 +21,7 @@ class CheckboxField extends React.Component {
         if (typeof this.props.onChange === 'function') this.props.onChange(value);
     }
 
-    render(){
+    render() {
         const {
             wrapperClassName,
             className,
