@@ -77,25 +77,25 @@ const workDaySchema = new Schema({
 });
 
 const timeManageSchema = new Schema({
-    poniedzialek:{
+    monday:{
         type: workDaySchema
     },
-    wtorek:{
+    tuesday:{
         type: workDaySchema
     },
-    sroda:{
+    wednesday:{
         type: workDaySchema
     },
-    czwartek:{
+    thursday:{
         type: workDaySchema
     },
-    piatek:{
+    friday:{
         type: workDaySchema
     },
-    sobota:{
+    saturday:{
         type: workDaySchema
     },
-    niedziela:{
+    sunday:{
         type: workDaySchema
     }
 });
@@ -109,8 +109,8 @@ const TimeManageForm = () => (
         <h4>WORK MANAGE FORM</h4>
         <div className="row">
             <div className="col-xs-12">
-                Poniedziałek
-                <ObjectField name="poniedzialek" wrapperClassName="row">
+                Monday
+                <ObjectField name="monday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
                             <SelectField name="hours" wrapperClassName="col-xs-6"/>
@@ -128,8 +128,8 @@ const TimeManageForm = () => (
                         <CheckboxField name="workDay" />
                     </div>
                 </ObjectField>
-                Wtorek
-                <ObjectField name="wtorek" wrapperClassName="row">
+                Tuesday
+                <ObjectField name="tuesday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
                             <SelectField name="hours" wrapperClassName="col-xs-6"/>
@@ -147,8 +147,8 @@ const TimeManageForm = () => (
                         <CheckboxField name="workDay" />
                     </div>
                 </ObjectField>
-                Środa
-                <ObjectField name="sroda" wrapperClassName="row">
+                Wednesday
+                <ObjectField name="wednesday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
                             <SelectField name="hours" wrapperClassName="col-xs-6"/>
@@ -166,8 +166,8 @@ const TimeManageForm = () => (
                         <CheckboxField name="workDay" />
                     </div>
                 </ObjectField>
-                Czwartek
-                <ObjectField name="czwartek" wrapperClassName="row">
+                Thursday
+                <ObjectField name="thursday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
                             <SelectField name="hours" wrapperClassName="col-xs-6"/>
@@ -185,8 +185,8 @@ const TimeManageForm = () => (
                         <CheckboxField name="workDay" />
                     </div>
                 </ObjectField>
-                Piątek
-                <ObjectField name="piatek" wrapperClassName="row">
+                Friday
+                <ObjectField name="friday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
                             <SelectField name="hours" wrapperClassName="col-xs-6"/>
@@ -204,8 +204,8 @@ const TimeManageForm = () => (
                         <CheckboxField name="workDay" />
                     </div>
                 </ObjectField>
-                Sobota
-                <ObjectField name="sobota" wrapperClassName="row">
+                Saturday
+                <ObjectField name="saturday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
                             <SelectField name="hours" wrapperClassName="col-xs-6"/>
@@ -223,8 +223,8 @@ const TimeManageForm = () => (
                         <CheckboxField name="workDay" />
                     </div>
                 </ObjectField>
-                Niedziela
-                <ObjectField name="niedziela" wrapperClassName="row">
+                Sunday
+                <ObjectField name="sunday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
                             <SelectField name="hours" wrapperClassName="col-xs-6"/>

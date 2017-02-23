@@ -7,10 +7,13 @@
 1. [Installation](#installation)
 2. [Description](#description)
 3. [Demo](#demo)
-4. [Fields](#fields)
+4. [Form props](#form-props)
+5. [Fields](#fields)
     - [Fields props](#fields-props)
-5. [How to use](#how-to-use)
+    - [How create new field](#how-create-new-field)
+6. [How to use](#how-to-use)
     - [Example of login form](#example-of-login-form)
+    - [Example of login form in edit mode](#example-of-login-form-in-edit-mode)
     - [Example of registration form](#example-of-registration-form)
     - [Example of use SelectField](#example-of-use-selectfield)
     - [Example of use ObjectField](#example-of-use-objectfield)
@@ -47,6 +50,17 @@ $ npm install
 $ npm run start
 ```
 
+Now go to http://localhost:8080 in your browser.
+
+###Form props
+
+| Props name | Type |
+|---|---|
+| schema | Instance of Schema from "form-schema-validation" |
+| model | Object |
+| onSubmit | Function(model) |
+| onError | Function(errors, model) |
+
 ###Fields
 
 You can use current fields or create new fields. Here You have list of fields.
@@ -64,7 +78,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | ListField | This field give You posibility to create list of fields with add and remove buttons |
 
 
-#####Fields props
+####Fields props
 
 | Props name | Type |
 |---|---|
@@ -76,6 +90,42 @@ You can use current fields or create new fields. Here You have list of fields.
 | options | [String], [{label: String, value: String}] |
 | errorStyles | {className, itemClassName} |
 | ErrorComponent | React.Component |
+
+####How create new field
+If You want create Your own custom field You must create component that use onChange method from props when value is changed and on export use FieldConnect method. FieldConnect will wrap Your field component and give props from form to Your field. Abow You have example of custom text field that have icon.
+```js
+import React from 'react';
+import { FieldConnect, ErrorField } from 'react-components-form';
+
+const CustomTextField = ({
+    wrapperClassName,
+    className,
+    onChange,
+    name,
+    errors,
+    error,
+    value,
+    label,
+    placeholder,
+    errorStyles = {}
+}) => (
+    <div className={wrapperClassName}>
+        {label && <label>{label}</label>}
+        <input
+            type="text"
+            name={name}
+            onChange={(e) => onChange(e.target.value)}
+            value={value}
+            placeholder={placeholder}
+            className={className}
+        />
+        <icon className="some-icon-class" />
+        {error && <ErrorField errors={errors} {...errorStyles} />}
+    </div>
+);
+
+export default FieldConnect(CustomTextField);
+```
 
 ###How to use
 
@@ -101,6 +151,44 @@ const loginSchema = new Schema({
 const LoginForm  = () => (
     <Form
         schema={loginSchema}
+        onSubmit={data => console.log(data)}
+        onError={(errors, data) => console.log('error', errors, data)}
+    >
+        <TextField name="login" label="Login" type="text" />
+        <TextField name="password" label="Login" type="text" />
+        <SubmitField value="Submit" />
+    </Form>
+);
+
+export default LoginForm;
+```
+
+####Example of login form in edit mode
+```js
+import React from 'react';
+import { Form, TextField, SubmitField } from 'react-components-form';
+import Schema from 'form-schema-validation';
+
+const loginSchema = new Schema({
+    login:{
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+});
+
+const model = {
+    login: 'TestLogin',
+    password: '1234'
+};
+
+const LoginForm  = () => (
+    <Form
+        schema={loginSchema}
+        model={model}
         onSubmit={data => console.log(data)}
         onError={(errors, data) => console.log('error', errors, data)}
     >
