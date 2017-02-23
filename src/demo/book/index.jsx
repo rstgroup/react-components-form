@@ -58,6 +58,9 @@ const postSchema = new Schema({
     createdAt:{
         type: Date,
         defaultValue: new Date()
+    },
+    languages:{
+        type: [String]
     }
 });
 
@@ -67,7 +70,7 @@ const BookForm = () => (
         onSubmit={data => console.log(data)}
         onError={(errors, data) => console.log('error', errors, data)}
     >
-        <h4>POST FORM</h4>
+        <h4>BOOK FORM</h4>
         <TextField name="title" type="text" />
         <SelectField name="category" />
         <ListField name="authors" className={listWrapper}>
@@ -79,6 +82,9 @@ const BookForm = () => (
                     <TextField name="surname" placeholder="surname"/>
                 </div>
             </ObjectField>
+        </ListField>
+        <ListField name="languages" label="Languages" className={listWrapper}>
+            <TextField placeholder="language" />
         </ListField>
         <CheckboxField name="status" label="Published" />
         <SubmitField value="Submit" />
