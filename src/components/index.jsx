@@ -8,3 +8,5 @@ export { default as SelectField } from './SelectField';
 export { default as CheckboxField } from './CheckboxField';
 export { default as ObjectField } from './ObjectField';
 export { default as ListField } from './ListField';
+export { default as FieldConnect } from './FieldConnect';
+export { default as FieldsRestyle } from './FieldsRestyle';

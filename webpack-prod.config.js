@@ -1,10 +1,11 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ['babel-polyfill', "./src/index.js"],
+    entry: "./src/index.js",
     output: {
         path: 'libs/',
-        filename: "main.js"
+        filename: "main.js",
+        libraryTarget: "umd"
     },
     resolve: {
         extensions: ['.js', '.jsx']

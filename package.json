@@ -2,33 +2,32 @@
   "name": "react-components-form",
   "version": "1.0.0",
   "description": "React form components",
-  "main": "./libs/main.js",
+  "main": "lib/main.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "start": "webpack-dev-server --hot --progress --colors",
     "test": "jest",
-    "build": "webpack -p --config webpack-prod.config.js"
+    "build": "webpack -p --config webpack-prod.config.js",
+    "prepublish": "npm run build"
   },
   "keywords": [
+    "react-components-form",
     "react",
     "forms",
     "react-forms",
+    "react-form",
     "form",
-    "inputs"
+    "inputs",
+    "input"
   ],
   "author": "Mariusz Przodała",
   "license": "MIT",
   "dependencies": {
-    "form-schema-validation": "^1.2.5",
-    "lodash": "^4.17.3",
-    "moment": "^2.17.1",
     "react": "^15.4.1",
-    "react-dom": "^15.4.1",
-    "style-loader": "^0.13.1",
-    "uniqid": "^4.1.0",
-    "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.2.0"
+    "react-dom": "^15.4.1"
   },
   "devDependencies": {
+    "form-schema-validation": "^1.2.5",
     "babel-core": "^6.21.0",
     "babel-jest": "^18.0.0",
     "babel-loader": "^6.2.10",
