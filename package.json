@@ -4,6 +4,8 @@
   "description": "React form components",
   "main": "lib/main.js",
   "jsnext:main": "src/index.js",
+  "repository": "https://github.com/mprzodala/react-components-form",
+  "homepage": "https://github.com/mprzodala/react-components-form",
   "scripts": {
     "start": "webpack-dev-server --hot --progress --colors",
     "test": "jest",
