@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
@@ -28,5 +28,25 @@ const TextField = ({
         {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
 );
+
+TextField.propTypes = {
+    wrapperClassName: PropTypes.string,
+    className: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.any,
+    onChange: PropTypes.func,
+    errors: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.shape({})
+    ]),
+    error: PropTypes.bool,
+    value: PropTypes.string,
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+    errorStyles: PropTypes.shape({
+        className: PropTypes.string,
+        itemClassName: PropTypes.string
+    })
+};
 
 export default FieldConnect(TextField);

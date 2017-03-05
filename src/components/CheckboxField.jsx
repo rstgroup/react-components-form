@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
@@ -28,7 +28,6 @@ class CheckboxField extends React.Component {
             name,
             errors,
             error,
-            value,
             label,
             placeholder,
             errorStyles = {}
@@ -38,9 +37,9 @@ class CheckboxField extends React.Component {
                 <label>
                     <input
                         type="checkbox"
-                        checked={!!value}
+                        checked={this.state.checked}
                         name={name}
-                        onClick={this.toggleValue}
+                        onChange={this.toggleValue}
                         placeholder={placeholder}
                         className={className}
                     />
@@ -51,5 +50,25 @@ class CheckboxField extends React.Component {
         );
     }
 }
+
+CheckboxField.propTypes = {
+    wrapperClassName: PropTypes.string,
+    className: PropTypes.string,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    errors: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.shape({})
+    ]),
+    error: PropTypes.bool,
+    value: PropTypes.any,
+    checkboxValue: PropTypes.any,
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+    errorStyles: PropTypes.shape({
+        className: PropTypes.string,
+        itemClassName: PropTypes.string
+    })
+};
 
 export default FieldConnect(CheckboxField);

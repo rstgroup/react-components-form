@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
@@ -13,12 +13,11 @@ const getDateString = (date = new Date()) => {
     return `${year}-${month}-${day}`;
 };
 
-const TextField = ({
+const DateField = ({
     wrapperClassName,
     className,
     onChange,
     name,
-    type = 'text',
     errors,
     error,
     value,
@@ -40,4 +39,23 @@ const TextField = ({
     </div>
 );
 
-export default FieldConnect(TextField);
+DateField.propTypes = {
+    wrapperClassName: PropTypes.string,
+    className: PropTypes.string,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    errors: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.shape({})
+    ]),
+    error: PropTypes.bool,
+    value: PropTypes.shape({}),
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+    errorStyles: PropTypes.shape({
+        className: PropTypes.string,
+        itemClassName: PropTypes.string
+    })
+};
+
+export default FieldConnect(DateField);

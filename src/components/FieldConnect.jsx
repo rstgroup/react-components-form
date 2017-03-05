@@ -82,6 +82,15 @@ const FieldConnect = (Component) => {
         getSchema: PropTypes.func
     };
 
+    FieldConnector.propTypes = {
+        name: PropTypes.string,
+        value: PropTypes.any,
+        options: PropTypes.arrayOf(PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.shape({})
+        ]))
+    };
+
     return FieldConnector;
 };
 

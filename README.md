@@ -32,6 +32,10 @@ React components form give you posibility to create forms with schema validation
 
 ###Demo
 
+Live demo:
+https://mprzodala.github.io/react-components-form/
+
+Localhost demo:
 You can run demo by clone repository and run webpack-dev-server:
 
 ```bash
@@ -88,8 +92,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | label | String, Node |
 | placeholder | String |
 | options | [String], [{label: String, value: String}] |
-| errorStyles | {className, itemClassName} |
-| ErrorComponent | React.Component |
+| errorStyles | {className, itemClassName, ErrorComponent} |
 
 ####How create new field
 If You want create Your own custom field You must create component that use onChange method from props when value is changed and on export use FieldConnect method. FieldConnect will wrap Your field component and give props from form to Your field. Abow You have example of custom text field that have icon.

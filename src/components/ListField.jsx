@@ -135,8 +135,16 @@ ListField.childContextTypes = {
 };
 
 ListField.propTypes = {
-    model: PropTypes.object,
-    schema: PropTypes.object
+    className: PropTypes.string,
+    wrapperClassName: PropTypes.string,
+    label: PropTypes.string,
+    addButton: PropTypes.shape({
+        className: PropTypes.string,
+        value: PropTypes.node
+    }),
+    onChange: PropTypes.func,
+    name: PropTypes.string,
+    value: PropTypes.any
 };
 
 export default FieldConnect(ListField);

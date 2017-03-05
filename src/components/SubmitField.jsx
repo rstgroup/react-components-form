@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
 const SubmitField = ({
@@ -16,5 +16,12 @@ const SubmitField = ({
         </button>
     </div>
 );
+
+SubmitField.propTypes = {
+    wrapperClassName: PropTypes.string,
+    className: PropTypes.string,
+    submit: PropTypes.func,
+    value: PropTypes.string
+};
 
 export default FieldConnect(SubmitField);

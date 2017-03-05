@@ -82,8 +82,11 @@ ObjectField.childContextTypes = {
 };
 
 ObjectField.propTypes = {
-    model: PropTypes.object,
-    schema: PropTypes.object
+    value: PropTypes.shape({}),
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    children: PropTypes.node,
+    wrapperClassName: PropTypes.string
 };
 
 export default FieldConnect(ObjectField);
