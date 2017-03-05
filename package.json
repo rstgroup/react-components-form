@@ -9,7 +9,7 @@
   "scripts": {
     "start": "webpack-dev-server --hot --progress --colors",
     "test": "jest",
-    "build": "webpack -p --config webpack-prod.config.js",
+    "build": "webpack -p --config webpack.ghpages.config.js",
     "prepublish": "npm run build"
   },
   "keywords": [
