@@ -13,7 +13,7 @@ const getDateString = (date = new Date()) => {
     return `${year}-${month}-${day}`;
 };
 
-const DateField = ({
+export const DateField = ({
     wrapperClassName,
     className,
     onChange,

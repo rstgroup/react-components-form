@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
-const NumberField = ({
+export const NumberField = ({
     wrapperClassName,
     className,
     onChange,

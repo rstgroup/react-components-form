@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
-const SubmitField = ({
+export const SubmitField = ({
     wrapperClassName,
     className,
     submit,

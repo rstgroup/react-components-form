@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
-const SelectField = ({
+export const SelectField = ({
     wrapperClassName,
     className,
     onChange,

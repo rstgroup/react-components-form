@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
-class ObjectField extends React.Component {
+export class ObjectField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

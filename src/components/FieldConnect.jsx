@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const FieldConnect = (Component) => {
+export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
         constructor(props) {
             super(props);

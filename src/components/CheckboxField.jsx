@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
-class CheckboxField extends React.Component {
+export class CheckboxField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
