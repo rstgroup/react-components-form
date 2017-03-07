@@ -1,10 +1,14 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: {
+        main: "./src/index.js",
+        Bootstrap: "./src/components/styled/Bootstrap.js",
+        Separate: "./src/components/separate/index.js"
+    },
     output: {
-        path: 'libs/',
-        filename: "main.js",
+        path: '',
+        filename: "[name].js",
         libraryTarget: "umd"
     },
     resolve: {
