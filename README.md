@@ -18,9 +18,19 @@
     - [Example of use SelectField](#example-of-use-selectfield)
     - [Example of use ObjectField](#example-of-use-objectfield)
     - [Example of use ListField](#example-of-use-listfield)
+7. [Separate fields](#separate-fields)
+8. [Bootstrap fields](#bootstrap-fields)
 
 
 ###Installation
+
+```bash
+$ npm install react --save
+```
+
+```bash
+$ npm install form-schema-validation --save
+```
 
 ```bash
 $ npm install react-components-form --save
@@ -390,4 +400,61 @@ const MemberForm  = () => (
 );
 
 export default MemberForm;
+```
+
+####Separate fields
+
+You can use fields without Form context by import it from "react-components-form/Separate"
+
+```js
+import { TextField } from 'react-components-form/Separate';
+
+const exampleSearchComponent = ({onSearch}) => (
+    <div>
+        <TextField onChange={onSearch} />
+    </div>
+);
+
+export default exampleComponent;
+```
+
+####Bootstrap fields
+
+You can use fields with Bootstrap theme by import it from "react-components-form/Bootstrap"
+
+```js
+import React from 'react';
+import { Form, TextField, SubmitField } from 'react-components-form/Bootstrap';
+import Schema from 'form-schema-validation';
+
+const loginSchema = new Schema({
+    login:{
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+});
+
+const model = {
+    login: 'TestLogin',
+    password: '1234'
+};
+
+const LoginForm  = () => (
+    <Form
+        schema={loginSchema}
+        model={model}
+        onSubmit={data => console.log(data)}
+        onError={(errors, data) => console.log('error', errors, data)}
+    >
+        <TextField name="login" label="Login" type="text" />
+        <TextField name="password" label="Login" type="text" />
+        <SubmitField value="Submit" />
+    </Form>
+);
+
+export default LoginForm;
 ```
