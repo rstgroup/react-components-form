@@ -84,7 +84,7 @@ ObjectField.childContextTypes = {
 ObjectField.propTypes = {
     value: PropTypes.shape({}),
     name: PropTypes.string,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     children: PropTypes.node,
     wrapperClassName: PropTypes.string
 };

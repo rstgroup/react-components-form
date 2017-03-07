@@ -76,9 +76,9 @@ Form.childContextTypes = {
 
 Form.propTypes = {
     model: PropTypes.shape({}),
-    schema: PropTypes.shape({}),
+    schema: PropTypes.shape({}).isRequired,
     onError: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func.isRequired
 };
 
 export default Form;

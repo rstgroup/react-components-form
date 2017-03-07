@@ -20,7 +20,7 @@ export const SubmitField = ({
 SubmitField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
-    submit: PropTypes.func,
+    submit: PropTypes.func.isRequired,
     value: PropTypes.string
 };
 

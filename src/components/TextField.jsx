@@ -34,7 +34,7 @@ TextField.propTypes = {
     className: PropTypes.string,
     name: PropTypes.string,
     type: PropTypes.any,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.shape({})

@@ -32,7 +32,7 @@ NumberField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
     name: PropTypes.string,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.shape({})

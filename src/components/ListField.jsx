@@ -142,7 +142,7 @@ ListField.propTypes = {
         className: PropTypes.string,
         value: PropTypes.node
     }),
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
     value: PropTypes.any
 };
