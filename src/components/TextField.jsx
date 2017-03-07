@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
-const TextField = ({
+export const TextField = ({
     wrapperClassName,
     className,
     onChange,
@@ -34,7 +34,7 @@ TextField.propTypes = {
     className: PropTypes.string,
     name: PropTypes.string,
     type: PropTypes.any,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.shape({})

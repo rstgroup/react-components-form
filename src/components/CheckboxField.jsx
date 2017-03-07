@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
-class CheckboxField extends React.Component {
+export class CheckboxField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,7 +55,7 @@ CheckboxField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
     name: PropTypes.string,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.shape({})

@@ -26,7 +26,7 @@ const restyledFields = {
     Form
 };
 
-const FieldRestyle = (styles) => {
+export const FieldRestyle = (styles) => {
     Object.keys(fields).forEach(fieldName => {
         const Field = fields[fieldName];
 

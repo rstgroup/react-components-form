@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
-const SubmitField = ({
+export const SubmitField = ({
     wrapperClassName,
     className,
     submit,
@@ -20,7 +20,7 @@ const SubmitField = ({
 SubmitField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
-    submit: PropTypes.func,
+    submit: PropTypes.func.isRequired,
     value: PropTypes.string
 };
 

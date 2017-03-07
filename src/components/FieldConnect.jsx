@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const FieldConnect = (Component) => {
+export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
         constructor(props) {
             super(props);
@@ -14,6 +14,7 @@ const FieldConnect = (Component) => {
         componentWillMount() {
             const { name, value, options } = this.props;
             const { setModel } = this.context;
+            if (typeof setModel !== 'function') return;
             if (name && value) setModel(name, value);
             if (name && !value && options) setModel(name, options[0]);
         }
@@ -27,29 +28,34 @@ const FieldConnect = (Component) => {
         onChangeData(value) {
             const { name } = this.props;
             const { setModel } = this.context;
+            if (typeof setModel !== 'function') return;
             setModel(name, value);
         }
 
         getValue() {
             const { name, value } = this.props;
             const { getModel } = this.context;
+            if (typeof getModel !== 'function') return value;
             return getModel(name) || value;
         }
 
         getPropsFromSchema() {
             const { name } = this.props;
             const { getSchema } = this.context;
+            if (typeof getSchema !== 'function') return;
             return getSchema(name);
         }
 
         submit() {
             const { submitForm } = this.context;
+            if (typeof submitForm !== 'function') return;
             submitForm();
         }
 
         getErrors() {
             const { name } = this.props;
             const { getErrors } = this.context;
+            if (typeof getErrors !== 'function') return [];
             return getErrors(name);
         }
 

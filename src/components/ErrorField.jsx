@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-const ErrorField = ({
+export const ErrorField = ({
     errors = [],
     className,
     itemClassName,

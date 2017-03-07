@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
-class ObjectField extends React.Component {
+export class ObjectField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -84,7 +84,7 @@ ObjectField.childContextTypes = {
 ObjectField.propTypes = {
     value: PropTypes.shape({}),
     name: PropTypes.string,
-    onChange: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
     children: PropTypes.node,
     wrapperClassName: PropTypes.string
 };
