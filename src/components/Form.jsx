@@ -6,19 +6,22 @@ export class Form extends React.Component {
         this.state = {
             schema: props.schema || {},
             model: props.model || props.schema.getDefaultValues(),
-            errors: {}
+            errors: {},
+            validateOnChange: props.validateOnChange
         };
         this.setModel = this.setModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.getErrors = this.getErrors.bind(this);
+        this.validateModel = this.validateModel.bind(this);
     }
 
     setModel(name, value) {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
         this.setState({ model });
+        if (this.state.validateOnChange) this.validateModel(model);
     }
 
     getModel(name) {
@@ -33,11 +36,16 @@ export class Form extends React.Component {
         return this.state.errors[name] || {};
     }
 
-    submitForm() {
-        const model = Object.assign({}, this.state.model);
+    validateModel(model) {
         const { schema } = this.state;
         const errors = schema.validate(model);
         this.setState({ errors });
+        return errors;
+    }
+
+    submitForm() {
+        const model = Object.assign({}, this.state.model);
+        const errors = this.validateModel(model);
 
         if (Object.keys(errors).length > 0) {
             if (this.props.onError) this.props.onError(errors, model);

@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.2.0-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.3.0-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
@@ -18,6 +18,7 @@
     - [Example of use SelectField](#example-of-use-selectfield)
     - [Example of use ObjectField](#example-of-use-objectfield)
     - [Example of use ListField](#example-of-use-listfield)
+    - [Example of use FieldsRestyle](#example-of-use-fieldsrestyle)
 7. [Separate fields](#separate-fields)
 8. [Bootstrap fields](#bootstrap-fields)
 
@@ -74,6 +75,7 @@ Now go to http://localhost:8080 in your browser.
 | model | Object |
 | onSubmit | Function(model) |
 | onError | Function(errors, model) |
+| validateOnChange | Boolean |
 | className | String |
 
 ###Fields
@@ -91,7 +93,6 @@ You can use current fields or create new fields. Here You have list of fields.
 | CheckboxField | This field is normal checkbox that return Boolean |
 | ObjectField | This field give You posibility to wrap another fields to object |
 | ListField | This field give You posibility to create list of fields with add and remove buttons |
-
 
 ####Fields props
 
