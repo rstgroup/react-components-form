@@ -23,7 +23,8 @@ export const DateField = ({
     value,
     label,
     placeholder,
-    errorStyles = {}
+    errorStyles = {},
+    fieldAttributes = {}
 }) => (
     <div className={wrapperClassName}>
         {label && <label>{label}</label>}
@@ -34,6 +35,7 @@ export const DateField = ({
             value={getDateString(value)}
             placeholder={placeholder}
             className={className}
+            {...fieldAttributes}
         />
         {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
@@ -55,7 +57,8 @@ DateField.propTypes = {
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
         itemClassName: PropTypes.string
-    })
+    }),
+    fieldAttributes: PropTypes.shape({})
 };
 
 export default FieldConnect(DateField);

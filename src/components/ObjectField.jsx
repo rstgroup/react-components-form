@@ -60,9 +60,9 @@ export class ObjectField extends React.Component {
     }
 
     render() {
-        const { children, wrapperClassName } = this.props;
+        const { children, wrapperClassName, fieldAttributes } = this.props;
         return (
-            <div className={wrapperClassName}>
+            <div className={wrapperClassName} {...fieldAttributes}>
                 {children}
             </div>
         );
@@ -86,7 +86,8 @@ ObjectField.propTypes = {
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     children: PropTypes.node,
-    wrapperClassName: PropTypes.string
+    wrapperClassName: PropTypes.string,
+    fieldAttributes: PropTypes.shape({})
 };
 
 export default FieldConnect(ObjectField);

@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.1.2-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.2.0-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
@@ -74,6 +74,7 @@ Now go to http://localhost:8080 in your browser.
 | model | Object |
 | onSubmit | Function(model) |
 | onError | Function(errors, model) |
+| className | String |
 
 ###Fields
 
@@ -103,6 +104,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | placeholder | String |
 | options | [String], [{label: String, value: String}] |
 | errorStyles | {className, itemClassName, ErrorComponent} |
+| fieldAttributes | Object with html attributes for input |
 
 ####How create new field
 If You want create Your own custom field You must create component that use onChange method from props when value is changed and on export use FieldConnect method. FieldConnect will wrap Your field component and give props from form to Your field. Abow You have example of custom text field that have icon.
@@ -121,6 +123,7 @@ const CustomTextField = ({
     label,
     placeholder,
     errorStyles = {}
+    fieldAttributes = {}
 }) => (
     <div className={wrapperClassName}>
         {label && <label>{label}</label>}
@@ -131,6 +134,7 @@ const CustomTextField = ({
             value={value}
             placeholder={placeholder}
             className={className}
+            {...fieldAttributes}
         />
         <icon className="some-icon-class" />
         {error && <ErrorField errors={errors} {...errorStyles} />}
@@ -321,6 +325,9 @@ export default CompanyForm;
 ```
 
 ####Example of use ObjectField
+
+You can group fields as object by using ObjectField component.
+
 ```js
 import React from 'react';
 import { Form, TextField, ObjectField, SubmitField } from 'react-components-form';
@@ -366,6 +373,9 @@ export default CompanyForm;
 ```
 
 ####Example of use ListField
+
+You can use ListField to create list of fields or groups of fields
+
 ```js
 import React from 'react';
 import { Form, TextField, ListField, SubmitField } from 'react-components-form';
@@ -402,6 +412,73 @@ const MemberForm  = () => (
 export default MemberForm;
 ```
 
+####Example of use FieldsRestyle
+
+You can restyle all fields by FieldRestyle method
+
+```js
+import { FieldsRestyle } from 'react-components-form';
+
+const errorStyles = {
+    className: 'alert alert-danger'
+};
+
+const Fields = FieldsRestyle({
+    TextField: {
+        className: 'form-control',
+        errorStyles
+    },
+    DateField: {
+        className: 'form-control',
+        errorStyles
+    },
+    TextareaField: {
+        className: 'form-control',
+        errorStyles
+    },
+    NumberField: {
+        className: 'form-control',
+        errorStyles
+    },
+    SubmitField: {
+        className: 'btn btn-primary',
+        errorStyles
+    },
+    SelectField: {
+        className: 'form-control',
+        errorStyles
+    },
+    CheckboxField: {
+        wrapperClassName: 'checkbox',
+        errorStyles
+    },
+    ListField: {
+        className: 'form-control',
+        errorStyles,
+        addButton: {
+            className: 'btn btn-success btn-xs'
+        },
+        removeButton: {
+            className: 'btn btn-danger btn-xs pull-right'
+        }
+    }
+});
+
+export const Form = Fields.Form;
+export const TextField = Fields.TextField;
+export const DateField = Fields.DateField;
+export const TextareaField = Fields.TextareaField;
+export const NumberField = Fields.NumberField;
+export const SubmitField = Fields.SubmitField;
+export const SelectField = Fields.SelectField;
+export const CheckboxField = Fields.CheckboxField;
+export const ObjectField = Fields.ObjectField;
+export const ListField = Fields.ListField;
+export default Fields;
+```
+
+
+
 ####Separate fields
 
 You can use fields without Form context by import it from "react-components-form/Separate"
@@ -415,7 +492,7 @@ const exampleSearchComponent = ({onSearch}) => (
     </div>
 );
 
-export default exampleComponent;
+export default exampleSearchComponent;
 ```
 
 ####Bootstrap fields

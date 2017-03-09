@@ -12,7 +12,8 @@ export const NumberField = ({
     value,
     label,
     placeholder,
-    errorStyles = {}
+    errorStyles = {},
+    fieldAttributes = {}
 }) => (
     <div className={wrapperClassName}>
         {label && <label>{label}</label>}
@@ -23,6 +24,7 @@ export const NumberField = ({
             value={value}
             placeholder={placeholder}
             className={className}
+            {...fieldAttributes}
         />
         {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
@@ -44,7 +46,8 @@ NumberField.propTypes = {
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
         itemClassName: PropTypes.string
-    })
+    }),
+    fieldAttributes: PropTypes.shape({})
 };
 
 export default FieldConnect(NumberField);

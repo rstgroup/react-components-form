@@ -12,7 +12,8 @@ export const TextareaField = ({
     value,
     label,
     placeholder,
-    errorStyles = {}
+    errorStyles = {},
+    fieldAttributes = {}
 }) => (
     <div className={wrapperClassName}>
         {label && <label>{label}</label>}
@@ -22,6 +23,7 @@ export const TextareaField = ({
             value={value}
             placeholder={placeholder}
             className={className}
+            {...fieldAttributes}
         />
         {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
@@ -43,7 +45,8 @@ TextareaField.propTypes = {
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
         itemClassName: PropTypes.string
-    })
+    }),
+    fieldAttributes: PropTypes.shape({})
 };
 
 export default FieldConnect(TextareaField);

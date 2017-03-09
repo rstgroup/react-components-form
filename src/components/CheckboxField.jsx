@@ -30,7 +30,8 @@ export class CheckboxField extends React.Component {
             error,
             label,
             placeholder,
-            errorStyles = {}
+            errorStyles = {},
+            fieldAttributes = {}
         } = this.props;
         return (
             <div className={wrapperClassName}>
@@ -42,6 +43,7 @@ export class CheckboxField extends React.Component {
                         onChange={this.toggleValue}
                         placeholder={placeholder}
                         className={className}
+                        {...fieldAttributes}
                     />
                     {label}
                 </label>
@@ -68,7 +70,8 @@ CheckboxField.propTypes = {
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
         itemClassName: PropTypes.string
-    })
+    }),
+    fieldAttributes: PropTypes.shape({})
 };
 
 export default FieldConnect(CheckboxField);

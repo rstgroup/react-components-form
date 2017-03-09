@@ -105,12 +105,13 @@ export class ListField extends React.Component {
             className,
             wrapperClassName,
             label,
-            addButton = {}
+            addButton = {},
+            fieldAttributes = {}
         } = this.props;
         return (
             <div className={wrapperClassName}>
                 {label && <label>{label}</label>}
-                <div className={className}>{this.getList(children)}</div>
+                <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
                 <span
                     onClick={this.addListElement}
                     className={addButton.className}
@@ -144,7 +145,8 @@ ListField.propTypes = {
     }),
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    value: PropTypes.any
+    value: PropTypes.any,
+    fieldAttributes: PropTypes.shape({})
 };
 
 export default FieldConnect(ListField);
