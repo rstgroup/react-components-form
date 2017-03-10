@@ -61,6 +61,9 @@ const postSchema = new Schema({
     },
     languages:{
         type: [String]
+    },
+    status:{
+        type: Boolean
     }
 });
 
