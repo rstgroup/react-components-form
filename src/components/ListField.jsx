@@ -84,7 +84,7 @@ export class ListField extends React.Component {
             });
 
             list.push(
-               <div key={key}>
+               <div key={`${name}-${key}`}>
                    <div>{child}</div>
                    <div>
                        <span

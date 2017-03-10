@@ -39,6 +39,8 @@ TextField.propTypes = {
     onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
+        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+        PropTypes.string,
         PropTypes.shape({})
     ]),
     error: PropTypes.bool,
