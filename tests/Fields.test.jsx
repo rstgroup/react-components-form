@@ -67,15 +67,35 @@ describe('Fields', () => {
         expect(context.getModel.mock.calls.length).toBe(1);
     });
 
-    it('FieldConnect without context from form should give props to SelectField',() => {
+    it('FieldConnect should give props to TextField without context from form',() => {
+        const props = {
+            name: 'firstName',
+            label: 'first name',
+            className: 'testComponent',
+            value: 'testValue'
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />);
+        const field = wrapper.find(TextField);
+        expect(field.props().name).toBe(props.name);
+        expect(field.props().label).toBe(props.label);
+        field.find('input').simulate('change', 'testValue');
+    });
 
+    it('FieldConnect without context from form should give props to SelectField',() => {
+        const context = {
+            setModel: jest.fn(),
+            getModel: jest.fn(),
+            getSchema: jest.fn(),
+            submitForm: jest.fn(),
+            getErrors: () => []
+        };
         const props = {
             name: 'selectName',
             label: 'first name',
             className: 'testComponent',
             options: ['test1', 'test2', 'test3']
         };
-        const wrapper = mount(<SelectFieldWithFormConnect {...props} />);
+        const wrapper = mount(<SelectFieldWithFormConnect {...props} />, {context});
         const field = wrapper.find(SelectField);
         expect(field.props().name).toBe(props.name);
         expect(field.props().label).toBe(props.label);
