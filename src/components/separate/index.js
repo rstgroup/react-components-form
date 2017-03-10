@@ -5,3 +5,4 @@ export {SelectField} from '../SelectField';
 export {NumberField} from '../NumberField';
 export {DateField} from '../DateField';
 export {CheckboxField} from '../CheckboxField';
+export {ErrorField} from '../ErrorField';

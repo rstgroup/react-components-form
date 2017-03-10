@@ -26,7 +26,7 @@ ErrorField.propTypes = {
     errors: PropTypes.arrayOf(PropTypes.string),
     className: PropTypes.string,
     itemClassName: PropTypes.string,
-    ErrorComponent: PropTypes.node
+    ErrorComponent: PropTypes.func
 };
 
 export default ErrorField;
