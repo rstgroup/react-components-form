@@ -1,25 +1,22 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { TextField, NumberField, FieldsRestyle } from '../src/components';
+import TextField from '../src/components/TextField';
+import NumberField from '../src/components/NumberField';
+import FieldsRestyle from '../src/components/FieldsRestyle';
 
 describe('FieldsRestyle', () => {
     it('should restyle field TextField',() => {
-        const fields = {
-            TextField,
-            NumberField
-        };
-
         const errorStyles = {
             className: 'alert alert-danger'
         };
 
-        const Fields = FieldsRestyle(fields, {
+        const Fields = FieldsRestyle({
             TextField: {
                 className: 'form-control',
                 errorStyles
             }
         });
-        expect(Object.keys(Fields).length).toBe(3);
+        expect(Object.keys(Fields).length).toBe(10);
         const TextComponent = Fields.TextField;
         const textWrapper = mount(<TextComponent />);
         expect(textWrapper.find(TextField).props().className).toBe('form-control');

@@ -1,12 +1,14 @@
 # REACT COMPONENTS FORM
 
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
+<img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.4.0-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.4.1-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
 3. [Demo](#demo)
+4. [Tests](#tests)
 4. [Form props](#form-props)
 5. [Fields](#fields)
     - [Fields props](#fields-props)
@@ -66,6 +68,32 @@ $ npm run start
 ```
 
 Now go to http://localhost:8080 in your browser.
+
+###Tests
+
+If You want run tests. Please clone this project repository
+
+```bash
+$ git clone https://github.com/mprzodala/react-components-form.git
+```
+
+Go to project directory
+
+```bash
+$ cd react-components-form
+```
+
+Install node module
+
+```bash
+$ npm install
+```
+
+Run "Jest" tests
+
+```bash
+$ npm run test
+```
 
 ###Form props
 
@@ -420,12 +448,34 @@ You can restyle all fields by FieldRestyle method
 
 ```js
 import { FieldsRestyle } from 'react-components-form';
+import {
+    TextField,
+    DateField,
+    TextareaField,
+    NumberField,
+    SubmitField,
+    SelectField,
+    CheckboxField,
+    ObjectField,
+    ListField
+} from 'react-components-form';
 
+const fields = {
+    TextField,
+    DateField,
+    TextareaField,
+    NumberField,
+    SubmitField,
+    SelectField,
+    CheckboxField,
+    ObjectField,
+    ListField
+};
 const errorStyles = {
     className: 'alert alert-danger'
 };
 
-const Fields = FieldsRestyle({
+const Fields = FieldsRestyle(fields, {
     TextField: {
         className: 'form-control',
         errorStyles
