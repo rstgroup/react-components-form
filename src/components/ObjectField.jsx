@@ -25,7 +25,7 @@ export class ObjectField extends React.Component {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
         this.setState({ model });
-        if (typeof this.props.onChange === 'function') this.props.onChange(model);
+        this.props.onChange(model);
     }
 
     getModel(name) {
@@ -34,8 +34,8 @@ export class ObjectField extends React.Component {
 
     getSchema(name) {
         if (!this.state.schema) return {};
-        if (!Array.isArray(this.state.schema)) return this.state.schema.getField(name);
-        return this.state.schema[0].getField(name);
+        if (Array.isArray(this.state.schema)) return this.state.schema[0].getField(name);
+        return this.state.schema.getField(name);
     }
 
     getErrors(name) {

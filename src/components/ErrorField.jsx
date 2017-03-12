@@ -33,7 +33,7 @@ ErrorField.propTypes = {
     ]),
     className: PropTypes.string,
     itemClassName: PropTypes.string,
-    ErrorComponent: PropTypes.node
+    ErrorComponent: PropTypes.func
 };
 
 export default ErrorField;

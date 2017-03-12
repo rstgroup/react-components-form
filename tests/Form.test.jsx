@@ -1,140 +1,137 @@
-import jsdom from 'jsdom';
 import React from 'react';
-import ReactTestUtils from 'react-addons-test-utils';
+import { mount } from 'enzyme';
 import Schema from 'form-schema-validation';
-import { shallow } from 'enzyme';
 import {
+    Form,
     TextField,
-    TextareaField,
     NumberField,
-    SubmitField,
-    SelectField,
-    CheckboxField,
-    DateField
-} from '../src/components/separate';
+    SubmitField
+} from '../src/components';
 
-describe('Form fields', () => {
 
-    const createTestComponent = (props = {}, Field) => {
-        const renderedTextField = shallow(
-            <div>
-                <Field
-                    {...props}
-                />
-            </div>
+describe('Form', () => {
+    it('should run error method from props',() => {
+        const loginSchema = new Schema({
+            login:{
+                type: String,
+                required: true
+            },
+            password: {
+                type: String,
+                required: true
+            }
+        });
+
+        const mockSubmit = jest.fn();
+        const mockError = jest.fn();
+
+        const wrapper = mount(
+            <Form
+                schema={loginSchema}
+                onError={mockError}
+                onSubmit={mockSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
         );
-        renderedTextField.render();
-        return renderedTextField.find(Field);
-    };
-
-    it('TextField should have props and have onChange method', () => {
-        const mockFunction = jest.fn();
-        const FieldComponent = createTestComponent({
-            name: 'firstName',
-            label: 'first name',
-            onChange: mockFunction,
-            error: true,
-            errors: ['testError']
-        }, TextField);
-        expect(FieldComponent.props().name).toBe('firstName');
-        expect(FieldComponent.props().label).toBe('first name');
-        expect(FieldComponent.props().onChange).toBe(mockFunction);
-        FieldComponent.simulate('change', 'Jan');
-        expect(mockFunction.mock.calls.length).toBe(1);
+        const fieldSubmit = wrapper.find(SubmitField);
+        fieldSubmit.find('button').simulate('click');
+        expect(mockError.mock.calls.length).toBe(1);
     });
 
-    it('TextareaField should have props and have onChange method', () => {
-        const mockFunction = jest.fn();
-        const FieldComponent = createTestComponent({
-            name: 'description',
-            label: 'description',
-            onChange: mockFunction,
-            error: true,
-            errors: ['testError']
-        }, TextareaField);
-        expect(FieldComponent.props().name).toBe('description');
-        expect(FieldComponent.props().label).toBe('description');
-        expect(FieldComponent.props().onChange).toBe(mockFunction);
-        FieldComponent.simulate('change', 'test description');
-        expect(mockFunction.mock.calls.length).toBe(1);
+    it('should have error and return undefined if dont have onError method from props',() => {
+        const loginSchema = new Schema({
+            login:{
+                type: String,
+                required: true
+            },
+            password: {
+                type: String,
+                required: true
+            }
+        });
+
+        const mockSubmit = jest.fn();
+
+        const wrapper = mount(
+            <Form
+                schema={loginSchema}
+                onSubmit={mockSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const fieldSubmit = wrapper.find(SubmitField);
+        fieldSubmit.find('button').simulate('click');
+        expect(mockSubmit.mock.calls.length).toBe(0);
     });
 
-    it('NumberField should have props and have onChange method', () => {
-        const mockFunction = jest.fn();
-        const FieldComponent = createTestComponent({
-            name: 'age',
-            label: 'Age',
-            onChange: mockFunction,
-            error: true,
-            errors: ['testError']
-        }, NumberField);
-        expect(FieldComponent.props().name).toBe('age');
-        expect(FieldComponent.props().label).toBe('Age');
-        expect(FieldComponent.props().onChange).toBe(mockFunction);
-        FieldComponent.simulate('change', 20);
-        expect(mockFunction.mock.calls.length).toBe(1);
+    it('should run submit method from props',() => {
+        const loginSchema = new Schema({
+            login:{
+                type: String,
+                required: true
+            },
+            password: {
+                type: String,
+                required: true
+            }
+        });
+
+        const mockSubmit = jest.fn();
+        const model = {
+            login: 'testLogin',
+            password: 'testPassword'
+        };
+
+        const wrapper = mount(
+            <Form
+                schema={loginSchema}
+                onSubmit={mockSubmit}
+                model={model}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const fieldSubmit = wrapper.find(SubmitField);
+        fieldSubmit.find('button').simulate('click');
+        expect(mockSubmit.mock.calls.length).toBe(1);
     });
 
-    it('SelectField should have props and have onChange method', () => {
-        const mockFunction = jest.fn();
-        const options = ['country1', 'country2'];
-        const FieldComponent = createTestComponent({
-            name: 'country',
-            label: 'Country',
-            onChange: mockFunction,
-            options: options,
-            error: true,
-            errors: ['testError']
-        }, SelectField);
-        expect(FieldComponent.props().name).toBe('country');
-        expect(FieldComponent.props().label).toBe('Country');
-        expect(FieldComponent.props().options).toBe(options);
-        expect(FieldComponent.props().onChange).toBe(mockFunction);
-        FieldComponent.simulate('change', 'test');
-        expect(mockFunction.mock.calls.length).toBe(1);
+    it('should update model on field value change',() => {
+        const wrapper = mount(
+            <Form
+                onSubmit={({quantity}) => expect(quantity).toBe(12)}
+            >
+                <NumberField name="quantity" label="Quantity" />
+                <SubmitField value="Submit" />
+            </Form>
+        );
+        const fieldSubmit = wrapper.find(SubmitField);
+        const fieldQuantity = wrapper.find(NumberField);
+        fieldQuantity.find('input').simulate('change', {target: {value: 12}});
+        fieldSubmit.find('button').simulate('click');
     });
 
-    it('SubmitField should run submit method on click', () => {
-        const mockFunction = jest.fn();
-        const FieldComponent = createTestComponent({
-            value: 'Save',
-            submit: mockFunction
-        }, SubmitField);
-        expect(FieldComponent.props().value).toBe('Save');
-        expect(FieldComponent.props().submit).toBe(mockFunction);
-    });
-
-    it('DateField should run submit method on click', () => {
-        const mockFunction = jest.fn();
-        const FieldComponent = createTestComponent({
-            name: 'createdAt',
-            label: 'Created at',
-            onChange: mockFunction,
-            error: true,
-            errors: ['testError']
-        }, DateField);
-        expect(FieldComponent.props().name).toBe('createdAt');
-        expect(FieldComponent.props().label).toBe('Created at');
-        expect(FieldComponent.props().onChange).toBe(mockFunction);
-        FieldComponent.simulate('change', '01.01.2017');
-        expect(mockFunction.mock.calls.length).toBe(1);
-    });
-
-    it('CheckboxField should run submit method on click', () => {
-        const mockFunction = jest.fn();
-        const FieldComponent = createTestComponent({
-            name: 'acceptTerms',
-            label: 'Accept terms',
-            onChange: mockFunction,
-            value: true,
-            error: true,
-            errors: []
-        }, CheckboxField);
-        expect(FieldComponent.props().name).toBe('acceptTerms');
-        expect(FieldComponent.props().label).toBe('Accept terms');
-        expect(FieldComponent.props().value).toBe(true);
-        expect(FieldComponent.props().onChange).toBe(mockFunction);
-        FieldComponent.simulate('change', true);
-        expect(mockFunction.mock.calls.length).toBe(1);
+    it('should validate model by custom validation',() => {
+        const mockCustomValidation = jest.fn();
+        const wrapper = mount(
+            <Form
+                onSubmit={({title}) => expect(title).toBe('test')}
+                customValidation={model => {mockCustomValidation(model); return {}}}
+                validateOnChange
+            >
+                <TextField name="title" label="Title" />
+            </Form>
+        );
+        const fieldTitle = wrapper.find(TextField);
+        fieldTitle.find('input').simulate('change', {target: {value: 'test'}});
+        expect(mockCustomValidation.mock.calls.length).toBe(1);
     });
 });

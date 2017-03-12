@@ -18,7 +18,7 @@ export class CheckboxField extends React.Component {
         this.setState({
             checked: !this.state.checked
         });
-        if (typeof this.props.onChange === 'function') this.props.onChange(value);
+        this.props.onChange(value);
     }
 
     render() {
