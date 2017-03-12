@@ -20,7 +20,7 @@ export class Form extends React.Component {
     }
 
     getDefaultModelValue(schema) {
-        if (typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
+        if (schema && typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
         return {};
     }
 
@@ -62,7 +62,7 @@ export class Form extends React.Component {
             if (this.props.onError) this.props.onError(errors, model);
             return;
         }
-        if (this.props.onSubmit) this.props.onSubmit(model);
+        this.props.onSubmit(model);
     }
 
     getChildContext() {

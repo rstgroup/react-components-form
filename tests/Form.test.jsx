@@ -4,6 +4,7 @@ import Schema from 'form-schema-validation';
 import {
     Form,
     TextField,
+    NumberField,
     SubmitField
 } from '../src/components';
 
@@ -27,8 +28,37 @@ describe('Form', () => {
         const wrapper = mount(
             <Form
                 schema={loginSchema}
-                onSubmit={mockSubmit}
                 onError={mockError}
+                onSubmit={mockSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const fieldSubmit = wrapper.find(SubmitField);
+        fieldSubmit.find('button').simulate('click');
+        expect(mockError.mock.calls.length).toBe(1);
+    });
+
+    it('should have error and return undefined if dont have onError method from props',() => {
+        const loginSchema = new Schema({
+            login:{
+                type: String,
+                required: true
+            },
+            password: {
+                type: String,
+                required: true
+            }
+        });
+
+        const mockSubmit = jest.fn();
+
+        const wrapper = mount(
+            <Form
+                schema={loginSchema}
+                onSubmit={mockSubmit}
             >
                 <TextField name="login" label="Login" type="text" />
                 <TextField name="password" label="Password" type="text" />
@@ -38,7 +68,6 @@ describe('Form', () => {
         const fieldSubmit = wrapper.find(SubmitField);
         fieldSubmit.find('button').simulate('click');
         expect(mockSubmit.mock.calls.length).toBe(0);
-        expect(mockError.mock.calls.length).toBe(1);
     });
 
     it('should run submit method from props',() => {
@@ -54,7 +83,6 @@ describe('Form', () => {
         });
 
         const mockSubmit = jest.fn();
-        const mockError = jest.fn();
         const model = {
             login: 'testLogin',
             password: 'testPassword'
@@ -64,7 +92,6 @@ describe('Form', () => {
             <Form
                 schema={loginSchema}
                 onSubmit={mockSubmit}
-                onError={mockError}
                 model={model}
             >
                 <TextField name="login" label="Login" type="text" />
@@ -75,26 +102,36 @@ describe('Form', () => {
         const fieldSubmit = wrapper.find(SubmitField);
         fieldSubmit.find('button').simulate('click');
         expect(mockSubmit.mock.calls.length).toBe(1);
-        expect(mockError.mock.calls.length).toBe(0);
     });
 
     it('should update model on field value change',() => {
-        const model = {
-            title: 'testTitle'
-        };
-
         const wrapper = mount(
             <Form
-                onSubmit={({title}) => expect(title).toBe('test')}
-                model={model}
+                onSubmit={({quantity}) => expect(quantity).toBe(12)}
             >
-                <TextField name="title" label="Title" />
+                <NumberField name="quantity" label="Quantity" />
                 <SubmitField value="Submit" />
             </Form>
         );
         const fieldSubmit = wrapper.find(SubmitField);
-        const fieldTitle = wrapper.find(TextField);
-        fieldTitle.find('input').simulate('change', 'test');
+        const fieldQuantity = wrapper.find(NumberField);
+        fieldQuantity.find('input').simulate('change', {target: {value: 12}});
         fieldSubmit.find('button').simulate('click');
+    });
+
+    it('should validate model by custom validation',() => {
+        const mockCustomValidation = jest.fn();
+        const wrapper = mount(
+            <Form
+                onSubmit={({title}) => expect(title).toBe('test')}
+                customValidation={model => {mockCustomValidation(model); return {}}}
+                validateOnChange
+            >
+                <TextField name="title" label="Title" />
+            </Form>
+        );
+        const fieldTitle = wrapper.find(TextField);
+        fieldTitle.find('input').simulate('change', {target: {value: 'test'}});
+        expect(mockCustomValidation.mock.calls.length).toBe(1);
     });
 });
