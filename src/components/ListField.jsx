@@ -57,7 +57,7 @@ export class ListField extends React.Component {
         const model = Array.from(this.state.model);
         model.splice(key, 1);
         this.setState({ model, listLength: this.state.listLength - 1 });
-        if (typeof this.props.onChange === 'function') this.props.onChange(model);
+        this.props.onChange(model);
     }
 
     getChildContext() {
