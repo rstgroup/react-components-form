@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.3.0-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.4.0-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
@@ -76,6 +76,7 @@ Now go to http://localhost:8080 in your browser.
 | onSubmit | Function(model) |
 | onError | Function(errors, model) |
 | validateOnChange | Boolean |
+| customValidation | Function(model) { return errors} |
 | className | String |
 
 ###Fields

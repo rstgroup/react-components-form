@@ -3,18 +3,25 @@ import React, { PropTypes } from 'react';
 export class Form extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             schema: props.schema || {},
-            model: props.model || props.schema.getDefaultValues(),
+            model: props.model || this.getDefaultModelValue(props.schema),
             errors: {},
             validateOnChange: props.validateOnChange
         };
+
         this.setModel = this.setModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.getErrors = this.getErrors.bind(this);
         this.validateModel = this.validateModel.bind(this);
+    }
+
+    getDefaultModelValue(schema) {
+        if (typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
+        return {};
     }
 
     setModel(name, value) {
@@ -29,6 +36,7 @@ export class Form extends React.Component {
     }
 
     getSchema(name) {
+        if(typeof this.state.schema.getField !== 'function') return {};
         return this.state.schema.getField(name);
     }
 
@@ -38,7 +46,10 @@ export class Form extends React.Component {
 
     validateModel(model) {
         const { schema } = this.state;
-        const errors = schema.validate(model);
+        const { customValidation } = this.props;
+        let errors = {};
+        if (typeof schema.validate === 'function') errors = schema.validate(model);
+        if (typeof customValidation === 'function') errors = customValidation(model);
         this.setState({ errors });
         return errors;
     }
@@ -84,9 +95,11 @@ Form.childContextTypes = {
 
 Form.propTypes = {
     model: PropTypes.shape({}),
-    schema: PropTypes.shape({}).isRequired,
+    schema: PropTypes.shape({}),
     onError: PropTypes.func,
-    onSubmit: PropTypes.func.isRequired
+    onSubmit: PropTypes.func.isRequired,
+    validateOnChange: PropTypes.bool,
+    customValidation: PropTypes.func
 };
 
 export default Form;

@@ -33,7 +33,8 @@ export class ObjectField extends React.Component {
     }
 
     getSchema(name) {
-        if(!Array.isArray(this.state.schema)) return this.state.schema.getField(name);
+        if (!this.state.schema) return {};
+        if (!Array.isArray(this.state.schema)) return this.state.schema.getField(name);
         return this.state.schema[0].getField(name);
     }
 
