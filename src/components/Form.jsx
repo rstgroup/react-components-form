@@ -11,12 +11,24 @@ export class Form extends React.Component {
             validateOnChange: props.validateOnChange
         };
 
+        this.registerEvents(props.eventsListener);
         this.setModel = this.setModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.getErrors = this.getErrors.bind(this);
         this.validateModel = this.validateModel.bind(this);
+    }
+
+    registerEvents(eventsListener) {
+        if (eventsListener) {
+            eventsListener.registerEvent('submit', () => {
+                this.submitForm();
+            });
+            eventsListener.registerEvent('validate', (schema) => {
+                return this.validateModel(this.state.model, schema || this.state.schema);
+            });
+        }
     }
 
     getDefaultModelValue(schema) {
@@ -28,7 +40,7 @@ export class Form extends React.Component {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
         this.setState({ model });
-        if (this.state.validateOnChange) this.validateModel(model);
+        if (this.state.validateOnChange) this.validateModel(model, this.state.schema);
     }
 
     getModel(name) {
@@ -44,8 +56,7 @@ export class Form extends React.Component {
         return this.state.errors[name] || {};
     }
 
-    validateModel(model) {
-        const { schema } = this.state;
+    validateModel(model, schema) {
         const { customValidation } = this.props;
         let errors = {};
         if (typeof schema.validate === 'function') errors = schema.validate(model);
@@ -56,7 +67,7 @@ export class Form extends React.Component {
 
     submitForm() {
         const model = Object.assign({}, this.state.model);
-        const errors = this.validateModel(model);
+        const errors = this.validateModel(model, this.state.schema);
 
         if (Object.keys(errors).length > 0) {
             if (this.props.onError) this.props.onError(errors, model);
