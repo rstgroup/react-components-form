@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.4.1-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.5.0-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
@@ -13,16 +13,18 @@
 5. [Fields](#fields)
     - [Fields props](#fields-props)
     - [How create new field](#how-create-new-field)
-6. [How to use](#how-to-use)
+6. [FormEventsListener](#formeventslistener)
+7. [How to use](#how-to-use)
     - [Example of login form](#example-of-login-form)
     - [Example of login form in edit mode](#example-of-login-form-in-edit-mode)
+    - [Example of login form with FormEventsListener submit](#example-of-login-form-with-formeventslistener-submit)
     - [Example of registration form](#example-of-registration-form)
     - [Example of use SelectField](#example-of-use-selectfield)
     - [Example of use ObjectField](#example-of-use-objectfield)
     - [Example of use ListField](#example-of-use-listfield)
     - [Example of use FieldsRestyle](#example-of-use-fieldsrestyle)
-7. [Separate fields](#separate-fields)
-8. [Bootstrap fields](#bootstrap-fields)
+8. [Separate fields](#separate-fields)
+9. [Bootstrap fields](#bootstrap-fields)
 
 
 ###Installation
@@ -105,6 +107,7 @@ $ npm run test
 | onError | Function(errors, model) |
 | validateOnChange | Boolean |
 | customValidation | Function(model) { return errors} |
+| eventsListener | Instance of FormEventsListener |
 | className | String |
 
 ###Fields
@@ -135,6 +138,18 @@ You can use current fields or create new fields. Here You have list of fields.
 | options | [String], [{label: String, value: String}] |
 | errorStyles | {className, itemClassName, ErrorComponent} |
 | fieldAttributes | Object with html attributes for input |
+
+###FormEventsListener
+
+You can submit your form outside form context by use FormEventsListener. Form register submit and validate events if have eventsListener in props.
+
+| Method name | Arguments |
+|---|---|
+| registerEvent | name: String<br />method: Function(data: Any) |
+| unregisterEvent | name: String |
+| callEvent | name: String<br />data: Any |
+
+
 
 ####How create new field
 If You want create Your own custom field You must create component that use onChange method from props when value is changed and on export use FieldConnect method. FieldConnect will wrap Your field component and give props from form to Your field. Abow You have example of custom text field that have icon.
@@ -244,6 +259,44 @@ const LoginForm  = () => (
         <SubmitField value="Submit" />
     </Form>
 );
+
+export default LoginForm;
+```
+
+####Example of login form with FormEventsListener submit
+```js
+import React from 'react';
+import { Form, FormEventsListener, TextField, SubmitField } from 'react-components-form';
+import Schema from 'form-schema-validation';
+
+const loginSchema = new Schema({
+    login:{
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
+});
+
+const LoginForm  = () => {
+    const eventsListener = new FormEventsListener();
+    return (
+        <div>
+            <Form
+                schema={loginSchema}
+                onSubmit={data => console.log(data)}
+                onError={(errors, data) => console.log('error', errors, data)}
+                eventsListener={eventsListener}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Login" type="text" />
+            </Form>
+            <button onClick={() => eventsListener.callEvent('submit')}>Outside form submit button</button>
+        </div>
+    );
+};
 
 export default LoginForm;
 ```

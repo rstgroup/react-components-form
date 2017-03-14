@@ -5,7 +5,8 @@ import {
     Form,
     TextField,
     NumberField,
-    SubmitField
+    SubmitField,
+    FormEventsListener
 } from '../src/components';
 
 
@@ -133,5 +134,30 @@ describe('Form', () => {
         const fieldTitle = wrapper.find(TextField);
         fieldTitle.find('input').simulate('change', {target: {value: 'test'}});
         expect(mockCustomValidation.mock.calls.length).toBe(1);
+    });
+
+    it('should submit form from eventListener',() => {
+        const mockSubmit = jest.fn();
+        const TestComponent = () => {
+            const eventsListener = new FormEventsListener();
+            return (
+                <div>
+                    <Form
+                        onSubmit={() => mockSubmit()}
+                        eventsListener={eventsListener}
+                    >
+                        <TextField name="title" label="Title" />
+                    </Form>
+                    <button className="testValidate" onClick={() => eventsListener.callEvent('validate')}>Outside validate</button>
+                    <button className="testSubmit" onClick={() => eventsListener.callEvent('submit')}>Outside submit</button>
+                </div>
+            );
+        };
+        const wrapper = mount(<TestComponent />);
+        const fieldTitle = wrapper.find(TextField);
+        fieldTitle.find('input').simulate('change', {target: {value: 'test'}});
+        wrapper.find('.testValidate').first().simulate('click');
+        wrapper.find('.testSubmit').first().simulate('click');
+        expect(mockSubmit.mock.calls.length).toBe(1);
     });
 });
