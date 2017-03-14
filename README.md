@@ -149,10 +149,10 @@ You can submit your form outside form context by use FormEventsListener. Form re
 | unregisterEvent | name: String |
 | callEvent | name: String<br />data: Any |
 
-
-
 ####How create new field
+
 If You want create Your own custom field You must create component that use onChange method from props when value is changed and on export use FieldConnect method. FieldConnect will wrap Your field component and give props from form to Your field. Abow You have example of custom text field that have icon.
+
 ```js
 import React from 'react';
 import { FieldConnect, ErrorField } from 'react-components-form';
@@ -194,6 +194,7 @@ export default FieldConnect(CustomTextField);
 You can define any form. Abow You have example of login and registration form. 
 
 ####Example of login form
+
 ```js
 import React from 'react';
 import { Form, TextField, SubmitField } from 'react-components-form';
@@ -226,6 +227,7 @@ export default LoginForm;
 ```
 
 ####Example of login form in edit mode
+
 ```js
 import React from 'react';
 import { Form, TextField, SubmitField } from 'react-components-form';
@@ -264,6 +266,7 @@ export default LoginForm;
 ```
 
 ####Example of login form with FormEventsListener submit
+
 ```js
 import React from 'react';
 import { Form, FormEventsListener, TextField, SubmitField } from 'react-components-form';
@@ -302,6 +305,7 @@ export default LoginForm;
 ```
 
 ####Example of registration form
+
 ```js
 import React from 'react';
 import Schema from 'form-schema-validation';
@@ -373,8 +377,8 @@ const RegistrationForm  = () => (
 export default RegistrationForm;
 ```
 
-
 ####Example of use SelectField
+
 ```js
 import React from 'react';
 import { Form, SelectField, SubmitField } from 'react-components-form';
