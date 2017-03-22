@@ -24,7 +24,10 @@ describe('NumberField', () => {
         expect(wrapper.props().onChange).toBe(props.onChange);
         expect(wrapper.props().error).toBe(props.error);
         expect(wrapper.props().errors).toBe(props.errors);
-        wrapper.find('input').simulate('change', 12);
-        expect(mockFunction.mock.calls.length).toBe(1);
+        wrapper.find('input').simulate('change', {target: { value: 'abc' } });
+        wrapper.find('input').simulate('change', {target: { value: '' } });
+        wrapper.find('input').simulate('change', {target: { value: undefined } });
+        wrapper.find('input').simulate('change', {target: { value: 12 } });
+        expect(mockFunction.mock.calls.length).toBe(4);
     });
 });

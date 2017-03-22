@@ -2,6 +2,13 @@ import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
+const parseValueToInteger = (name, value) => {
+    if(!value) return 0;
+    const fieldValue = parseInt(value);
+    if(`${fieldValue}` === 'NaN') return value;
+    return fieldValue;
+};
+
 export const NumberField = ({
     wrapperClassName,
     className,
@@ -20,7 +27,7 @@ export const NumberField = ({
         <input
             type="number"
             name={name}
-            onChange={(e) => onChange(parseInt(e.target.value))}
+            onChange={(e) => onChange(parseValueToInteger(name, e.target.value))}
             value={value}
             placeholder={placeholder}
             className={className}
