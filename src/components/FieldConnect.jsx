@@ -9,14 +9,26 @@ export const FieldConnect = (Component) => {
             this.getErrors = this.getErrors.bind(this);
             this.hasError = this.hasError.bind(this);
             this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
+            this.getEventsListener = this.getEventsListener.bind(this);
         }
 
         componentWillMount() {
-            const { name, value, options } = this.props;
-            const { setModel } = this.context;
+            const { name, value, options, onChangeModel } = this.props;
+            const { setModel, eventsListener } = this.context;
             if (typeof setModel !== 'function') return;
             if (name && value) setModel(name, value);
             if (name && !value && options) setModel(name, options[0]);
+            if (eventsListener && typeof onChangeModel === 'function') {
+                eventsListener.registerEventListener('changeModel', onChangeModel);
+            }
+        }
+
+        componentWillUnmount() {
+          const { onChangeModel } = this.props;
+          const { eventsListener } = this.context;
+          if (eventsListener && typeof onChangeModel === 'function') {
+              eventsListener.unregisterEventListener('changeModel', onChangeModel);
+          }
         }
 
         getChildContext() {
@@ -46,6 +58,10 @@ export const FieldConnect = (Component) => {
             return getSchema(name);
         }
 
+        getEventsListener() {
+            return this.context.eventsListener;
+        }
+
         submit() {
             const { submitForm } = this.context;
             if (typeof submitForm !== 'function') return;
@@ -72,6 +88,7 @@ export const FieldConnect = (Component) => {
                 errors={this.getErrors()}
                 error={this.hasError()}
                 value={this.getValue()}
+                eventsListener={this.getEventsListener()}
             />);
         }
     }
@@ -81,7 +98,14 @@ export const FieldConnect = (Component) => {
         getModel: PropTypes.func,
         getSchema: PropTypes.func,
         submitForm: PropTypes.func,
-        getErrors: PropTypes.func
+        getErrors: PropTypes.func,
+        eventsListener: PropTypes.shape({
+            callEvent: PropTypes.func,
+            registerEvent: PropTypes.func,
+            registerEventListener: PropTypes.func,
+            unregisterEvent: PropTypes.func,
+            unregisterEventListener: PropTypes.func,
+        })
     };
 
     FieldConnector.childContextTypes = {

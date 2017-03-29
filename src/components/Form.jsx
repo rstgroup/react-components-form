@@ -11,21 +11,22 @@ export class Form extends React.Component {
             validateOnChange: props.validateOnChange
         };
 
-        this.registerEvents(props.eventsListener);
+        this.eventsListener = props.eventsListener;
         this.setModel = this.setModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.getErrors = this.getErrors.bind(this);
         this.validateModel = this.validateModel.bind(this);
+        this.registerEvents();
     }
 
-    registerEvents(eventsListener) {
-        if (eventsListener) {
-            eventsListener.registerEvent('submit', () => {
+    registerEvents() {
+        if (this.eventsListener) {
+            this.eventsListener.registerEventListener('submit', () => {
                 this.submitForm();
             });
-            eventsListener.registerEvent('validate', (schema) => {
+            this.eventsListener.registerEventListener('validate', (schema) => {
                 return this.validateModel(this.state.model, schema || this.state.schema);
             });
         }
@@ -40,6 +41,7 @@ export class Form extends React.Component {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
         this.setState({ model });
+        if (this.eventsListener) this.eventsListener.callEvent('changeModel', { name, value });
         if (this.state.validateOnChange) this.validateModel(model, this.state.schema);
     }
 
@@ -82,7 +84,8 @@ export class Form extends React.Component {
             getModel: this.getModel,
             getSchema: this.getSchema,
             submitForm: this.submitForm,
-            getErrors: this.getErrors
+            getErrors: this.getErrors,
+            eventsListener: this.eventsListener,
         }
     }
 
@@ -101,7 +104,14 @@ Form.childContextTypes = {
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
     submitForm: PropTypes.func,
-    getErrors: PropTypes.func
+    getErrors: PropTypes.func,
+    eventsListener: PropTypes.shape({
+        callEvent: PropTypes.func,
+        registerEvent: PropTypes.func,
+        registerEventListener: PropTypes.func,
+        unregisterEvent: PropTypes.func,
+        unregisterEventListener: PropTypes.func,
+    })
 };
 
 Form.propTypes = {
@@ -110,7 +120,14 @@ Form.propTypes = {
     onError: PropTypes.func,
     onSubmit: PropTypes.func.isRequired,
     validateOnChange: PropTypes.bool,
-    customValidation: PropTypes.func
+    customValidation: PropTypes.func,
+    eventsListener: PropTypes.shape({
+        callEvent: PropTypes.func,
+        registerEvent: PropTypes.func,
+        registerEventListener: PropTypes.func,
+        unregisterEvent: PropTypes.func,
+        unregisterEventListener: PropTypes.func,
+    })
 };
 
 export default Form;

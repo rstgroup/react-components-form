@@ -1,18 +1,42 @@
 class FormEventsListener {
     constructor() {
-        this.events = {};
+        this.eventsListeners = {
+            submit: [],
+            validate: [],
+            changeModel: [],
+        };
     }
-    registerEvent(name, method) {
-        this.events[name] = method;
+    registerEvent(name) {
+        this.eventsListeners[name] = [];
     }
-    unregisterEvent(name){
-        if(this.events[name]) {
-            delete this.events[name];
+    registerEventListener(name, method) {
+        if (
+          this.eventsListeners[name] &&
+          Array.isArray(this.eventsListeners[name]) &&
+          typeof method === 'function'
+        ) {
+            this.eventsListeners[name].push(method);
+        }
+    }
+    unregisterEvent(name) {
+        if(this.eventsListeners[name]) {
+            delete this.eventsListeners[name];
+        }
+    }
+    unregisterEventListener(name, handler) {
+        if(this.eventsListeners[name] && Array.isArray(this.eventsListeners[name])) {
+            const index = this.eventsListeners[name].indexOf(handler);
+            if (index > -1) this.eventsListeners[name].splice(index, 1);
         }
     }
     callEvent(name, data) {
-        if(typeof this.events[name] === 'function') {
-            return this.events[name](data);
+        const responseFromEventsListeners = [];
+        if (this.eventsListeners[name] && Array.isArray(this.eventsListeners[name])) {
+            this.eventsListeners[name].forEach((eventListener) => {
+                const response = eventListener(data);
+                if (response) responseFromEventsListeners.push(response);
+            });
+            return responseFromEventsListeners;
         }
     }
 }
