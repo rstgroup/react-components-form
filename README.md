@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.5.0-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.6.0-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
@@ -17,7 +17,7 @@
 7. [How to use](#how-to-use)
     - [Example of login form](#example-of-login-form)
     - [Example of login form in edit mode](#example-of-login-form-in-edit-mode)
-    - [Example of login form with FormEventsListener submit](#example-of-login-form-with-formeventslistener-submit)
+    - [Example of login form with FormEventsListener submit and onChangeModel](#example-of-login-form-with-formeventslistener-submit-and-onchangemodel)
     - [Example of registration form](#example-of-registration-form)
     - [Example of use SelectField](#example-of-use-selectfield)
     - [Example of use ObjectField](#example-of-use-objectfield)
@@ -138,15 +138,18 @@ You can use current fields or create new fields. Here You have list of fields.
 | options | [String], [{label: String, value: String}] |
 | errorStyles | {className, itemClassName, ErrorComponent} |
 | fieldAttributes | Object with html attributes for input |
+| eventsListener | Instance of FormEventsListener (prop avaible if you have eventListener in form) |
 
 ###FormEventsListener
 
-You can submit your form outside form context by use FormEventsListener. Form register submit and validate events if have eventsListener in props.
+You can submit your form outside form context by use FormEventsListener. Form register submit and validate events if have eventsListener in props. When form have eventListener on all fields you can use onChangeModel method by props on field or use eventsListener on Your custom field to change state of field etc.
 
 | Method name | Arguments |
 |---|---|
-| registerEvent | name: String<br />method: Function(data: Any) |
+| registerEvent | name: String |
+| registerEventListener | name: String<br />method: Function(data: Any) |
 | unregisterEvent | name: String |
+| unregisterEventListener | name: String, handler: Instance of registred function |
 | callEvent | name: String<br />data: Any |
 
 ####How create new field
@@ -265,7 +268,7 @@ const LoginForm  = () => (
 export default LoginForm;
 ```
 
-####Example of login form with FormEventsListener submit
+####Example of login form with FormEventsListener submit and onChangeModel
 
 ```js
 import React from 'react';
@@ -294,7 +297,7 @@ const LoginForm  = () => {
                 eventsListener={eventsListener}
             >
                 <TextField name="login" label="Login" type="text" />
-                <TextField name="password" label="Login" type="text" />
+                <TextField name="password" onChangeModel={({ name, value }) => { console.log(name, value) }} label="Login" type="text" />
             </Form>
             <button onClick={() => eventsListener.callEvent('submit')}>Outside form submit button</button>
         </div>
@@ -491,7 +494,7 @@ const MemberForm  = () => (
         <TextField name="surname" label="Surname" />
         <ListField name="languages" label="Languages">
             <TextField placeholder="language" />
-        </ObjectField>
+        </ListField>
         <SubmitField value="Submit" />
     </Form>
 );

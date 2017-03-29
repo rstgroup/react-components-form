@@ -108,7 +108,9 @@ Form.childContextTypes = {
     eventsListener: PropTypes.shape({
         callEvent: PropTypes.func,
         registerEvent: PropTypes.func,
+        registerEventListener: PropTypes.func,
         unregisterEvent: PropTypes.func,
+        unregisterEventListener: PropTypes.func,
     })
 };
 
@@ -122,7 +124,9 @@ Form.propTypes = {
     eventsListener: PropTypes.shape({
         callEvent: PropTypes.func,
         registerEvent: PropTypes.func,
+        registerEventListener: PropTypes.func,
         unregisterEvent: PropTypes.func,
+        unregisterEventListener: PropTypes.func,
     })
 };
 

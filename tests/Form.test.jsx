@@ -136,10 +136,16 @@ describe('Form', () => {
         expect(mockCustomValidation.mock.calls.length).toBe(1);
     });
 
-    it('should submit form from eventListener',() => {
+    it('should submit form from eventListener and run onModelChangeListeners',() => {
         const mockSubmit = jest.fn();
+        const mockOnChangeModel = jest.fn();
+        const onChangeModel = ({ name, value }) => {
+            expect(name).toBe('title');
+            expect(value).toBe('test');
+            mockOnChangeModel();
+        };
+        const eventsListener = new FormEventsListener();
         const TestComponent = () => {
-            const eventsListener = new FormEventsListener();
             return (
                 <div>
                     <Form
@@ -147,6 +153,11 @@ describe('Form', () => {
                         eventsListener={eventsListener}
                     >
                         <TextField name="title" label="Title" />
+                        <TextField
+                            name="description"
+                            label="Description"
+                            onChangeModel={onChangeModel}
+                        />
                     </Form>
                     <button className="testValidate" onClick={() => eventsListener.callEvent('validate')}>Outside validate</button>
                     <button className="testSubmit" onClick={() => eventsListener.callEvent('submit')}>Outside submit</button>
@@ -155,9 +166,12 @@ describe('Form', () => {
         };
         const wrapper = mount(<TestComponent />);
         const fieldTitle = wrapper.find(TextField);
-        fieldTitle.find('input').simulate('change', {target: {value: 'test'}});
+        fieldTitle.find('input').first().simulate('change', {target: {value: 'test'}});
         wrapper.find('.testValidate').first().simulate('click');
         wrapper.find('.testSubmit').first().simulate('click');
         expect(mockSubmit.mock.calls.length).toBe(1);
+        expect(mockOnChangeModel.mock.calls.length).toBe(1);
+        wrapper.unmount();
+        expect(eventsListener.eventsListeners.changeModel.length).toBe(0);
     });
 });
