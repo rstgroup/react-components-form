@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
-        constructor(props) {
+        constructor(props, context) {
             super(props);
             this.onChangeData = this.onChangeData.bind(this);
             this.submit = this.submit.bind(this);
@@ -12,11 +12,22 @@ export const FieldConnect = (Component) => {
         }
 
         componentWillMount() {
-            const { name, value, options } = this.props;
-            const { setModel } = this.context;
+            const { name, value, options, onChangeModel } = this.props;
+            const { setModel, eventsListener } = this.context;
             if (typeof setModel !== 'function') return;
             if (name && value) setModel(name, value);
             if (name && !value && options) setModel(name, options[0]);
+            if (eventsListener && typeof onChangeModel === 'function') {
+                eventsListener.registerEventListener('changeModel', onChangeModel);
+            }
+        }
+
+        componentWillUnmount() {
+          const { onChangeModel } = this.props;
+          const { eventsListener } = this.context;
+          if (eventsListener && typeof onChangeModel === 'function') {
+              eventsListener.unregisterEventListener('changeModel', onChangeModel);
+          }
         }
 
         getChildContext() {
@@ -81,7 +92,12 @@ export const FieldConnect = (Component) => {
         getModel: PropTypes.func,
         getSchema: PropTypes.func,
         submitForm: PropTypes.func,
-        getErrors: PropTypes.func
+        getErrors: PropTypes.func,
+        eventsListener: PropTypes.shape({
+            callEvent: PropTypes.func,
+            registerEvent: PropTypes.func,
+            unregisterEvent: PropTypes.func,
+        })
     };
 
     FieldConnector.childContextTypes = {
