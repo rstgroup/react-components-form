@@ -137,6 +137,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | placeholder | String |
 | options | [String], [{label: String, value: String}] |
 | errorStyles | {className, itemClassName, ErrorComponent} |
+| onChangeModel | Function(data: { name: String, value: Any }, componentInstance: FieldComponentInstance) |
 | fieldAttributes | Object with html attributes for input |
 | eventsListener (from context) | Instance of FormEventsListener (prop avaible if you have eventListener in form) |
 | path (from context) | String (this prop give you path to field "form.someObjectField.thisField") |
