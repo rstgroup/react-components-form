@@ -7,6 +7,7 @@ export const FieldConnect = (Component) => {
             this.onChangeData = this.onChangeData.bind(this);
             this.submit = this.submit.bind(this);
             this.getErrors = this.getErrors.bind(this);
+            this.getPath = this.getPath.bind(this);
             this.hasError = this.hasError.bind(this);
             this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
             this.getEventsListener = this.getEventsListener.bind(this);
@@ -19,29 +20,36 @@ export const FieldConnect = (Component) => {
             if (name && value) setModel(name, value);
             if (name && !value && options) setModel(name, options[0]);
             if (eventsListener && typeof onChangeModel === 'function') {
-                eventsListener.registerEventListener('changeModel', onChangeModel);
+                this.onChangeModelMethod = ({ name, value }) => {
+                    return onChangeModel({ name, value }, this);
+                };
+                eventsListener.registerEventListener('changeModel', this.onChangeModelMethod);
             }
         }
 
         componentWillUnmount() {
-          const { onChangeModel } = this.props;
           const { eventsListener } = this.context;
-          if (eventsListener && typeof onChangeModel === 'function') {
-              eventsListener.unregisterEventListener('changeModel', onChangeModel);
+          if (eventsListener && typeof this.onChangeModelMethod === 'function') {
+              eventsListener.unregisterEventListener('changeModel', this.onChangeModelMethod);
           }
         }
 
         getChildContext() {
             return {
-                getSchema: this.context.getSchema
+                getSchema: this.context.getSchema,
+                getPath: this.getPath
             }
         }
 
         onChangeData(value) {
             const { name } = this.props;
-            const { setModel } = this.context;
+            const { setModel, eventsListener, getPath } = this.context;
             if (typeof setModel !== 'function') return;
             setModel(name, value);
+            if (eventsListener) eventsListener.callEvent('changeModel', {
+                name:`${getPath()}.${name}`,
+                value
+            });
         }
 
         getValue() {
@@ -75,6 +83,13 @@ export const FieldConnect = (Component) => {
             return getErrors(name);
         }
 
+        getPath() {
+            const { name } = this.props;
+            const { getPath } = this.context;
+            if (typeof getPath !== 'function') return name;
+            return `${getPath()}.${name}`;
+        }
+
         hasError() {
             return this.getErrors().length > 0;
         }
@@ -89,6 +104,7 @@ export const FieldConnect = (Component) => {
                 error={this.hasError()}
                 value={this.getValue()}
                 eventsListener={this.getEventsListener()}
+                path={this.getPath()}
             />);
         }
     }
@@ -99,6 +115,7 @@ export const FieldConnect = (Component) => {
         getSchema: PropTypes.func,
         submitForm: PropTypes.func,
         getErrors: PropTypes.func,
+        getPath: PropTypes.func,
         eventsListener: PropTypes.shape({
             callEvent: PropTypes.func,
             registerEvent: PropTypes.func,
@@ -109,7 +126,8 @@ export const FieldConnect = (Component) => {
     };
 
     FieldConnector.childContextTypes = {
-        getSchema: PropTypes.func
+        getSchema: PropTypes.func,
+        getPath: PropTypes.func
     };
 
     FieldConnector.propTypes = {

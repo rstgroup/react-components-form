@@ -73,7 +73,12 @@ export class ListField extends React.Component {
         const list = [];
         const {
             name,
-            removeButton: {className, value} = {}
+            removeButton: {
+                wrapperClassName,
+                className,
+                value
+            } = {},
+            hideRemoveButton
         } = this.props;
 
         for(let key = 0; key < this.state.listLength; key += 1){
@@ -86,13 +91,14 @@ export class ListField extends React.Component {
             list.push(
                <div key={`${name}-${key}`}>
                    <div>{child}</div>
-                   <div>
+                   {!hideRemoveButton && <div className={wrapperClassName}>
                        <span
                            onClick={() => this.removeListElement(key)}
                            className={className}
                        >
                            {value || 'Remove'}
-                       </span></div>
+                       </span>
+                   </div>}
                </div>
             );
         }
@@ -106,18 +112,19 @@ export class ListField extends React.Component {
             wrapperClassName,
             label,
             addButton = {},
+            hideAddButton,
             fieldAttributes = {}
         } = this.props;
         return (
             <div className={wrapperClassName}>
                 {label && <label>{label}</label>}
                 <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
-                <span
+                {!hideAddButton && <span
                     onClick={this.addListElement}
                     className={addButton.className}
                 >
                     {addButton.value || 'Add'}
-                </span>
+                </span>}
             </div>
         );
     }
@@ -143,6 +150,13 @@ ListField.propTypes = {
         className: PropTypes.string,
         value: PropTypes.node
     }),
+    removeButton: PropTypes.shape({
+        wrapperClassName: PropTypes.string,
+        className: PropTypes.string,
+        value: PropTypes.node
+    }),
+    hideAddButton: PropTypes.bool,
+    hideRemoveButton: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
     value: PropTypes.any,

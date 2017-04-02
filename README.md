@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.6.0-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.7.0-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
@@ -27,7 +27,7 @@
 9. [Bootstrap fields](#bootstrap-fields)
 
 
-###Installation
+### Installation
 
 ```bash
 $ npm install react --save
@@ -41,11 +41,11 @@ $ npm install form-schema-validation --save
 $ npm install react-components-form --save
 ```
 
-###Description
+### Description
 
 React components form give you posibility to create forms with schema validation using "form-schema-validation". You can easy create any form with any inputs and create Your own custom fields and validators. Also You can create object fields that represents some object data. Please read another sections of this readme to check what You can use in your project.
 
-###Demo
+### Demo
 
 Live demo:
 https://mprzodala.github.io/react-components-form/
@@ -71,7 +71,7 @@ $ npm run start
 
 Now go to http://localhost:8080 in your browser.
 
-###Tests
+### Tests
 
 If You want run tests. Please clone this project repository
 
@@ -97,7 +97,7 @@ Run "Jest" tests
 $ npm run test
 ```
 
-###Form props
+### Form props
 
 | Props name | Type |
 |---|---|
@@ -110,7 +110,7 @@ $ npm run test
 | eventsListener | Instance of FormEventsListener |
 | className | String |
 
-###Fields
+### Fields
 
 You can use current fields or create new fields. Here You have list of fields.
 
@@ -126,7 +126,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | ObjectField | This field give You posibility to wrap another fields to object |
 | ListField | This field give You posibility to create list of fields with add and remove buttons |
 
-####Fields props
+#### Fields props
 
 | Props name | Type |
 |---|---|
@@ -138,9 +138,10 @@ You can use current fields or create new fields. Here You have list of fields.
 | options | [String], [{label: String, value: String}] |
 | errorStyles | {className, itemClassName, ErrorComponent} |
 | fieldAttributes | Object with html attributes for input |
-| eventsListener | Instance of FormEventsListener (prop avaible if you have eventListener in form) |
+| eventsListener (from context) | Instance of FormEventsListener (prop avaible if you have eventListener in form) |
+| path (from context) | String (this prop give you path to field "form.someObjectField.thisField") |
 
-###FormEventsListener
+### FormEventsListener
 
 You can submit your form outside form context by use FormEventsListener. Form register submit and validate events if have eventsListener in props. When form have eventListener on all fields you can use onChangeModel method by props on field or use eventsListener on Your custom field to change state of field etc.
 
@@ -152,7 +153,7 @@ You can submit your form outside form context by use FormEventsListener. Form re
 | unregisterEventListener | name: String, handler: Instance of registred function |
 | callEvent | name: String<br />data: Any |
 
-####How create new field
+#### How create new field
 
 If You want create Your own custom field You must create component that use onChange method from props when value is changed and on export use FieldConnect method. FieldConnect will wrap Your field component and give props from form to Your field. Abow You have example of custom text field that have icon.
 
@@ -192,11 +193,11 @@ const CustomTextField = ({
 export default FieldConnect(CustomTextField);
 ```
 
-###How to use
+### How to use
 
 You can define any form. Abow You have example of login and registration form. 
 
-####Example of login form
+#### Example of login form
 
 ```js
 import React from 'react';
@@ -229,7 +230,7 @@ const LoginForm  = () => (
 export default LoginForm;
 ```
 
-####Example of login form in edit mode
+#### Example of login form in edit mode
 
 ```js
 import React from 'react';
@@ -268,7 +269,7 @@ const LoginForm  = () => (
 export default LoginForm;
 ```
 
-####Example of login form with FormEventsListener submit and onChangeModel
+#### Example of login form with FormEventsListener submit and onChangeModel
 
 ```js
 import React from 'react';
@@ -307,7 +308,7 @@ const LoginForm  = () => {
 export default LoginForm;
 ```
 
-####Example of registration form
+#### Example of registration form
 
 ```js
 import React from 'react';
@@ -380,7 +381,7 @@ const RegistrationForm  = () => (
 export default RegistrationForm;
 ```
 
-####Example of use SelectField
+#### Example of use SelectField
 
 ```js
 import React from 'react';
@@ -414,7 +415,7 @@ const CompanyForm  = () => (
 export default CompanyForm;
 ```
 
-####Example of use ObjectField
+#### Example of use ObjectField
 
 You can group fields as object by using ObjectField component.
 
@@ -462,7 +463,7 @@ const CompanyForm  = () => (
 export default CompanyForm;
 ```
 
-####Example of use ListField
+#### Example of use ListField
 
 You can use ListField to create list of fields or groups of fields
 
@@ -502,7 +503,7 @@ const MemberForm  = () => (
 export default MemberForm;
 ```
 
-####Example of use FieldsRestyle
+#### Example of use FieldsRestyle
 
 You can restyle all fields by FieldRestyle method
 
@@ -591,7 +592,7 @@ export default Fields;
 
 
 
-####Separate fields
+#### Separate fields
 
 You can use fields without Form context by import it from "react-components-form/Separate"
 
@@ -607,7 +608,7 @@ const exampleSearchComponent = ({onSearch}) => (
 export default exampleSearchComponent;
 ```
 
-####Bootstrap fields
+#### Bootstrap fields
 
 You can use fields with Bootstrap theme by import it from "react-components-form/Bootstrap"
 
