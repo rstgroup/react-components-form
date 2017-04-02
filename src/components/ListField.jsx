@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
 export class ListField extends React.Component {
-    constructor(props) {
+    constructor(props, { getSchema }) {
         super(props);
         this.state = {
-            schema: {},
+            schema: getSchema(props.name) || {},
             model: props.value || [],
             listLength: props.value ? props.value.length : 1,
             errors: {}
@@ -17,12 +17,6 @@ export class ListField extends React.Component {
         this.removeListElement = this.removeListElement.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.getErrors = this.getErrors.bind(this);
-    }
-
-    componentWillMount() {
-        const { getSchema } = this.context;
-        const schema = getSchema(this.props.name);
-        this.setState({ schema })
     }
 
     setModel(name, value) {
