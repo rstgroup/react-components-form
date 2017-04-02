@@ -139,9 +139,10 @@ describe('Form', () => {
     it('should submit form from eventListener and run onModelChangeListeners',() => {
         const mockSubmit = jest.fn();
         const mockOnChangeModel = jest.fn();
-        const onChangeModel = ({ name, value }) => {
-            expect(name).toBe('title');
+        const onChangeModel = ({ name, value }, componentInstance) => {
+            expect(name).toBe('form.title');
             expect(value).toBe('test');
+            expect(componentInstance.getPath()).toBe('form.description');
             mockOnChangeModel();
         };
         const eventsListener = new FormEventsListener();

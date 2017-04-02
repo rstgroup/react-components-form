@@ -66,6 +66,7 @@ describe('FieldConnect', () => {
         expect(field.props().name).toBe(props.name);
         expect(field.props().label).toBe(props.label);
         expect(field.props().options).toBe(props.options);
+        expect(wrapper.component.getInstance().getPath()).toBe(props.name);
         field.find('select').simulate('change', 'test3');
     });
 

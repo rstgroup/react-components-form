@@ -17,6 +17,7 @@ export class Form extends React.Component {
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.getErrors = this.getErrors.bind(this);
+        this.getPath = this.getPath.bind(this);
         this.validateModel = this.validateModel.bind(this);
         this.registerEvents();
     }
@@ -41,7 +42,6 @@ export class Form extends React.Component {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
         this.setState({ model });
-        if (this.eventsListener) this.eventsListener.callEvent('changeModel', { name, value });
         if (this.state.validateOnChange) this.validateModel(model, this.state.schema);
     }
 
@@ -56,6 +56,10 @@ export class Form extends React.Component {
 
     getErrors(name) {
         return this.state.errors[name] || {};
+    }
+
+    getPath() {
+        return 'form';
     }
 
     validateModel(model, schema) {
@@ -85,6 +89,7 @@ export class Form extends React.Component {
             getSchema: this.getSchema,
             submitForm: this.submitForm,
             getErrors: this.getErrors,
+            getPath: this.getPath,
             eventsListener: this.eventsListener,
         }
     }
@@ -105,6 +110,7 @@ Form.childContextTypes = {
     getSchema: PropTypes.func,
     submitForm: PropTypes.func,
     getErrors: PropTypes.func,
+    getPath: PropTypes.func,
     eventsListener: PropTypes.shape({
         callEvent: PropTypes.func,
         registerEvent: PropTypes.func,

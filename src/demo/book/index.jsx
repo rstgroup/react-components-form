@@ -10,6 +10,7 @@ import {
 } from '../../components/styled/Bootstrap';
 import Schema from 'form-schema-validation';
 import { listWrapper, objectFormField, objectFieldClassName } from '../demo.css';
+import { FormEventsListener } from '../../components';
 
 const options = [
     {
@@ -67,11 +68,13 @@ const postSchema = new Schema({
     }
 });
 
+const eventsListener = new FormEventsListener();
 const BookForm = () => (
     <Form
         schema={postSchema}
         onSubmit={data => console.log(data)}
         onError={(errors, data) => console.log('error', errors, data)}
+        eventsListener={eventsListener}
     >
         <h4>BOOK FORM</h4>
         <TextField name="title" type="text" />
