@@ -5,7 +5,7 @@ export class ListField extends React.Component {
     constructor(props, { getSchema }) {
         super(props);
         this.state = {
-            schema: getSchema(props.name) || {},
+            schema: getSchema(props.name),
             model: props.value || [],
             listLength: props.value ? props.value.length : 1,
             errors: {}
