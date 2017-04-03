@@ -15,6 +15,10 @@ export class ObjectField extends React.Component {
         this.getErrors = this.getErrors.bind(this);
     }
 
+    componentWillReceiveProps({ value = {} }){
+        this.setState({model: value});
+    }
+
     componentWillMount() {
         const { getSchema } = this.context;
         const schema = getSchema(this.props.name).type;
