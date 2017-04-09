@@ -16,6 +16,7 @@ export class Form extends React.Component {
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
+        this.runSubmit = this.runSubmit.bind(this);
         this.getErrors = this.getErrors.bind(this);
         this.getPath = this.getPath.bind(this);
         this.validateModel = this.validateModel.bind(this);
@@ -67,7 +68,15 @@ export class Form extends React.Component {
         let errors = {};
         if (typeof schema.validate === 'function') errors = schema.validate(model);
         if (typeof customValidation === 'function') errors = customValidation(model);
-        this.setState({ errors });
+        if (errors instanceof Promise) {
+            return new Promise((resolve) => {
+                errors.then(errorsFromPromise => {
+                    this.setState({errors: errorsFromPromise});
+                    resolve(errorsFromPromise);
+                });
+            })
+        }
+        this.setState({errors});
         return errors;
     }
 
@@ -75,6 +84,16 @@ export class Form extends React.Component {
         const model = Object.assign({}, this.state.model);
         const errors = this.validateModel(model, this.state.schema);
 
+        if (errors instanceof Promise){
+            errors.then((errors) => {
+                this.runSubmit(errors, model);
+            });
+            return;
+        }
+        this.runSubmit(errors, model);
+    }
+
+    runSubmit(errors, model) {
         if (Object.keys(errors).length > 0) {
             if (this.props.onError) this.props.onError(errors, model);
             return;
