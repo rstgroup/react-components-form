@@ -11,6 +11,7 @@ import {
 
 
 describe('Form', () => {
+    jest.useFakeTimers();
     it('should run error method from props',() => {
         const loginSchema = new Schema({
             login:{
@@ -40,6 +41,53 @@ describe('Form', () => {
         const fieldSubmit = wrapper.find(SubmitField);
         fieldSubmit.find('button').simulate('click');
         expect(mockError.mock.calls.length).toBe(1);
+    });
+
+    it('should support promise validation', (done) => {
+        const asyncValidator = () => ({
+            validator(value) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(value === 'test');
+                    },100);
+                });
+            },
+            errorMessage: `async validation failed`
+        });
+        
+        const loginSchema = new Schema({
+            login:{
+                type: String,
+                validators: [asyncValidator()]
+            },
+            password: {
+                type: String
+            }
+        });
+
+        const onSubmit = (model) => {};
+        const onError = (errors) => {
+            expect(errors.login[0]).toBe('async validation failed');
+            done();
+        };
+
+        const wrapper = mount(
+            <Form
+                schema={loginSchema}
+                onError={onError}
+                onSubmit={onSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const fieldSubmit = wrapper.find(SubmitField);
+        const loginField = wrapper.find(TextField).first();
+        loginField.find('input').simulate('change', { target: {value: 'test2'} });
+        fieldSubmit.find('button').simulate('click');
+        jest.runOnlyPendingTimers();
+
     });
 
     it('should have error and return undefined if dont have onError method from props',() => {
