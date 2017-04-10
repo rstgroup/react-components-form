@@ -3,8 +3,13 @@ import { mount } from 'enzyme';
 import {CheckboxField} from '../src/components/CheckboxField';
 
 describe('CheckboxField', () => {
-    it('should receive props and call onChange method on change value', () => {
-        const mockFunction = jest.fn();
+    it('should call onChange method on change value', () => {
+        const onChangeData = (value) => {
+            expect(value).toBe(true);
+        };
+        const onChangeData2 = (value) => {
+            expect(value).toBe(false);
+        };
         const testError = ['testError'];
         const errorStyles = {
             className: 'errorClassName'
@@ -12,21 +17,18 @@ describe('CheckboxField', () => {
         const props = {
             name: 'firstName',
             label: 'first name',
-            onChange: mockFunction,
+            onChange: onChangeData,
             error: true,
             errors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent'
         };
         const wrapper = mount(<CheckboxField {...props} />);
-        expect(wrapper.props().name).toBe(props.name);
-        expect(wrapper.props().label).toBe(props.label);
-        expect(wrapper.props().onChange).toBe(props.onChange);
-        expect(wrapper.props().error).toBe(props.error);
-        expect(wrapper.props().errors).toBe(props.errors);
         wrapper.find('input').simulate('change');
-        wrapper.setProps({type: Boolean});
+        wrapper.setProps({
+            type: Boolean,
+            onChange: onChangeData2
+        });
         wrapper.find('input').simulate('change');
-        expect(mockFunction.mock.calls.length).toBe(2);
     });
 });

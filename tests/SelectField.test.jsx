@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import {SelectField} from '../src/components/SelectField';
 
 describe('SelectField', () => {
-    it('should receive props and call onChange method on change value', () => {
+    it('should call onChange method on change value with string options', () => {
         const onChangeData = (value) => {
             expect(value).toBe('option3');
         };
@@ -26,7 +26,7 @@ describe('SelectField', () => {
         wrapper.find('select').simulate('change', {target:{value:'option3'}});
     });
 
-    it('should receive props and call onChange method on change value', () => {
+    it('should call onChange method on change value with object options', () => {
         const onChangeData = (value) => {
             expect(value).toBe('opt2');
         };

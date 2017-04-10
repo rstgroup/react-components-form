@@ -3,8 +3,13 @@ import { mount } from 'enzyme';
 import {DateField} from '../src/components/DateField';
 
 describe('DateField', () => {
-    it('should receive props and call onChange method on change value', () => {
-        const mockFunction = jest.fn();
+    it('should call onChange method on change value and convert value to Date object', () => {
+        const onChangeData = (value) => {
+            expect(value instanceof Date).toBe(true);
+            expect(value.getDate()).toBe(12);
+            expect(value.getMonth()).toBe(1);
+            expect(value.getFullYear()).toBe(2017);
+        };
         const testError = ['testError'];
         const errorStyles = {
             className: 'errorClassName'
@@ -12,21 +17,15 @@ describe('DateField', () => {
         const props = {
             name: 'firstName',
             label: 'first name',
-            onChange: mockFunction,
+            onChange: onChangeData,
             error: true,
             errors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent'
         };
         const wrapper = mount(<DateField {...props} />);
-        expect(wrapper.props().name).toBe(props.name);
-        expect(wrapper.props().label).toBe(props.label);
-        expect(wrapper.props().onChange).toBe(props.onChange);
-        expect(wrapper.props().error).toBe(props.error);
-        expect(wrapper.props().errors).toBe(props.errors);
         wrapper.setProps({value: new Date('01.01.2017')});
         wrapper.setProps({value: new Date('12.12.2017')});
-        wrapper.find('input').simulate('change', '01.02.2017');
-        expect(mockFunction.mock.calls.length).toBe(1);
+        wrapper.find('input').simulate('change', {target:{value:'02.12.2017'}});
     });
 });
