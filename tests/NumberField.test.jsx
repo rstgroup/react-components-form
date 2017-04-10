@@ -4,7 +4,9 @@ import {NumberField} from '../src/components/NumberField';
 
 describe('NumberField', () => {
     it('should receive props and call onChange method on change value', () => {
-        const mockFunction = jest.fn();
+        const onChangeData = (value) => {
+            expect(value).toBe(12);
+        };
         const testError = ['testError'];
         const errorStyles = {
             className: 'errorClassName'
@@ -12,19 +14,13 @@ describe('NumberField', () => {
         const props = {
             name: 'firstName',
             label: 'first name',
-            onChange: mockFunction,
+            onChange: onChangeData,
             error: true,
             errors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent'
         };
         const wrapper = mount(<NumberField {...props} />);
-        expect(wrapper.props().name).toBe(props.name);
-        expect(wrapper.props().label).toBe(props.label);
-        expect(wrapper.props().onChange).toBe(props.onChange);
-        expect(wrapper.props().error).toBe(props.error);
-        expect(wrapper.props().errors).toBe(props.errors);
-        wrapper.find('input').simulate('change', 12);
-        expect(mockFunction.mock.calls.length).toBe(1);
+        wrapper.find('input').simulate('change', {target:{value: '12'}});
     });
 });
