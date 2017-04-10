@@ -34,6 +34,27 @@ const personSchema = new Schema({
     },
     surname: {
         type: String
+    },
+    age: {
+        type: String,
+        options: [
+            {
+                label: 'Select age range',
+                value: ''
+            },
+            {
+                label: '18-21',
+                value: '18-21'
+            },
+            {
+                label: '22-28',
+                value: '22-28'
+            },
+            {
+                label: '29-40',
+                value: '29-40'
+            }
+        ]
     }
 });
 
@@ -84,8 +105,11 @@ const BookForm = () => (
                 <div className={objectFormField}>
                     <TextField name="name" placeholder="name"/>
                 </div>
-                <div>
+                <div className={objectFormField}>
                     <TextField name="surname" placeholder="surname"/>
+                </div>
+                <div>
+                    <SelectField name="age" />
                 </div>
             </ObjectField>
         </ListField>

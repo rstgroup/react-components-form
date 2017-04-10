@@ -28,8 +28,8 @@ export const SelectField = ({
         >
             {options.map(option => (
                 <option
-                    value={option.value || option}
-                    key={option.value || option}
+                    value={option.label ? option.value : option}
+                    key={option.label || option}
                 >
                     {option.label || option}
                 </option>
