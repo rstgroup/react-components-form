@@ -39,10 +39,10 @@ export class Form extends React.Component {
         return {};
     }
 
-    setModel(name, value) {
+    setModel(name, value, callback) {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
-        this.setState({ model });
+        this.setState({ model }, callback);
         if (this.state.validateOnChange) this.validateModel(model, this.state.schema);
     }
 

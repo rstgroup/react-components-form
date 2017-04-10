@@ -19,11 +19,11 @@ export class ListField extends React.Component {
         this.getErrors = this.getErrors.bind(this);
     }
 
-    setModel(name, value) {
+    setModel(name, value, callback) {
         const [fieldName, key] = name.split('-');
         const model = Array.from(this.state.model);
         model[parseInt(key)] = value;
-        this.setState({ model });
+        this.setState({ model }, callback);
         this.props.onChange(model);
     }
 

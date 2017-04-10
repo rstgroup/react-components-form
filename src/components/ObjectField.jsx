@@ -25,10 +25,10 @@ export class ObjectField extends React.Component {
         this.setState({ schema })
     }
 
-    setModel(name, value) {
+    setModel(name, value, callback) {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
-        this.setState({ model });
+        this.setState({ model }, callback);
         this.props.onChange(model);
     }
 
