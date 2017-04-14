@@ -11,3 +11,4 @@ export { default as ListField } from './ListField';
 export { default as FieldConnect } from './FieldConnect';
 export { default as FieldsRestyle } from './FieldsRestyle';
 export { default as FormEventsListener } from './FormEventsListener';
+export { default as ErrorField } from './ErrorField';
