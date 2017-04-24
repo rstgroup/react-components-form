@@ -30,7 +30,7 @@ const LoginForm  = () => {
                 <SubmitField value="Login" />
             </Form>
             <h5>This is example of submit form outside form context</h5>
-            <button onClick={() => console.log(eventsListener.callEvent('submit'))}>Outside submit button</button>
+            <button onClick={() => eventsListener.callEvent('submit')}>Outside submit button</button>
             <button onClick={() => eventsListener.callEvent('validate')}>Outside validate button</button>
         </div>
     );

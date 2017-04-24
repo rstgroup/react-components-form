@@ -2,12 +2,14 @@ import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
 export class ListField extends React.Component {
+    static generateItemId() {
+        return Math.random().toString(36).substring(7);
+    }
     constructor(props, { getSchema }) {
         super(props);
         this.state = {
             schema: getSchema(props.name),
-            model: props.value || [],
-            listLength: props.value ? props.value.length : 1,
+            model: this.getModelFromProps(props),
             errors: {}
         };
         this.setModel = this.setModel.bind(this);
@@ -19,17 +21,27 @@ export class ListField extends React.Component {
         this.getErrors = this.getErrors.bind(this);
     }
 
+    getModelFromProps(props) {
+        if (props.value) {
+            return props.value.map(item => ({
+                id: ListField.generateItemId(),
+                value: item
+            }));
+        }
+        return [{ id: ListField.generateItemId() }];
+    }
+
     setModel(name, value, callback) {
         const [fieldName, key] = name.split('-');
         const model = Array.from(this.state.model);
-        model[parseInt(key)] = value;
+        model[parseInt(key)].value = value;
         this.setState({ model }, callback);
-        this.props.onChange(model);
+        this.props.onChange(model.map(item => item.value));
     }
 
     getModel(name) {
         const [fieldName, key] = name.split('-');
-        return this.state.model[key];
+        return this.state.model[key].value;
     }
 
     getSchema() {
@@ -44,14 +56,18 @@ export class ListField extends React.Component {
     }
 
     addListElement(){
-        this.setState({ listLength: this.state.listLength + 1 });
+        const model = Array.from(this.state.model);
+        model.push({
+            id: ListField.generateItemId()
+        });
+        this.setState({ model });
     }
 
     removeListElement(key) {
         const model = Array.from(this.state.model);
         model.splice(key, 1);
-        this.setState({ model, listLength: this.state.listLength - 1 });
-        this.props.onChange(model);
+        this.setState({ model });
+        this.props.onChange(model.map(item => item.value));
     }
 
     getChildContext() {
@@ -64,7 +80,6 @@ export class ListField extends React.Component {
     }
 
     getList(children) {
-        const list = [];
         const {
             name,
             removeButton: {
@@ -72,18 +87,19 @@ export class ListField extends React.Component {
                 className,
                 value
             } = {},
-            hideRemoveButton
+            hideRemoveButton,
+            itemWrapperClassName
         } = this.props;
 
-        for(let key = 0; key < this.state.listLength; key += 1){
+        return this.state.model.map((item, key) => {
             const child = React.cloneElement(children, {
                 name: `${name}-${key}`,
-                value: this.state.model[key],
-                key
+                value: item.value,
+                key: item.id
             });
 
-            list.push(
-               <div key={`${name}-${key}`}>
+            return (
+               <div key={item.id} className={itemWrapperClassName}>
                    <div>{child}</div>
                    {!hideRemoveButton && <div className={wrapperClassName}>
                        <span
@@ -95,8 +111,7 @@ export class ListField extends React.Component {
                    </div>}
                </div>
             );
-        }
-        return list;
+        });
     }
 
     render() {
@@ -139,6 +154,7 @@ ListField.childContextTypes = {
 ListField.propTypes = {
     className: PropTypes.string,
     wrapperClassName: PropTypes.string,
+    itemWrapperClassName: PropTypes.string,
     label: PropTypes.string,
     addButton: PropTypes.shape({
         className: PropTypes.string,

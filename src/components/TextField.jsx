@@ -19,7 +19,7 @@ export const TextField = ({
     <div className={wrapperClassName}>
         {label && <label>{label}</label>}
         <input
-            type={type}
+            type={type === String ? 'text' : type}
             name={name}
             onChange={(e) => onChange(e.target.value)}
             value={value}
