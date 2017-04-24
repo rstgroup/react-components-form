@@ -26,7 +26,7 @@ export class Form extends React.Component {
     registerEvents() {
         if (this.eventsListener) {
             this.eventsListener.registerEventListener('submit', () => {
-                this.submitForm();
+                return this.submitForm();
             });
             this.eventsListener.registerEventListener('validate', (schema) => {
                 return this.validateModel(this.state.model, schema || this.state.schema);
@@ -90,7 +90,7 @@ export class Form extends React.Component {
             });
             return;
         }
-        this.runSubmit(errors, model);
+        return this.runSubmit(errors, model);
     }
 
     runSubmit(errors, model) {
@@ -99,6 +99,7 @@ export class Form extends React.Component {
             return;
         }
         this.props.onSubmit(model);
+        return model;
     }
 
     getChildContext() {
