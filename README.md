@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.8.3-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.8.4-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
