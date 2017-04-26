@@ -16,7 +16,7 @@ export const TextareaField = ({
     errorStyles = {},
     fieldAttributes = {}
 }) => (
-    <div className={classnames(wrapperClassName, errorStyles.fieldClassName)}>
+    <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <textarea
             name={name}

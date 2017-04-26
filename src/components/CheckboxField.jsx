@@ -35,7 +35,7 @@ export class CheckboxField extends React.Component {
             fieldAttributes = {}
         } = this.props;
         return (
-            <div className={classnames(wrapperClassName, errorStyles.fieldClassName)}>
+            <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
                 <label>
                     <input
                         type="checkbox"
