@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-export class Form extends React.Component {
+class Form extends React.Component {
     constructor(props) {
         super(props);
 

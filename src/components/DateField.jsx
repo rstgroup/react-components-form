@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
+import classnames from 'classnames';
 
 const getDateString = (date = new Date()) => {
     const day = date.getDate();
@@ -26,7 +27,7 @@ export const DateField = ({
     errorStyles = {},
     fieldAttributes = {}
 }) => (
-    <div className={wrapperClassName}>
+    <div className={classnames(wrapperClassName, errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <input
             type='date'

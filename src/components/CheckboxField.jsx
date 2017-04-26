@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
+import classnames from 'classnames';
 
 export class CheckboxField extends React.Component {
     constructor(props) {
@@ -34,7 +35,7 @@ export class CheckboxField extends React.Component {
             fieldAttributes = {}
         } = this.props;
         return (
-            <div className={wrapperClassName}>
+            <div className={classnames(wrapperClassName, errorStyles.fieldClassName)}>
                 <label>
                     <input
                         type="checkbox"

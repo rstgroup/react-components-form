@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
+import classnames from 'classnames';
 
 export const TextareaField = ({
     wrapperClassName,
@@ -9,13 +10,13 @@ export const TextareaField = ({
     name,
     errors,
     error,
-    value,
+    value = '',
     label,
     placeholder,
     errorStyles = {},
     fieldAttributes = {}
 }) => (
-    <div className={wrapperClassName}>
+    <div className={classnames(wrapperClassName, errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <textarea
             name={name}

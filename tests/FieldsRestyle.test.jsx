@@ -1,7 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import TextField from '../src/components/TextField';
-import NumberField from '../src/components/NumberField';
 import FieldsRestyle from '../src/components/FieldsRestyle';
 
 describe('FieldsRestyle', () => {
@@ -15,13 +14,10 @@ describe('FieldsRestyle', () => {
                 className: 'form-control',
                 errorStyles
             }
-        });
-        expect(Object.keys(Fields).length).toBe(10);
+        }, { TextField });
+        expect(Object.keys(Fields).length).toBe(1);
         const TextComponent = Fields.TextField;
-        const textWrapper = mount(<TextComponent />);
-        expect(textWrapper.find(TextField).props().className).toBe('form-control');
-        const NumberComponent = Fields.NumberField;
-        const numberWrapper = mount(<NumberComponent />);
-        expect(numberWrapper.find(NumberField).props().className).toBe(undefined);
+        const textComponentWrapper = mount(<TextComponent />);
+        expect(textComponentWrapper.find(TextField).props().className).toBe('form-control');
     });
 });
