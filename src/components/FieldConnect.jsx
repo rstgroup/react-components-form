@@ -18,7 +18,7 @@ export const FieldConnect = (Component) => {
             const { setModel, eventsListener } = this.context;
             if (typeof setModel !== 'function') return;
             if (name && value) setModel(name, value);
-            if (name && !value && options) setModel(name, options[0]);
+            if (name && !value && options) setModel(name, options[0].label ? options[0].value : options[0]);
             if (eventsListener && typeof onChangeModel === 'function') {
                 this.onChangeModelMethod = ({ name, value }) => {
                     return onChangeModel({ name, value }, this);
@@ -28,10 +28,10 @@ export const FieldConnect = (Component) => {
         }
 
         componentWillUnmount() {
-          const { eventsListener } = this.context;
-          if (eventsListener && typeof this.onChangeModelMethod === 'function') {
+            const { eventsListener } = this.context;
+            if (eventsListener && typeof this.onChangeModelMethod === 'function') {
               eventsListener.unregisterEventListener('changeModel', this.onChangeModelMethod);
-          }
+            }
         }
 
         getChildContext() {

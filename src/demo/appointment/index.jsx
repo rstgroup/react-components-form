@@ -71,7 +71,6 @@ const appointmentSchema = new Schema({
     serviceId:{
         type: String,
         required: true,
-        options: services
     }
 });
 
@@ -93,7 +92,7 @@ const AppointmentForm = () => (
         <TextField name="phone" placeholder="Phone number" />
         <TextField name="clientName" placeholder="Name & Surname" />
         <SelectField name="userId" label="Responsible person" />
-        <SelectField name="serviceId" label="Service" />
+        <SelectField name="serviceId" label="Service" options={services} />
         <SubmitField value="Submit" />
     </Form>
 );
