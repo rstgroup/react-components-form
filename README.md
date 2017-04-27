@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.8.6-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v1.9.2-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
@@ -136,7 +136,9 @@ You can use current fields or create new fields. Here You have list of fields.
 | label | String, Node |
 | placeholder | String |
 | options | [String], [{label: String, value: String}] |
-| errorStyles | {className, itemClassName, ErrorComponent} |
+| className | String |
+| wrapperClassName | String |
+| errorStyles | {className, itemClassName, fieldClassName, ErrorComponent} |
 | onChangeModel | Function(data: { name: String, value: Any }, componentInstance: FieldComponentInstance) |
 | fieldAttributes | Object with html attributes for input |
 | eventsListener (from context) | Instance of FormEventsListener (prop avaible if you have eventListener in form) |
@@ -509,64 +511,52 @@ export default MemberForm;
 You can restyle all fields by FieldRestyle method
 
 ```js
-import { FieldsRestyle } from 'react-components-form';
 import {
-    TextField,
-    DateField,
-    TextareaField,
-    NumberField,
-    SubmitField,
-    SelectField,
-    CheckboxField,
-    ObjectField,
-    ListField
+    fieldsRestyle
+    TextField as TextFieldUnstyled,
+    DateField as DateFieldUnstyled,
+    TextareaField as TextareaFieldUnstyled,
+    NumberField as NumberFieldUnstyled,
+    SubmitField as SubmitFieldUnstyled,
+    SelectField as SelectFieldUnstyled,
+    CheckboxField as CheckboxFieldUnstyled,
+    ListField as ListFieldUnstyled
 } from 'react-components-form';
 
-const fields = {
-    TextField,
-    DateField,
-    TextareaField,
-    NumberField,
-    SubmitField,
-    SelectField,
-    CheckboxField,
-    ObjectField,
-    ListField
-};
 const errorStyles = {
     className: 'alert alert-danger'
 };
 
-const Fields = FieldsRestyle(fields, {
-    TextField: {
+const Fields = fieldsRestyle({
+    TextFieldUnstyled: {
         className: 'form-control',
         errorStyles
     },
-    DateField: {
+    DateFieldUnstyled: {
         className: 'form-control',
         errorStyles
     },
-    TextareaField: {
+    TextareaFieldUnstyled: {
         className: 'form-control',
         errorStyles
     },
-    NumberField: {
+    NumberFieldUnstyled: {
         className: 'form-control',
         errorStyles
     },
-    SubmitField: {
+    SubmitFieldUnstyled: {
         className: 'btn btn-primary',
         errorStyles
     },
-    SelectField: {
+    SelectFieldUnstyled: {
         className: 'form-control',
         errorStyles
     },
-    CheckboxField: {
+    CheckboxFieldUnstyled: {
         wrapperClassName: 'checkbox',
         errorStyles
     },
-    ListField: {
+    ListFieldUnstyled: {
         className: 'form-control',
         errorStyles,
         addButton: {
@@ -576,18 +566,25 @@ const Fields = FieldsRestyle(fields, {
             className: 'btn btn-danger btn-xs pull-right'
         }
     }
+}, {
+    TextFieldUnstyled,
+    DateFieldUnstyled,
+    TextareaFieldUnstyled,
+    NumberFieldUnstyled,
+    SubmitFieldUnstyled,
+    SelectFieldUnstyled,
+    CheckboxFieldUnstyled,
+    ListFieldUnstyled
 });
 
-export const Form = Fields.Form;
-export const TextField = Fields.TextField;
-export const DateField = Fields.DateField;
-export const TextareaField = Fields.TextareaField;
-export const NumberField = Fields.NumberField;
-export const SubmitField = Fields.SubmitField;
-export const SelectField = Fields.SelectField;
-export const CheckboxField = Fields.CheckboxField;
-export const ObjectField = Fields.ObjectField;
-export const ListField = Fields.ListField;
+export const TextField = Fields.TextFieldUnstyled;
+export const DateField = Fields.DateFieldUnstyled;
+export const TextareaField = Fields.TextareaFieldUnstyled;
+export const NumberField = Fields.NumberFieldUnstyled;
+export const SubmitField = Fields.SubmitFieldUnstyled;
+export const SelectField = Fields.SelectFieldUnstyled;
+export const CheckboxField = Fields.CheckboxFieldUnstyled;
+export const ListField = Fields.ListFieldUnstyled;
 export default Fields;
 ```
 

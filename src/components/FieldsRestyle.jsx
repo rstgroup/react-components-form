@@ -6,6 +6,7 @@ const extendStyles = (
     styles,
     {
         className,
+        wrapperClassName,
         itemWrapperClassName,
         addButton = {},
         removeButton = {},
@@ -15,6 +16,7 @@ const extendStyles = (
 ) => {
     return {
         className: classnames(get(styles,'className'), className),
+        wrapperClassName: classnames(get(styles,'wrapperClassName'), wrapperClassName),
         itemWrapperClassName: classnames(get(styles,'itemWrapperClassName'), itemWrapperClassName),
         addButton: {
             ...addButton,
@@ -34,7 +36,7 @@ const extendStyles = (
     };
 };
 
-const fieldRestyle = (styles, fields) => {
+const fieldsRestyle = (styles, fields) => {
     const restyledFields = {};
     Object.keys(fields).forEach(fieldName => {
         const Field = fields[fieldName];
@@ -47,4 +49,4 @@ const fieldRestyle = (styles, fields) => {
     return restyledFields;
 };
 
-export default fieldRestyle;
+export default fieldsRestyle;

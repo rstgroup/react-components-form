@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import TextField from '../src/components/TextField';
-import FieldsRestyle from '../src/components/FieldsRestyle';
+import fieldsRestyle from '../src/components/FieldsRestyle';
 
 describe('FieldsRestyle', () => {
     it('should restyle field TextField',() => {
@@ -9,7 +9,7 @@ describe('FieldsRestyle', () => {
             className: 'alert alert-danger'
         };
 
-        const Fields = FieldsRestyle({
+        const Fields = fieldsRestyle({
             TextField: {
                 className: 'form-control',
                 errorStyles
