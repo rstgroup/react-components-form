@@ -6,6 +6,7 @@ import classnames from 'classnames';
 export const SelectField = ({
     wrapperClassName,
     className,
+    labelClassName,
     onChange,
     name,
     errors,
@@ -18,7 +19,7 @@ export const SelectField = ({
     fieldAttributes = {}
 }) => (
     <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label className={labelClassName}>{label}</label>}
         <select
             name={name}
             onChange={(e) => onChange(e.target.value)}
@@ -43,6 +44,7 @@ export const SelectField = ({
 SelectField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
+    labelClassName: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([

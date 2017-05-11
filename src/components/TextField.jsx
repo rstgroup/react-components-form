@@ -6,6 +6,7 @@ import classnames from 'classnames';
 export const TextField = ({
     wrapperClassName,
     className,
+    labelClassName,
     onChange,
     name,
     type = 'text',
@@ -18,7 +19,7 @@ export const TextField = ({
     fieldAttributes = {}
 }) => (
     <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label className={labelClassName}>{label}</label>}
         <input
             type={type === String ? 'text' : type}
             name={name}
@@ -35,6 +36,7 @@ export const TextField = ({
 TextField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
+    labelClassName: PropTypes.string,
     name: PropTypes.string,
     type: PropTypes.any,
     onChange: PropTypes.func.isRequired,

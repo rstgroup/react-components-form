@@ -119,6 +119,7 @@ export class ListField extends React.Component {
             children,
             className,
             wrapperClassName,
+            labelClassName,
             label,
             addButton = {},
             hideAddButton,
@@ -126,7 +127,7 @@ export class ListField extends React.Component {
         } = this.props;
         return (
             <div className={wrapperClassName}>
-                {label && <label>{label}</label>}
+                {label && <label className={labelClassName}>{label}</label>}
                 <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
                 {!hideAddButton && <span
                     onClick={this.addListElement}
@@ -155,6 +156,7 @@ ListField.propTypes = {
     className: PropTypes.string,
     wrapperClassName: PropTypes.string,
     itemWrapperClassName: PropTypes.string,
+    labelClassName: PropTypes.string,
     label: PropTypes.string,
     addButton: PropTypes.shape({
         className: PropTypes.string,

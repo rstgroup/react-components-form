@@ -26,23 +26,22 @@ export class CheckboxField extends React.Component {
         const {
             wrapperClassName,
             className,
+            labelClassName,
             name,
             errors,
             error,
             label,
-            placeholder,
             errorStyles = {},
             fieldAttributes = {}
         } = this.props;
         return (
             <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
-                <label>
+                <label className={labelClassName}>
                     <input
                         type="checkbox"
                         checked={this.state.checked}
                         name={name}
                         onChange={this.toggleValue}
-                        placeholder={placeholder}
                         className={className}
                         {...fieldAttributes}
                     />
@@ -57,6 +56,7 @@ export class CheckboxField extends React.Component {
 CheckboxField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
+    labelClassName: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([
@@ -69,7 +69,6 @@ CheckboxField.propTypes = {
     value: PropTypes.any,
     checkboxValue: PropTypes.any,
     label: PropTypes.string,
-    placeholder: PropTypes.string,
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
         itemClassName: PropTypes.string

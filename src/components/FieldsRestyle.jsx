@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React  from 'react';
 import classnames from 'classnames';
 import { get } from '../helpers';
 
@@ -7,6 +7,7 @@ const extendStyles = (
     {
         className,
         wrapperClassName,
+        labelClassName,
         itemWrapperClassName,
         addButton = {},
         removeButton = {},
@@ -17,6 +18,7 @@ const extendStyles = (
     return {
         className: classnames(get(styles,'className'), className),
         wrapperClassName: classnames(get(styles,'wrapperClassName'), wrapperClassName),
+        labelClassName: classnames(get(styles,'labelClassName'), labelClassName),
         itemWrapperClassName: classnames(get(styles,'itemWrapperClassName'), itemWrapperClassName),
         addButton: {
             ...addButton,

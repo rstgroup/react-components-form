@@ -6,6 +6,7 @@ import classnames from 'classnames';
 export const TextareaField = ({
     wrapperClassName,
     className,
+    labelClassName,
     onChange,
     name,
     errors,
@@ -17,7 +18,7 @@ export const TextareaField = ({
     fieldAttributes = {}
 }) => (
     <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label className={labelClassName}>{label}</label>}
         <textarea
             name={name}
             onChange={(e) => onChange(e.target.value)}
@@ -33,6 +34,7 @@ export const TextareaField = ({
 TextareaField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
+    labelClassName: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([

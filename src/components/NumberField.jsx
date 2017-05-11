@@ -6,6 +6,7 @@ import classnames from 'classnames';
 export const NumberField = ({
     wrapperClassName,
     className,
+    labelClassName,
     onChange,
     name,
     errors,
@@ -17,7 +18,7 @@ export const NumberField = ({
     fieldAttributes = {}
 }) => (
     <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label className={labelClassName}>{label}</label>}
         <input
             type="number"
             name={name}
@@ -34,6 +35,7 @@ export const NumberField = ({
 NumberField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
+    labelClassName: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([

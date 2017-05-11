@@ -17,6 +17,7 @@ const getDateString = (date = new Date()) => {
 export const DateField = ({
     wrapperClassName,
     className,
+    labelClassName,
     onChange,
     name,
     errors,
@@ -28,7 +29,7 @@ export const DateField = ({
     fieldAttributes = {}
 }) => (
     <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label className={labelClassName}>{label}</label>}
         <input
             type='date'
             name={name}
@@ -45,6 +46,7 @@ export const DateField = ({
 DateField.propTypes = {
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
+    labelClassName: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     errors: PropTypes.oneOfType([
