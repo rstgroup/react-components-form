@@ -157,9 +157,9 @@ You can submit your form outside form context by use FormEventsListener. Form re
 | unregisterEventListener | name: String, handler: Instance of registred function |
 | callEvent | name: String<br />data: Any |
 
-#### How create new field
+#### How to create new field
 
-If You want create Your own custom field You must create component that use onChange method from props when value is changed and on export use FieldConnect method. FieldConnect will wrap Your field component and give props from form to Your field. Abow You have example of custom text field that have icon.
+If You want to create Custom field You need to create component with onChange prop (it's a method that fires when value changes) and wrap it with FieldConnect method on export. FieldConnect provide form props to Your component. Below You can find an example of custom text field with icon.
 
 ```js
 import React from 'react';
@@ -168,6 +168,7 @@ import { FieldConnect, ErrorField } from 'react-components-form';
 const CustomTextField = ({
     wrapperClassName,
     className,
+    labelClassName,
     onChange,
     name,
     errors,
@@ -179,7 +180,7 @@ const CustomTextField = ({
     fieldAttributes = {}
 }) => (
     <div className={wrapperClassName}>
-        {label && <label>{label}</label>}
+        {label && <label className={labelClassName}>{label}</label>}
         <input
             type="text"
             name={name}
@@ -189,7 +190,7 @@ const CustomTextField = ({
             className={className}
             {...fieldAttributes}
         />
-        <icon className="some-icon-class" />
+        <i className="some-icon-class" />
         {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
 );
