@@ -137,6 +137,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | placeholder | String |
 | options | [String], [{label: String, value: String}] |
 | className | String |
+| labelClassName | String |
 | wrapperClassName | String |
 | errorStyles | {className, itemClassName, fieldClassName, ErrorComponent} |
 | onChangeModel | Function(data: { name: String, value: Any }, componentInstance: FieldComponentInstance) |
