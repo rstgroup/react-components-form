@@ -100,7 +100,7 @@ export class ListField extends React.Component {
 
             return (
                <div key={item.id} className={itemWrapperClassName}>
-                   <div>{child}</div>
+                   {child}
                    {!hideRemoveButton && <div className={wrapperClassName}>
                        <span
                            onClick={() => this.removeListElement(key)}

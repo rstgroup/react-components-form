@@ -17,36 +17,45 @@ const errorStyles = {
 const Fields = fieldRestyle({
     TextFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
     DateFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
     TextareaFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
     NumberFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
     SubmitFieldUnstyled: {
-        className: 'btn btn-primary',
+        wrapperClassName: 'clearfix',
+        className: 'btn btn-primary pull-right',
         errorStyles
     },
     SelectFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
     CheckboxFieldUnstyled: {
-        wrapperClassName: 'checkbox',
+        wrapperClassName: 'form-group checkbox',
         errorStyles
     },
     ListFieldUnstyled: {
+        className: 'form-group',
+        wrapperClassName: 'form-group',
+        itemWrapperClassName: 'form-group clearfix',
         errorStyles,
         addButton: {
-            className: 'btn btn-success btn-xs'
+            className: 'btn btn-success btn-sm'
         },
         removeButton: {
             className: 'btn btn-danger btn-xs pull-right'
