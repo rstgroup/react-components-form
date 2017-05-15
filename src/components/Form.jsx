@@ -20,6 +20,7 @@ class Form extends React.Component {
         this.getErrors = this.getErrors.bind(this);
         this.getPath = this.getPath.bind(this);
         this.validateModel = this.validateModel.bind(this);
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.registerEvents();
     }
 
@@ -30,6 +31,10 @@ class Form extends React.Component {
             });
             this.eventsListener.registerEventListener('validate', (schema) => {
                 return this.validateModel(this.state.model, schema || this.state.schema);
+            });
+            this.eventsListener.registerEventListener('reset', (model) => {
+                const newModel = model || this.getDefaultModelValue(this.state.schema);
+                this.setState({model: newModel});
             });
         }
     }
@@ -60,7 +65,7 @@ class Form extends React.Component {
     }
 
     getPath() {
-        return 'form';
+        return this.props.id;
     }
 
     validateModel(model, schema) {
@@ -114,12 +119,26 @@ class Form extends React.Component {
         }
     }
 
+    handleFormSubmit(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.submitForm();
+    }
+
     render() {
-        const { children, className } = this.props;
+        const { children, className, subform, id } = this.props;
+
+        if (subform) {
+            return (
+                <div className={className}>
+                    {children}
+                </div>
+            );
+        }
         return (
-            <div className={className}>
+            <form onSubmit={this.handleFormSubmit} id={id} className={className}>
                 {children}
-            </div>
+            </form>
         );
     }
 }
@@ -147,6 +166,7 @@ Form.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     validateOnChange: PropTypes.bool,
     customValidation: PropTypes.func,
+    subform: PropTypes.bool,
     eventsListener: PropTypes.shape({
         callEvent: PropTypes.func,
         registerEvent: PropTypes.func,
@@ -154,6 +174,10 @@ Form.propTypes = {
         unregisterEvent: PropTypes.func,
         unregisterEventListener: PropTypes.func,
     })
+};
+
+Form.defaultProps = {
+    id: 'form'
 };
 
 export default Form;

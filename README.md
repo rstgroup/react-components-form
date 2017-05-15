@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
 <img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v1.9.2-blue.svg" />
+<img src="https://img.shields.io/badge/npm-v2.1.0-blue.svg" />
 
 1. [Installation](#installation)
 2. [Description](#description)
@@ -109,6 +109,7 @@ $ npm run test
 | customValidation | Function(model) { return errors} |
 | eventsListener | Instance of FormEventsListener |
 | className | String |
+| subform | Boolean |
 
 ### Fields
 
@@ -155,6 +156,13 @@ You can submit your form outside form context by use FormEventsListener. Form re
 | unregisterEvent | name: String |
 | unregisterEventListener | name: String, handler: Instance of registred function |
 | callEvent | name: String<br />data: Any |
+
+##### Default events names:
+
+- changeModel
+- submit
+- validate
+- reset
 
 #### How create new field
 
