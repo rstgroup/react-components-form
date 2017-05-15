@@ -223,4 +223,68 @@ describe('Form', () => {
         wrapper.unmount();
         expect(eventsListener.eventsListeners.changeModel.length).toBe(0);
     });
+
+    it('should submit form by default form submit',() => {
+        const mockSubmit = jest.fn();
+        const wrapper = mount(
+            <Form
+                onSubmit={mockSubmit}
+            >
+                <TextField name="title" label="Title" />
+            </Form>
+        );
+        const formElement = wrapper.find('form');
+        formElement.simulate('submit');
+        expect(mockSubmit).toBeCalled();
+    });
+
+    it('should display subform without form tag',() => {
+        const mockSubmit = jest.fn();
+        const wrapper = mount(
+            <Form
+                onSubmit={mockSubmit}
+                subform
+            >
+                <TextField name="title" label="Title" />
+            </Form>
+        );
+        const formElement = wrapper.find('form');
+        expect(formElement.length).toBe(0);
+    });
+
+    it('should reset form by FormEventsListener',() => {
+        const mockSubmit = jest.fn();
+        const eventListener = new FormEventsListener();
+        const wrapper = mount(
+            <Form
+                onSubmit={mockSubmit}
+                eventsListener={eventListener}
+            >
+                <TextField name="title" label="Title" />
+            </Form>
+        );
+        const titleField = wrapper.find(TextField);
+        titleField.find('input').first().simulate('change', {target: {value: 'test'}});
+        eventListener.callEvent('reset');
+        eventListener.callEvent('submit');
+        expect(mockSubmit).toBeCalledWith({});
+    });
+
+    it('should reset form by FormEventsListener with new model',() => {
+        const mockSubmit = jest.fn();
+        const eventListener = new FormEventsListener();
+        const wrapper = mount(
+            <Form
+                onSubmit={mockSubmit}
+                eventsListener={eventListener}
+            >
+                <TextField name="title" label="Title" />
+            </Form>
+        );
+        const titleField = wrapper.find(TextField);
+        titleField.find('input').first().simulate('change', {target: {value: 'test'}});
+        eventListener.callEvent('reset', {title: 'new'});
+        eventListener.callEvent('submit');
+        expect(mockSubmit).toBeCalledWith({title: 'new'});
+    });
 });

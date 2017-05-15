@@ -17,7 +17,7 @@ describe('FormEventsListener', () => {
 
     it('should not unregister event if not exists', () => {
         eventsListener.unregisterEvent('afterSubmit');
-        expect(Object.keys(eventsListener.eventsListeners).length).toBe(3);
+        expect(Object.keys(eventsListener.eventsListeners).length).toBe(4);
     });
 
     it('should register event listener', () => {
