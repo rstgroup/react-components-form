@@ -45,12 +45,8 @@ export class ObjectField extends React.Component {
     getErrors(name) {
         const { getErrors } = this.context;
         const errors = getErrors(this.props.name);
-        if(Array.isArray(errors)){
-            const returnedErrors = [];
-            errors.forEach(error => {
-                if (error[name]) returnedErrors.push(error[name]);
-            });
-            return returnedErrors;
+        if(Array.isArray(errors) && errors.length === 1){
+            return errors[0][name] || [];
         }
         return errors[name] || [];
     }
