@@ -144,6 +144,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | fieldAttributes | Object with html attributes for input |
 | eventsListener (from context) | Instance of FormEventsListener (prop avaible if you have eventListener in form) |
 | path (from context) | String (this prop give you path to field "form.someObjectField.thisField") |
+| trim (**TextField**) | boolean (trims values passed to `onChange` if set) |
 
 ### FormEventsListener
 
@@ -206,7 +207,7 @@ export default FieldConnect(CustomTextField);
 
 ### How to use
 
-You can define any form. Abow You have example of login and registration form. 
+You can define any form. Abow You have example of login and registration form.
 
 #### Example of login form
 
