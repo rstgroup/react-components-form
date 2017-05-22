@@ -12,6 +12,7 @@ import {
 
 describe('Form', () => {
     jest.useFakeTimers();
+
     it('should run error method from props',() => {
         const loginSchema = new Schema({
             login:{
@@ -54,7 +55,7 @@ describe('Form', () => {
             },
             errorMessage: `async validation failed`
         });
-        
+
         const loginSchema = new Schema({
             login:{
                 type: String,
@@ -151,6 +152,12 @@ describe('Form', () => {
         const fieldSubmit = wrapper.find(SubmitField);
         fieldSubmit.find('button').simulate('click');
         expect(mockSubmit.mock.calls.length).toBe(1);
+
+        mockSubmit.mockClear();
+
+        const formComponent = wrapper.find(Form);
+        formComponent.find('form').simulate('submit', { preventDefault: jest.fn() });
+        expect(mockSubmit).toHaveBeenCalledTimes(1);
     });
 
     it('should update model on field value change',() => {

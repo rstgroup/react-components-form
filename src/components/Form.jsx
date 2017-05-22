@@ -20,7 +20,6 @@ class Form extends React.Component {
         this.getErrors = this.getErrors.bind(this);
         this.getPath = this.getPath.bind(this);
         this.validateModel = this.validateModel.bind(this);
-        this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.registerEvents();
     }
 
@@ -85,9 +84,13 @@ class Form extends React.Component {
         return errors;
     }
 
-    submitForm() {
+    submitForm(event) {
         const model = Object.assign({}, this.state.model);
         const errors = this.validateModel(model, this.state.schema);
+
+        if (event) {
+            event.preventDefault();
+        }
 
         if (errors instanceof Promise){
             errors.then((errors) => {
@@ -119,12 +122,6 @@ class Form extends React.Component {
         }
     }
 
-    handleFormSubmit(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        this.submitForm();
-    }
-
     render() {
         const { children, className, subform, id } = this.props;
 
@@ -136,7 +133,7 @@ class Form extends React.Component {
             );
         }
         return (
-            <form onSubmit={this.handleFormSubmit} id={id} className={className}>
+            <form onSubmit={this.submitForm} id={id} className={className}>
                 {children}
             </form>
         );
