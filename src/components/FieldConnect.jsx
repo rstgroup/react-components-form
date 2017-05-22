@@ -71,10 +71,10 @@ export const FieldConnect = (Component) => {
             return this.context.eventsListener;
         }
 
-        submit() {
+        submit(event) {
             const { submitForm } = this.context;
             if (typeof submitForm !== 'function') return;
-            submitForm();
+            submitForm(event);
         }
 
         getErrors() {
