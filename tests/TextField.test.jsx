@@ -24,4 +24,14 @@ describe('TextField', () => {
         wrapper.setProps({type: 'number'});
         wrapper.find('input').simulate('change', {target:{value:'testValue'}});
     });
+
+    it('should call onChange with trimmed value if trim flag is set', () => {
+        const fakeOnChange = jest.fn();
+        const fakeEvent = { target: { value: '  test value  ' } };
+        const wrapper = mount(<TextField onChange={fakeOnChange} trim />);
+
+        wrapper.find('input').simulate('change', fakeEvent);
+
+        expect(fakeOnChange).toHaveBeenCalledWith('test value');
+    })
 });
