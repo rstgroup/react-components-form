@@ -3,8 +3,8 @@ var webpack = require('webpack');
 module.exports = {
     entry: ['babel-polyfill', "./src/demo/index.jsx"],
     output: {
-        path: '/libs/',
-        filename: "main.js"
+        path: '/dist/',
+        filename: "demo.js"
     },
     resolve: {
         extensions: ['.js', '.jsx']

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
-class ObjectField extends React.Component {
+export class ObjectField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,17 +15,21 @@ class ObjectField extends React.Component {
         this.getErrors = this.getErrors.bind(this);
     }
 
+    componentWillReceiveProps({ value = {} }){
+        this.setState({model: value});
+    }
+
     componentWillMount() {
         const { getSchema } = this.context;
         const schema = getSchema(this.props.name).type;
         this.setState({ schema })
     }
 
-    setModel(name, value) {
+    setModel(name, value, callback) {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
-        this.setState({ model });
-        if (typeof this.props.onChange === 'function') this.props.onChange(model);
+        this.setState({ model }, callback);
+        this.props.onChange(model);
     }
 
     getModel(name) {
@@ -33,19 +37,16 @@ class ObjectField extends React.Component {
     }
 
     getSchema(name) {
-        if(!Array.isArray(this.state.schema)) return this.state.schema.getField(name);
-        return this.state.schema[0].getField(name);
+        if (!this.state.schema) return {};
+        if (Array.isArray(this.state.schema)) return this.state.schema[0].getField(name);
+        return this.state.schema.getField(name);
     }
 
     getErrors(name) {
         const { getErrors } = this.context;
         const errors = getErrors(this.props.name);
-        if(Array.isArray(errors)){
-            const returnedErrors = [];
-            errors.forEach(error => {
-                if (error[name]) returnedErrors.push(error[name]);
-            });
-            return returnedErrors;
+        if(Array.isArray(errors) && errors.length === 1){
+            return errors[0][name] || [];
         }
         return errors[name] || [];
     }
@@ -60,9 +61,9 @@ class ObjectField extends React.Component {
     }
 
     render() {
-        const { children, wrapperClassName } = this.props;
+        const { children, wrapperClassName, fieldAttributes } = this.props;
         return (
-            <div className={wrapperClassName}>
+            <div className={wrapperClassName} {...fieldAttributes}>
                 {children}
             </div>
         );
@@ -82,8 +83,12 @@ ObjectField.childContextTypes = {
 };
 
 ObjectField.propTypes = {
-    model: PropTypes.object,
-    schema: PropTypes.object
+    value: PropTypes.shape({}),
+    name: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    children: PropTypes.node,
+    wrapperClassName: PropTypes.string,
+    fieldAttributes: PropTypes.shape({})
 };
 
 export default FieldConnect(ObjectField);

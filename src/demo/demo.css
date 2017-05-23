@@ -1,52 +1,45 @@
-.row{
+.row {
     display: block;
     width: 100%;
-    border-bottom: 2px solid #dddddd;
+    border-bottom: 2px solid #ddd;
     vertical-align: top;
-    padding: 15px 0px;
+    padding: 15px 0;
 }
 
-.column{
+.column {
     display: inline-block;
     width: calc(49% - 300px);
     vertical-align: top;
-    margin: 0px 150px;
+    margin: 0 150px;
 }
 
-.form{
-    width: 70%;
+.form {
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
 
-.listWrapper{
-    margin-left: 15px;
-}
-
-.field{
+label {
     display: block;
-}
-
-label{
-    display: block;
-    margin-left: 10px;
-    font-size: 11px;
-    margin-top: 10px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     font-weight: 600;
-    color: #666666;
+    color: #666;
 }
 
-.objectFormField{
+.listWrapper:not(:empty) {
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.listWrapper > div:last-of-type {
+    margin-bottom: 0;
+}
+
+.objectFormField {
     margin-bottom: 10px;
 }
 
-.objectFieldClassName{
-    background: #eaeaea;
-    padding: 15px;
+.objectFieldClassName {
     border-radius: 4px;
-}
-
-.objectFieldClassName span{
-
 }

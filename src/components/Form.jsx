@@ -3,22 +3,51 @@ import React, { PropTypes } from 'react';
 class Form extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             schema: props.schema || {},
-            model: props.model || props.schema.getDefaultValues(),
-            errors: {}
+            model: props.model || this.getDefaultModelValue(props.schema),
+            errors: {},
+            validateOnChange: props.validateOnChange
         };
+
+        this.eventsListener = props.eventsListener;
         this.setModel = this.setModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
+        this.runSubmit = this.runSubmit.bind(this);
         this.getErrors = this.getErrors.bind(this);
+        this.getPath = this.getPath.bind(this);
+        this.validateModel = this.validateModel.bind(this);
+        this.registerEvents();
     }
 
-    setModel(name, value) {
+    registerEvents() {
+        if (this.eventsListener) {
+            this.eventsListener.registerEventListener('submit', () => {
+                return this.submitForm();
+            });
+            this.eventsListener.registerEventListener('validate', (schema) => {
+                return this.validateModel(this.state.model, schema || this.state.schema);
+            });
+            this.eventsListener.registerEventListener('reset', (model) => {
+                const newModel = model || this.getDefaultModelValue(this.state.schema);
+                this.setState({model: newModel});
+            });
+        }
+    }
+
+    getDefaultModelValue(schema) {
+        if (schema && typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
+        return {};
+    }
+
+    setModel(name, value, callback) {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
-        this.setState({ model });
+        this.setState({ model }, callback);
+        if (this.state.validateOnChange) this.validateModel(model, this.state.schema);
     }
 
     getModel(name) {
@@ -26,6 +55,7 @@ class Form extends React.Component {
     }
 
     getSchema(name) {
+        if(typeof this.state.schema.getField !== 'function') return {};
         return this.state.schema.getField(name);
     }
 
@@ -33,17 +63,51 @@ class Form extends React.Component {
         return this.state.errors[name] || {};
     }
 
-    submitForm() {
-        const model = Object.assign({}, this.state.model);
-        const { schema } = this.state;
-        const errors = schema.validate(model);
-        this.setState({ errors });
+    getPath() {
+        return this.props.id;
+    }
 
+    validateModel(model, schema) {
+        const { customValidation } = this.props;
+        let errors = {};
+        if (typeof schema.validate === 'function') errors = schema.validate(model);
+        if (typeof customValidation === 'function') errors = customValidation(model);
+        if (errors instanceof Promise) {
+            return new Promise((resolve) => {
+                errors.then(errorsFromPromise => {
+                    this.setState({errors: errorsFromPromise});
+                    resolve(errorsFromPromise);
+                });
+            })
+        }
+        this.setState({errors});
+        return errors;
+    }
+
+    submitForm(event) {
+        const model = Object.assign({}, this.state.model);
+        const errors = this.validateModel(model, this.state.schema);
+
+        if (event) {
+            event.preventDefault();
+        }
+
+        if (errors instanceof Promise){
+            errors.then((errors) => {
+                this.runSubmit(errors, model);
+            });
+            return;
+        }
+        return this.runSubmit(errors, model);
+    }
+
+    runSubmit(errors, model) {
         if (Object.keys(errors).length > 0) {
             if (this.props.onError) this.props.onError(errors, model);
             return;
         }
-        if (this.props.onSubmit) this.props.onSubmit(model);
+        this.props.onSubmit(model);
+        return model;
     }
 
     getChildContext() {
@@ -52,16 +116,26 @@ class Form extends React.Component {
             getModel: this.getModel,
             getSchema: this.getSchema,
             submitForm: this.submitForm,
-            getErrors: this.getErrors
+            getErrors: this.getErrors,
+            getPath: this.getPath,
+            eventsListener: this.eventsListener,
         }
     }
 
     render() {
-        const { children, className } = this.props;
+        const { children, className, subform, id } = this.props;
+
+        if (subform) {
+            return (
+                <div className={className}>
+                    {children}
+                </div>
+            );
+        }
         return (
-            <div className={className}>
+            <form onSubmit={this.submitForm} id={id} className={className}>
                 {children}
-            </div>
+            </form>
         );
     }
 }
@@ -71,12 +145,36 @@ Form.childContextTypes = {
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
     submitForm: PropTypes.func,
-    getErrors: PropTypes.func
+    getErrors: PropTypes.func,
+    getPath: PropTypes.func,
+    eventsListener: PropTypes.shape({
+        callEvent: PropTypes.func,
+        registerEvent: PropTypes.func,
+        registerEventListener: PropTypes.func,
+        unregisterEvent: PropTypes.func,
+        unregisterEventListener: PropTypes.func,
+    })
 };
 
 Form.propTypes = {
-    model: PropTypes.object,
-    schema: PropTypes.object
+    model: PropTypes.shape({}),
+    schema: PropTypes.shape({}),
+    onError: PropTypes.func,
+    onSubmit: PropTypes.func.isRequired,
+    validateOnChange: PropTypes.bool,
+    customValidation: PropTypes.func,
+    subform: PropTypes.bool,
+    eventsListener: PropTypes.shape({
+        callEvent: PropTypes.func,
+        registerEvent: PropTypes.func,
+        registerEventListener: PropTypes.func,
+        unregisterEvent: PropTypes.func,
+        unregisterEventListener: PropTypes.func,
+    })
+};
+
+Form.defaultProps = {
+    id: 'form'
 };
 
 export default Form;

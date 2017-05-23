@@ -10,6 +10,7 @@ import {
 } from '../../components/styled/Bootstrap';
 import Schema from 'form-schema-validation';
 import { listWrapper, objectFormField, objectFieldClassName } from '../demo.css';
+import { FormEventsListener } from '../../components';
 
 const options = [
     {
@@ -33,6 +34,27 @@ const personSchema = new Schema({
     },
     surname: {
         type: String
+    },
+    age: {
+        type: String,
+        options: [
+            {
+                label: 'Select age range',
+                value: ''
+            },
+            {
+                label: '18-21',
+                value: '18-21'
+            },
+            {
+                label: '22-28',
+                value: '22-28'
+            },
+            {
+                label: '29-40',
+                value: '29-40'
+            }
+        ]
     }
 });
 
@@ -61,14 +83,19 @@ const postSchema = new Schema({
     },
     languages:{
         type: [String]
+    },
+    status:{
+        type: Boolean
     }
 });
 
+const eventsListener = new FormEventsListener();
 const BookForm = () => (
     <Form
         schema={postSchema}
         onSubmit={data => console.log(data)}
         onError={(errors, data) => console.log('error', errors, data)}
+        eventsListener={eventsListener}
     >
         <h4>BOOK FORM</h4>
         <TextField name="title" type="text" />
@@ -78,8 +105,11 @@ const BookForm = () => (
                 <div className={objectFormField}>
                     <TextField name="name" placeholder="name"/>
                 </div>
-                <div>
+                <div className={objectFormField}>
                     <TextField name="surname" placeholder="surname"/>
+                </div>
+                <div>
+                    <SelectField name="age" />
                 </div>
             </ObjectField>
         </ListField>

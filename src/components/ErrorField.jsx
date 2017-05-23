@@ -1,17 +1,39 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-const ErrorField = ({
+export const ErrorField = ({
     errors = [],
     className,
-    itemClassName
-}) => (
-    <div className={className}>
-        {errors.map((error, key) => (
-            <div className={itemClassName} key={key}>
-                {error}
-            </div>
-        ))}
-    </div>
-);
+    itemClassName,
+    ErrorComponent
+}) => {
+    const errorsList = Array.isArray(errors) ? errors : [errors];
+    return (
+        ErrorComponent &&
+        <ErrorComponent
+            className={className}
+            itemClassName={itemClassName}
+            errors={errorsList}
+        />
+        ||
+        <div className={className}>
+            {errorsList.map(error => (
+                <div className={itemClassName} key={error}>
+                    {error}
+                </div>
+            ))}
+        </div>
+    );
+};
+
+ErrorField.propTypes = {
+    errors: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+        PropTypes.string
+    ]),
+    className: PropTypes.string,
+    itemClassName: PropTypes.string,
+    ErrorComponent: PropTypes.func
+};
 
 export default ErrorField;

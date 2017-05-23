@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
+import classnames from 'classnames';
 
 const getDateString = (date = new Date()) => {
     const day = date.getDate();
@@ -13,20 +14,20 @@ const getDateString = (date = new Date()) => {
     return `${year}-${month}-${day}`;
 };
 
-const TextField = ({
+export const DateField = ({
     wrapperClassName,
     className,
     onChange,
     name,
-    type = 'text',
     errors,
     error,
     value,
     label,
     placeholder,
-    errorStyles = {}
+    errorStyles = {},
+    fieldAttributes = {}
 }) => (
-    <div className={wrapperClassName}>
+    <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <input
             type='date'
@@ -35,9 +36,32 @@ const TextField = ({
             value={getDateString(value)}
             placeholder={placeholder}
             className={className}
+            {...fieldAttributes}
         />
         {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
 );
 
-export default FieldConnect(TextField);
+DateField.propTypes = {
+    wrapperClassName: PropTypes.string,
+    className: PropTypes.string,
+    name: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    errors: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+        PropTypes.string,
+        PropTypes.shape({})
+    ]),
+    error: PropTypes.bool,
+    value: PropTypes.shape({}),
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+    errorStyles: PropTypes.shape({
+        className: PropTypes.string,
+        itemClassName: PropTypes.string
+    }),
+    fieldAttributes: PropTypes.shape({})
+};
+
+export default FieldConnect(DateField);

@@ -1,43 +1,52 @@
 import React, { PropTypes } from 'react';
-import Form from './Form';
-import TextField from './TextField';
-import DateField from './DateField';
-import TextareaField from './TextareaField';
-import NumberField from './NumberField';
-import SubmitField from './SubmitField';
-import SelectField from './SelectField';
-import CheckboxField from './CheckboxField';
-import ObjectField from './ObjectField';
-import ListField from './ListField';
+import classnames from 'classnames';
+import { get } from '../helpers';
 
-const fields = {
-    TextField,
-    DateField,
-    TextareaField,
-    NumberField,
-    SubmitField,
-    SelectField,
-    CheckboxField,
-    ObjectField,
-    ListField
+const extendStyles = (
+    styles,
+    {
+        className,
+        wrapperClassName,
+        itemWrapperClassName,
+        addButton = {},
+        removeButton = {},
+        errorStyles = {},
+        ...restProps
+    }
+) => {
+    return {
+        className: classnames(get(styles,'className'), className),
+        wrapperClassName: classnames(get(styles,'wrapperClassName'), wrapperClassName),
+        itemWrapperClassName: classnames(get(styles,'itemWrapperClassName'), itemWrapperClassName),
+        addButton: {
+            ...addButton,
+            className: classnames(get(styles,'addButton.className'), addButton.className)
+        },
+        removeButton: {
+            ...removeButton,
+            className: classnames(get(styles,'removeButton.className'), removeButton.className)
+        },
+        errorStyles: {
+            ...errorStyles,
+            className: classnames(get(styles,'errorStyles.className'), errorStyles.className),
+            itemClassName: classnames(get(styles,'errorStyles.itemClassName'), errorStyles.itemClassName),
+            fieldClassName: classnames(get(styles,'errorStyles.fieldClassName'), errorStyles.fieldClassName)
+        },
+        ...restProps
+    };
 };
 
-const restyledFields = {
-    Form
-};
-
-const FieldRestyle = (styles) => {
+const fieldsRestyle = (styles, fields) => {
+    const restyledFields = {};
     Object.keys(fields).forEach(fieldName => {
         const Field = fields[fieldName];
-
         restyledFields[fieldName] = (props) => (
             <Field
-                {...styles[fieldName] || {}}
-                {...props}
+                {...extendStyles(styles[fieldName], props)}
             />
         )
     });
     return restyledFields;
 };
 
-export default FieldRestyle;
+export default fieldsRestyle;

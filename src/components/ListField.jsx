@@ -1,13 +1,15 @@
 import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 
-class ListField extends React.Component {
-    constructor(props) {
+export class ListField extends React.Component {
+    static generateItemId() {
+        return Math.random().toString(36).substring(7);
+    }
+    constructor(props, { getSchema }) {
         super(props);
         this.state = {
-            schema: {},
-            model: props.value || [],
-            listLength: props.value ? props.value.length : 1,
+            schema: getSchema(props.name),
+            model: this.getModelFromProps(props),
             errors: {}
         };
         this.setModel = this.setModel.bind(this);
@@ -19,23 +21,27 @@ class ListField extends React.Component {
         this.getErrors = this.getErrors.bind(this);
     }
 
-    componentWillMount() {
-        const { getSchema } = this.context;
-        const schema = getSchema(this.props.name);
-        this.setState({ schema })
+    getModelFromProps(props) {
+        if (props.value) {
+            return props.value.map(item => ({
+                id: ListField.generateItemId(),
+                value: item
+            }));
+        }
+        return [{ id: ListField.generateItemId() }];
     }
 
-    setModel(name, value) {
+    setModel(name, value, callback) {
         const [fieldName, key] = name.split('-');
         const model = Array.from(this.state.model);
-        model[parseInt(key)] = value;
-        this.setState({ model });
-        if (typeof this.props.onChange === 'function') this.props.onChange(model);
+        model[parseInt(key)].value = value;
+        this.setState({ model }, callback);
+        this.props.onChange(model.map(item => item.value));
     }
 
     getModel(name) {
         const [fieldName, key] = name.split('-');
-        return this.state.model[key];
+        return this.state.model[key].value;
     }
 
     getSchema() {
@@ -50,14 +56,18 @@ class ListField extends React.Component {
     }
 
     addListElement(){
-        this.setState({ listLength: this.state.listLength + 1 });
+        const model = Array.from(this.state.model);
+        model.push({
+            id: ListField.generateItemId()
+        });
+        this.setState({ model });
     }
 
     removeListElement(key) {
         const model = Array.from(this.state.model);
         model.splice(key, 1);
-        this.setState({ model, listLength: this.state.listLength - 1 });
-        if (typeof this.props.onChange === 'function') this.props.onChange(model);
+        this.setState({ model });
+        this.props.onChange(model.map(item => item.value));
     }
 
     getChildContext() {
@@ -70,33 +80,38 @@ class ListField extends React.Component {
     }
 
     getList(children) {
-        const list = [];
         const {
             name,
-            removeButton: {className, value} = {}
+            removeButton: {
+                wrapperClassName,
+                className,
+                value
+            } = {},
+            hideRemoveButton,
+            itemWrapperClassName
         } = this.props;
 
-        for(let key = 0; key < this.state.listLength; key += 1){
+        return this.state.model.map((item, key) => {
             const child = React.cloneElement(children, {
                 name: `${name}-${key}`,
-                value: this.state.model[key],
-                key
+                value: item.value,
+                key: item.id
             });
 
-            list.push(
-               <div key={key}>
-                   <div>{child}</div>
-                   <div>
+            return (
+               <div key={item.id} className={itemWrapperClassName}>
+                   {child}
+                   {!hideRemoveButton && <div className={wrapperClassName}>
                        <span
                            onClick={() => this.removeListElement(key)}
                            className={className}
                        >
                            {value || 'Remove'}
-                       </span></div>
+                       </span>
+                   </div>}
                </div>
             );
-        }
-        return list;
+        });
     }
 
     render() {
@@ -105,18 +120,20 @@ class ListField extends React.Component {
             className,
             wrapperClassName,
             label,
-            addButton = {}
+            addButton = {},
+            hideAddButton,
+            fieldAttributes = {}
         } = this.props;
         return (
             <div className={wrapperClassName}>
                 {label && <label>{label}</label>}
-                <div className={className}>{this.getList(children)}</div>
-                <span
+                <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
+                {!hideAddButton && <span
                     onClick={this.addListElement}
                     className={addButton.className}
                 >
                     {addButton.value || 'Add'}
-                </span>
+                </span>}
             </div>
         );
     }
@@ -135,8 +152,25 @@ ListField.childContextTypes = {
 };
 
 ListField.propTypes = {
-    model: PropTypes.object,
-    schema: PropTypes.object
+    className: PropTypes.string,
+    wrapperClassName: PropTypes.string,
+    itemWrapperClassName: PropTypes.string,
+    label: PropTypes.string,
+    addButton: PropTypes.shape({
+        className: PropTypes.string,
+        value: PropTypes.node
+    }),
+    removeButton: PropTypes.shape({
+        wrapperClassName: PropTypes.string,
+        className: PropTypes.string,
+        value: PropTypes.node
+    }),
+    hideAddButton: PropTypes.bool,
+    hideRemoveButton: PropTypes.bool,
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    value: PropTypes.any,
+    fieldAttributes: PropTypes.shape({})
 };
 
 export default FieldConnect(ListField);

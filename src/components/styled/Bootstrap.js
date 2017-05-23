@@ -1,58 +1,85 @@
-import FieldRestyle from '../FieldsRestyle';
+import fieldRestyle from '../FieldsRestyle';
+import TextFieldUnstyled from '../TextField';
+import DateFieldUnstyled from '../DateField';
+import TextareaFieldUnstyled from '../TextareaField';
+import NumberFieldUnstyled from '../NumberField';
+import SubmitFieldUnstyled from '../SubmitField';
+import SelectFieldUnstyled from '../SelectField';
+import CheckboxFieldUnstyled from '../CheckboxField';
+import ObjectFieldUnstyled from '../ObjectField';
+import ListFieldUnstyled from '../ListField';
+export { default as Form } from '../Form';
 
 const errorStyles = {
     className: 'alert alert-danger'
 };
 
-const Fields = FieldRestyle({
-    TextField: {
+const Fields = fieldRestyle({
+    TextFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
-    DateField: {
+    DateFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
-    TextareaField: {
+    TextareaFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
-    NumberField: {
+    NumberFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
-    SubmitField: {
-        className: 'btn btn-primary',
+    SubmitFieldUnstyled: {
+        wrapperClassName: 'clearfix',
+        className: 'btn btn-primary pull-right',
         errorStyles
     },
-    SelectField: {
+    SelectFieldUnstyled: {
         className: 'form-control',
+        wrapperClassName: 'form-group',
         errorStyles
     },
-    CheckboxField: {
-        wrapperClassName: 'checkbox',
+    CheckboxFieldUnstyled: {
+        wrapperClassName: 'form-group checkbox',
         errorStyles
     },
-    ListField: {
-        className: 'form-control',
+    ListFieldUnstyled: {
+        className: 'form-group',
+        wrapperClassName: 'form-group',
+        itemWrapperClassName: 'form-group clearfix',
         errorStyles,
         addButton: {
-            className: 'btn btn-success btn-xs'
+            className: 'btn btn-success btn-sm'
         },
         removeButton: {
             className: 'btn btn-danger btn-xs pull-right'
         }
     }
+}, {
+    TextFieldUnstyled,
+    DateFieldUnstyled,
+    TextareaFieldUnstyled,
+    NumberFieldUnstyled,
+    SubmitFieldUnstyled,
+    SelectFieldUnstyled,
+    CheckboxFieldUnstyled,
+    ObjectFieldUnstyled,
+    ListFieldUnstyled
 });
 
-export const Form = Fields.Form;
-export const TextField = Fields.TextField;
-export const DateField = Fields.DateField;
-export const TextareaField = Fields.TextareaField;
-export const NumberField = Fields.NumberField;
-export const SubmitField = Fields.SubmitField;
-export const SelectField = Fields.SelectField;
-export const CheckboxField = Fields.CheckboxField;
-export const ObjectField = Fields.ObjectField;
-export const ListField = Fields.ListField;
-export default Fields;
+
+export const TextField = Fields.TextFieldUnstyled;
+export const DateField = Fields.DateFieldUnstyled;
+export const TextareaField = Fields.TextareaFieldUnstyled;
+export const NumberField = Fields.NumberFieldUnstyled;
+export const SubmitField = Fields.SubmitFieldUnstyled;
+export const SelectField = Fields.SelectFieldUnstyled;
+export const CheckboxField = Fields.CheckboxFieldUnstyled;
+export const ObjectField = Fields.ObjectFieldUnstyled;
+export const ListField = Fields.ListFieldUnstyled;

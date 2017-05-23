@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
+import classnames from 'classnames';
 
-const SelectField = ({
+export const SelectField = ({
     wrapperClassName,
     className,
     onChange,
@@ -10,12 +11,13 @@ const SelectField = ({
     errors,
     error,
     options = [],
-    value,
+    value = '',
     label,
     placeholder,
-    errorStyles = {}
+    errorStyles = {},
+    fieldAttributes = {}
 }) => (
-    <div className={wrapperClassName}>
+    <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <select
             name={name}
@@ -23,11 +25,12 @@ const SelectField = ({
             value={value}
             placeholder={placeholder}
             className={className}
+            {...fieldAttributes}
         >
             {options.map(option => (
                 <option
-                    value={option.value || option}
-                    key={option.value || option}
+                    value={option.label ? option.value : option}
+                    key={option.label || option}
                 >
                     {option.label || option}
                 </option>
@@ -36,5 +39,35 @@ const SelectField = ({
         {error && <ErrorField errors={errors} {...errorStyles} />}
     </div>
 );
+
+SelectField.propTypes = {
+    wrapperClassName: PropTypes.string,
+    className: PropTypes.string,
+    name: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    errors: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+        PropTypes.string,
+        PropTypes.shape({})
+    ]),
+    error: PropTypes.bool,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.shape({})
+    ]),
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+    options: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.shape({})
+    ])),
+    errorStyles: PropTypes.shape({
+        className: PropTypes.string,
+        itemClassName: PropTypes.string
+    }),
+    fieldAttributes: PropTypes.shape({})
+};
 
 export default FieldConnect(SelectField);

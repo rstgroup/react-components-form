@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
+import classnames from 'classnames';
 
-class CheckboxField extends React.Component {
+export class CheckboxField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,7 +19,7 @@ class CheckboxField extends React.Component {
         this.setState({
             checked: !this.state.checked
         });
-        if (typeof this.props.onChange === 'function') this.props.onChange(value);
+        this.props.onChange(value);
     }
 
     render() {
@@ -28,21 +29,22 @@ class CheckboxField extends React.Component {
             name,
             errors,
             error,
-            value,
             label,
             placeholder,
-            errorStyles = {}
+            errorStyles = {},
+            fieldAttributes = {}
         } = this.props;
         return (
-            <div className={wrapperClassName}>
+            <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
                 <label>
                     <input
                         type="checkbox"
-                        checked={!!value}
+                        checked={this.state.checked}
                         name={name}
-                        onClick={this.toggleValue}
+                        onChange={this.toggleValue}
                         placeholder={placeholder}
                         className={className}
+                        {...fieldAttributes}
                     />
                     {label}
                 </label>
@@ -51,5 +53,28 @@ class CheckboxField extends React.Component {
         );
     }
 }
+
+CheckboxField.propTypes = {
+    wrapperClassName: PropTypes.string,
+    className: PropTypes.string,
+    name: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    errors: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.string),
+        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+        PropTypes.string,
+        PropTypes.shape({})
+    ]),
+    error: PropTypes.bool,
+    value: PropTypes.any,
+    checkboxValue: PropTypes.any,
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+    errorStyles: PropTypes.shape({
+        className: PropTypes.string,
+        itemClassName: PropTypes.string
+    }),
+    fieldAttributes: PropTypes.shape({})
+};
 
 export default FieldConnect(CheckboxField);
