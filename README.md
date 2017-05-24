@@ -1,6 +1,5 @@
 # REACT COMPONENTS FORM
-
-<img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
+[![Build Status](https://travis-ci.org/mprzodala/react-components-form.svg?branch=master)](https://travis-ci.org/mprzodala/react-components-form)
 <img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
 <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
 <img src="https://img.shields.io/badge/npm-v2.2.0-blue.svg" />
