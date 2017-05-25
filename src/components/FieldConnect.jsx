@@ -13,12 +13,28 @@ export const FieldConnect = (Component) => {
             this.getEventsListener = this.getEventsListener.bind(this);
         }
 
+        updateModelWithValueOrOptions() {
+            const { name, value, options } = this.props;
+            const { setModel } = this.context;
+
+            if (!name || typeof setModel !== 'function') {
+                return;
+            }
+
+            if (name && value) {
+                setModel(name, value);
+            } else if (Array.isArray(options) && options.length) {
+                setModel(name, options[0].label ? options[0].value : options[0]);
+            }
+        }
+
         componentWillMount() {
             const { name, value, options, onChangeModel } = this.props;
             const { setModel, eventsListener } = this.context;
-            if (typeof setModel !== 'function') return;
-            if (name && value) setModel(name, value);
-            if (name && !value && options) setModel(name, options[0].label ? options[0].value : options[0]);
+            if (typeof setModel !== 'function') {
+                return;
+            }
+            this.updateModelWithValueOrOptions();
             if (eventsListener && typeof onChangeModel === 'function') {
                 this.onChangeModelMethod = ({ name, value }) => {
                     return onChangeModel({ name, value }, this);
