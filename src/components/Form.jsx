@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { cloneObject } from '../helpers';
 
 class Form extends React.Component {
     constructor(props) {
@@ -101,7 +102,8 @@ class Form extends React.Component {
         return this.runSubmit(errors, model);
     }
 
-    runSubmit(errors, model) {
+    runSubmit(errors, modelData) {
+        const model = cloneObject(modelData);
         if (Object.keys(errors).length > 0) {
             if (this.props.onError) this.props.onError(errors, model);
             return;
