@@ -21,7 +21,7 @@ export const FieldConnect = (Component) => {
                 return;
             }
 
-            if (name && value) {
+            if (value) {
                 setModel(name, value);
             } else if (Array.isArray(options) && options.length) {
                 setModel(name, options[0].label ? options[0].value : options[0]);
@@ -29,11 +29,8 @@ export const FieldConnect = (Component) => {
         }
 
         componentWillMount() {
-            const { name, value, options, onChangeModel } = this.props;
-            const { setModel, eventsListener } = this.context;
-            if (typeof setModel !== 'function') {
-                return;
-            }
+            const { name, value, onChangeModel } = this.props;
+            const { eventsListener } = this.context;
             this.updateModelWithValueOrOptions();
             if (eventsListener && typeof onChangeModel === 'function') {
                 this.onChangeModelMethod = ({ name, value }) => {
