@@ -8,6 +8,7 @@ import SelectFieldUnstyled from '../SelectField';
 import CheckboxFieldUnstyled from '../CheckboxField';
 import ObjectFieldUnstyled from '../ObjectField';
 import ListFieldUnstyled from '../ListField';
+import AutocompleteFieldUnstyled from '../AutocompleteField';
 export { default as Form } from '../Form';
 
 const errorStyles = {
@@ -45,6 +46,11 @@ const Fields = fieldRestyle({
         wrapperClassName: 'form-group',
         errorStyles
     },
+    AutocompleteFieldUnstyled: {
+        className: 'form-control',
+        wrapperClassName: 'form-group',
+        errorStyles
+    },
     CheckboxFieldUnstyled: {
         wrapperClassName: 'form-group checkbox',
         errorStyles
@@ -70,7 +76,8 @@ const Fields = fieldRestyle({
     SelectFieldUnstyled,
     CheckboxFieldUnstyled,
     ObjectFieldUnstyled,
-    ListFieldUnstyled
+    ListFieldUnstyled,
+    AutocompleteFieldUnstyled
 });
 
 
@@ -83,3 +90,4 @@ export const SelectField = Fields.SelectFieldUnstyled;
 export const CheckboxField = Fields.CheckboxFieldUnstyled;
 export const ObjectField = Fields.ObjectFieldUnstyled;
 export const ListField = Fields.ListFieldUnstyled;
+export const AutocompleteField = Fields.AutocompleteFieldUnstyled;
