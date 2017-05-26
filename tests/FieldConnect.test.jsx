@@ -44,7 +44,6 @@ describe('FieldConnect', () => {
         const field = wrapper.find(TextField);
         expect(field.props().name).toBe(props.name);
         expect(field.props().label).toBe(props.label);
-        field.find('input').simulate('change', 'testValue');
     });
 
     it('without context from form should give props to SelectField', () => {
@@ -67,7 +66,6 @@ describe('FieldConnect', () => {
         expect(field.props().label).toBe(props.label);
         expect(field.props().options).toBe(props.options);
         expect(wrapper.component.getInstance().getPath()).toBe(props.name);
-        field.find('select').simulate('change', 'test3');
     });
 
     it('without context from form should give props to SelectField when options are objects', () => {
@@ -95,7 +93,6 @@ describe('FieldConnect', () => {
         expect(field.props().label).toBe(props.label);
         expect(field.props().options).toBe(props.options);
         expect(wrapper.component.getInstance().getPath()).toBe(props.name);
-        field.find('select').simulate('change', 'test3');
     });
 
     it('should give SubmitField submit method from form', () => {
@@ -120,5 +117,52 @@ describe('FieldConnect', () => {
         const field = wrapper.find(SubmitField);
         field.find('button').simulate('click');
         expect(field.props().value).toBe('Submit');
+    });
+
+    it('should update model when value is available', () => {
+        const context = {
+            setModel: jest.fn()
+        };
+        const props = {
+            name: 'name',
+            value: 'value'
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, {context});
+        expect(context.setModel).toHaveBeenCalledWith(props.name, props.value);
+    });
+
+    it('should not update model when value is not available', () => {
+        const context = {
+            setModel: jest.fn()
+        };
+        const props = {
+            name: 'name'
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, {context});
+        expect(context.setModel).not.toHaveBeenCalled();
+    });
+
+    it('should update model when options is available', () => {
+        const context = {
+            setModel: jest.fn()
+        };
+        const props = {
+            name: 'name',
+            options: [0, 1, 2]
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, {context});
+        expect(context.setModel).toHaveBeenCalledWith(props.name, props.options[0]);
+    });
+
+    it('should not update model when options is available but is empty', () => {
+        const context = {
+            setModel: jest.fn()
+        };
+        const props = {
+            name: 'name',
+            options: []
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, {context});
+        expect(context.setModel).not.toHaveBeenCalled();
     });
 });
