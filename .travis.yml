@@ -3,3 +3,8 @@ node_js:
 - stable
 before_install: npm install -g npm@latest
 after_success: make report-cov-coveralls
+script:
+  - npm run coverage -- --no-cache --runInBand
+
+after_script:
+  - npm run coverage:report
