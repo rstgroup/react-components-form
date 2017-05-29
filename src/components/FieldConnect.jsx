@@ -57,13 +57,14 @@ export const FieldConnect = (Component) => {
         onChangeData(value) {
             const { name } = this.props;
             const { setModel, eventsListener, getPath } = this.context;
-            if (typeof setModel !== 'function') return;
-            setModel(name, value, () => {
-                if (eventsListener) eventsListener.callEvent('changeModel', {
-                    name:`${getPath()}.${name}`,
-                    value
+            if (typeof setModel === 'function') {
+                setModel(name, value, () => {
+                    if (eventsListener) eventsListener.callEvent('changeModel', {
+                        name:`${getPath()}.${name}`,
+                        value
+                    });
                 });
-            });
+            }
         }
 
         getValue() {

@@ -13,10 +13,7 @@ import SubmitFieldWithFormConnect from '../src/components/SubmitField';
 describe('FieldConnect', () => {
     it('should recive context from form and give props to TextField',() => {
         const context = {
-            setModel: jest.fn(),
             getModel: jest.fn(),
-            getSchema: jest.fn(),
-            submitForm: jest.fn(),
             getErrors: () => []
         };
         const props = {
@@ -30,7 +27,7 @@ describe('FieldConnect', () => {
         expect(field.props().name).toBe(props.name);
         expect(field.props().label).toBe(props.label);
         field.find('input').simulate('change', 'testValue');
-        expect(context.getModel.mock.calls.length).toBe(1);
+        expect(context.getModel).toBeCalled();
     });
 
     it('should give props to TextField without context from form',() => {
@@ -47,20 +44,13 @@ describe('FieldConnect', () => {
     });
 
     it('without context from form should give props to SelectField', () => {
-        const context = {
-            setModel: jest.fn(),
-            getModel: jest.fn(),
-            getSchema: jest.fn(),
-            submitForm: jest.fn(),
-            getErrors: () => []
-        };
         const props = {
             name: 'selectName',
             label: 'first name',
             className: 'testComponent',
             options: ['test1', 'test2', 'test3']
         };
-        const wrapper = mount(<SelectFieldWithFormConnect {...props} />, {context});
+        const wrapper = mount(<SelectFieldWithFormConnect {...props} />);
         const field = wrapper.find(SelectField);
         expect(field.props().name).toBe(props.name);
         expect(field.props().label).toBe(props.label);
