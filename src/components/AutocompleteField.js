@@ -22,14 +22,28 @@ export class AutocompleteField extends Component {
         };
     }
 
+    suggestionsFilter(escapedValue, searchKey) {
+        if (searchKey) {
+            return item => !!get(item, searchKey ,'').match(escapedValue)
+        }
+        return item => item.match(escapedValue);
+    }
+
     getSuggestions(value) {
         const { items, searchKey = '' } = this.props;
         const escapedValue = value.trim();
         if (escapedValue === '') return [];
-        return items.filter(item => !!get(item, searchKey ,'').match(escapedValue));
+        return items.filter(::this.suggestionsFilter(escapedValue, searchKey));
     }
 
     onSuggestionsFetchRequested = ({ value }) => {
+        const { getOptions } = this.props;
+        if (typeof getOptions === 'function') {
+            getOptions(value).then((suggestions) => {
+                this.setState({ suggestions });
+            });
+            return;
+        }
         this.setState({
             suggestions: this.getSuggestions(value)
         });
@@ -58,7 +72,8 @@ export class AutocompleteField extends Component {
             errorStyles = {},
             fieldAttributes = {},
             renderItem = AutocompleteField.renderSuggestion,
-            getValue = AutocompleteField.getSuggestion
+            getValue = AutocompleteField.getSuggestion,
+            optionsContainerClassName,
         } = this.props;
         return (
             <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
@@ -76,6 +91,9 @@ export class AutocompleteField extends Component {
                     getSuggestionValue={getValue}
                     onSuggestionsFetchRequested={::this.onSuggestionsFetchRequested}
                     onSuggestionsClearRequested={::this.onSuggestionsClearRequested}
+                    theme={{
+                        suggestionsContainer: optionsContainerClassName
+                    }}
                 />
                 {error && <ErrorField errors={errors} {...errorStyles} />}
             </div>
@@ -98,8 +116,13 @@ AutocompleteField.propTypes = {
     label: PropTypes.string,
     renderItem: PropTypes.func,
     getValue: PropTypes.func,
+    getOptions: PropTypes.func,
     searchKey: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.shape({})),
+    items: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.shape({}),
+        PropTypes.string,
+        PropTypes.number
+    ])),
     placeholder: PropTypes.string,
     errorStyles: PropTypes.shape({
         className: PropTypes.string,

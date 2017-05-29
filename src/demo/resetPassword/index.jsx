@@ -1,6 +1,6 @@
 import React from 'react';
 import Schema from 'form-schema-validation';
-import { Form, TextField, SubmitField, AutocompleteField } from '../../components/styled/Bootstrap';
+import { Form, TextField, SubmitField } from '../../components/styled/Bootstrap';
 
 const sameValueAs = (fieldName) => ({
     validator(value, type, model){
@@ -37,7 +37,6 @@ const ForgotPasswordForm  = () => (
         <h5>Please insert new password to your account.</h5>
         <TextField name="password" label="New password" type="text" />
         <TextField name="password2" label="Repeat new password" type="text" />
-        <AutocompleteField name="test" items={items}/>
         <SubmitField value="Change password" />
     </Form>
 );
