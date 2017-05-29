@@ -1,19 +1,22 @@
 import React, { PropTypes } from 'react';
+import Storage from './Storage';
 import { cloneObject } from '../helpers';
 
 class Form extends React.Component {
     constructor(props) {
         super(props);
-
+        const model = props.model || this.getDefaultModelValue(props.schema);
         this.state = {
             schema: props.schema || {},
-            model: props.model || this.getDefaultModelValue(props.schema),
+            model,
             errors: {},
-            validateOnChange: props.validateOnChange
+            validateOnChange: props.validateOnChange,
+            storage: new Storage(model),
         };
 
         this.eventsListener = props.eventsListener;
         this.setModel = this.setModel.bind(this);
+        this.setStateModel = this.setStateModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
@@ -21,21 +24,39 @@ class Form extends React.Component {
         this.getErrors = this.getErrors.bind(this);
         this.getPath = this.getPath.bind(this);
         this.validateModel = this.validateModel.bind(this);
-        this.registerEvents();
+        this.submitListener = this.submitListener.bind(this);
+        this.validateListener = this.validateListener.bind(this);
+        this.resetListener = this.resetListener.bind(this);
     }
 
-    registerEvents() {
+    submitListener() {
+        return this.submitForm();
+    }
+
+    validateListener(schema) {
+        return this.validateModel(this.state.model, schema || this.state.schema);
+    }
+
+    resetListener(model) {
+        const newModel = model || this.getDefaultModelValue(this.state.schema);
+        this.state.storage.setModel(newModel);
+    }
+
+    componentWillMount() {
+        this.state.storage.listen(this.setStateModel);
         if (this.eventsListener) {
-            this.eventsListener.registerEventListener('submit', () => {
-                return this.submitForm();
-            });
-            this.eventsListener.registerEventListener('validate', (schema) => {
-                return this.validateModel(this.state.model, schema || this.state.schema);
-            });
-            this.eventsListener.registerEventListener('reset', (model) => {
-                const newModel = model || this.getDefaultModelValue(this.state.schema);
-                this.setState({model: newModel});
-            });
+            this.eventsListener.registerEventListener('submit', this.submitListener);
+            this.eventsListener.registerEventListener('validate', this.validateListener);
+            this.eventsListener.registerEventListener('reset', this.resetListener);
+        }
+    }
+
+    componentWillUnmount() {
+        this.state.storage.unlisten(this.setStateModel);
+        if (this.eventsListener) {
+            this.eventsListener.unregisterEventListener('submit', this.submitListener);
+            this.eventsListener.unregisterEventListener('validate', this.validateListener);
+            this.eventsListener.unregisterEventListener('reset', this.resetListener);
         }
     }
 
@@ -44,10 +65,14 @@ class Form extends React.Component {
         return {};
     }
 
+    setStateModel(model, callback) {
+        this.setState({ model }, callback)
+    }
+
     setModel(name, value, callback) {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
-        this.setState({ model }, callback);
+        this.state.storage.set(name, value, callback);
         if (this.state.validateOnChange) this.validateModel(model, this.state.schema);
     }
 

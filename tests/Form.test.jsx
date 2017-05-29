@@ -274,6 +274,7 @@ describe('Form', () => {
         titleField.find('input').first().simulate('change', {target: {value: 'test'}});
         eventListener.callEvent('reset');
         eventListener.callEvent('submit');
+        wrapper.unmount();
         expect(mockSubmit).toBeCalledWith({});
     });
 
