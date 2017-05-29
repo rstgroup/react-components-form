@@ -8,7 +8,6 @@ export { default as SelectField } from './SelectField';
 export { default as CheckboxField } from './CheckboxField';
 export { default as ObjectField } from './ObjectField';
 export { default as ListField } from './ListField';
-export { default as AutocompleteField } from './AutocompleteField';
 export { default as FieldConnect } from './FieldConnect';
 export { default as fieldsRestyle } from './FieldsRestyle';
 export { default as FormEventsListener } from './FormEventsListener';

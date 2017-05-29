@@ -7,7 +7,7 @@ import Autocomplete from 'react-autosuggest';
 
 export class AutocompleteField extends Component {
     static renderSuggestion(value) {
-        return <div className={}>{value}</div>
+        return <div >{value}</div>
     }
 
     static getSuggestion(value) {
