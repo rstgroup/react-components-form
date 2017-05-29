@@ -5,15 +5,14 @@ import { cloneObject } from '../helpers';
 class Form extends React.Component {
     constructor(props) {
         super(props);
-        const model = props.model || this.getDefaultModelValue(props.schema);
         this.state = {
             schema: props.schema || {},
-            model,
+            model: props.model || this.getDefaultModelValue(props.schema),
             errors: {},
             validateOnChange: props.validateOnChange,
-            storage: new Storage(model),
         };
 
+        this.storage = new Storage(this.state.model);
         this.eventsListener = props.eventsListener;
         this.setModel = this.setModel.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
@@ -39,11 +38,11 @@ class Form extends React.Component {
 
     resetListener(model) {
         const newModel = model || this.getDefaultModelValue(this.state.schema);
-        this.state.storage.setModel(newModel);
+        this.storage.setModel(newModel);
     }
 
     componentWillMount() {
-        this.state.storage.listen(this.setStateModel);
+        this.storage.listen(this.setStateModel);
         if (this.eventsListener) {
             this.eventsListener.registerEventListener('submit', this.submitListener);
             this.eventsListener.registerEventListener('validate', this.validateListener);
@@ -52,7 +51,7 @@ class Form extends React.Component {
     }
 
     componentWillUnmount() {
-        this.state.storage.unlisten(this.setStateModel);
+        this.storage.unlisten(this.setStateModel);
         if (this.eventsListener) {
             this.eventsListener.unregisterEventListener('submit', this.submitListener);
             this.eventsListener.unregisterEventListener('validate', this.validateListener);
@@ -72,7 +71,7 @@ class Form extends React.Component {
     setModel(name, value, callback) {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
-        this.state.storage.set(name, value, callback);
+        this.storage.set(name, value, callback);
         if (this.state.validateOnChange) this.validateModel(model, this.state.schema);
     }
 
