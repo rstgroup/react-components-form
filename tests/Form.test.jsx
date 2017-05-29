@@ -242,6 +242,7 @@ describe('Form', () => {
         );
         const formElement = wrapper.find('form');
         formElement.simulate('submit');
+        wrapper.unmount();
         expect(mockSubmit).toBeCalled();
     });
 
