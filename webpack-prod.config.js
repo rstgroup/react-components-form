@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var path = require('path');
 
 module.exports = {
     entry: {
@@ -7,7 +8,7 @@ module.exports = {
         Separate: "./src/components/separate/index.js"
     },
     output: {
-        path: '',
+        path: path.join(__dirname, ''),
         filename: "[name].js",
         libraryTarget: "umd"
     },

@@ -13,12 +13,25 @@ export const FieldConnect = (Component) => {
             this.getEventsListener = this.getEventsListener.bind(this);
         }
 
+        updateModelWithValueOrOptions() {
+            const { name, value, options } = this.props;
+            const { setModel } = this.context;
+
+            if (!name || typeof setModel !== 'function') {
+                return;
+            }
+
+            if (value) {
+                setModel(name, value);
+            } else if (Array.isArray(options) && options.length) {
+                setModel(name, options[0].label ? options[0].value : options[0]);
+            }
+        }
+
         componentWillMount() {
-            const { name, value, options, onChangeModel } = this.props;
-            const { setModel, eventsListener } = this.context;
-            if (typeof setModel !== 'function') return;
-            if (name && value) setModel(name, value);
-            if (name && !value && options) setModel(name, options[0].label ? options[0].value : options[0]);
+            const { name, value, onChangeModel } = this.props;
+            const { eventsListener } = this.context;
+            this.updateModelWithValueOrOptions();
             if (eventsListener && typeof onChangeModel === 'function') {
                 this.onChangeModelMethod = ({ name, value }) => {
                     return onChangeModel({ name, value }, this);
@@ -44,20 +57,27 @@ export const FieldConnect = (Component) => {
         onChangeData(value) {
             const { name } = this.props;
             const { setModel, eventsListener, getPath } = this.context;
-            if (typeof setModel !== 'function') return;
-            setModel(name, value, () => {
-                if (eventsListener) eventsListener.callEvent('changeModel', {
-                    name:`${getPath()}.${name}`,
-                    value
+            if (typeof setModel === 'function') {
+                setModel(name, value, () => {
+                    if (eventsListener) eventsListener.callEvent('changeModel', {
+                        name:`${getPath()}.${name}`,
+                        value
+                    });
                 });
-            });
+            }
         }
 
         getValue() {
             const { name, value } = this.props;
             const { getModel } = this.context;
+
             if (typeof getModel !== 'function') return value;
-            return getModel(name) || value;
+
+            const valueFromModel = getModel(name);
+
+            return valueFromModel !== undefined
+                ? valueFromModel
+                : value;
         }
 
         getPropsFromSchema() {

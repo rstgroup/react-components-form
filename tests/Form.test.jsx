@@ -242,6 +242,7 @@ describe('Form', () => {
         );
         const formElement = wrapper.find('form');
         formElement.simulate('submit');
+        wrapper.unmount();
         expect(mockSubmit).toBeCalled();
     });
 
@@ -274,6 +275,7 @@ describe('Form', () => {
         titleField.find('input').first().simulate('change', {target: {value: 'test'}});
         eventListener.callEvent('reset');
         eventListener.callEvent('submit');
+        wrapper.unmount();
         expect(mockSubmit).toBeCalledWith({});
     });
 

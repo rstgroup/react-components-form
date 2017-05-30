@@ -1,9 +1,8 @@
 # REACT COMPONENTS FORM
-
-<img src="https://img.shields.io/badge/build-passing-brightgreen.svg" />
-<img src="https://img.shields.io/badge/coverage-100%25-brightgreen.svg" />
-<img src="https://img.shields.io/badge/license-MIT-blue.svg" />
-<img src="https://img.shields.io/badge/npm-v2.2.0-blue.svg" />
+[![Build Status](https://travis-ci.org/mprzodala/react-components-form.svg?branch=master)](https://travis-ci.org/mprzodala/react-components-form)
+[![Coverage Status](https://coveralls.io/repos/github/mprzodala/react-components-form/badge.svg?branch=master)](https://coveralls.io/github/mprzodala/react-components-form?branch=master)
+[![npm](https://img.shields.io/npm/l/react-components-form.svg)](https://npmjs.org/package/react-components-form)
+[![npm](https://img.shields.io/npm/v/react-components-form.svg)](https://npmjs.org/package/react-components-form)
 
 1. [Installation](#installation)
 2. [Description](#description)
