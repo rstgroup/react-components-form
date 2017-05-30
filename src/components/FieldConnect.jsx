@@ -70,8 +70,14 @@ export const FieldConnect = (Component) => {
         getValue() {
             const { name, value } = this.props;
             const { getModel } = this.context;
+
             if (typeof getModel !== 'function') return value;
-            return getModel(name) || value;
+
+            const valueFromModel = getModel(name);
+
+            return valueFromModel !== undefined
+                ? valueFromModel
+                : value;
         }
 
         getPropsFromSchema() {
