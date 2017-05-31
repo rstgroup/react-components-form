@@ -43,3 +43,39 @@ label {
 .objectFieldClassName {
     border-radius: 4px;
 }
+
+.autocompleteListItem {
+    display: block;
+    padding: 5px;
+    background: #FFF;
+    border: 1px solid #ddd;
+    border-top: 0px;
+}
+
+.autocompleteListItemPhone {
+
+}
+
+.autocompleteListItemName {
+
+}
+
+.autocompleteListItemWrapper {
+    position: relative;
+}
+
+.autocompleteListItemWrapper ul{
+    list-style: none;
+    padding-left: 0px;
+}
+
+.autocompleteListItemWrapper li{
+    list-style: none;
+    margin-left: 0px;
+}
+
+.suggestionsContainer {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+}

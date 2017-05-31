@@ -47,6 +47,7 @@ describe('ListField', () => {
         expect(list.find(TextField).length).toBe(3);
         list.find('.removeButtonClass').first().simulate('click');
         expect(list.find(TextField).length).toBe(2);
+        wrapper.unmount();
     });
 
     it('should add 3 object Fields and remove secound field',() => {

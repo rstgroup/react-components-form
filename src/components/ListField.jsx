@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
 export class ListField extends React.Component {
@@ -12,6 +13,8 @@ export class ListField extends React.Component {
             model: this.getModelFromProps(props),
             errors: {}
         };
+
+        this.storage = new Storage(this.state.model);
         this.setModel = this.setModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getList = this.getList.bind(this);
@@ -19,6 +22,20 @@ export class ListField extends React.Component {
         this.removeListElement = this.removeListElement.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.getErrors = this.getErrors.bind(this);
+        this.setStateModel = this.setStateModel.bind(this);
+    }
+
+    componentWillMount() {
+        this.storage.listen(this.setStateModel);
+    }
+
+    componentWillUnmount() {
+        this.storage.unlisten(this.setStateModel);
+    }
+
+    setStateModel(model, callback) {
+        this.setState({ model }, callback);
+        this.props.onChange(model.map(item => item.value));
     }
 
     getModelFromProps(props) {
@@ -35,8 +52,7 @@ export class ListField extends React.Component {
         const [fieldName, key] = name.split('-');
         const model = Array.from(this.state.model);
         model[parseInt(key)].value = value;
-        this.setState({ model }, callback);
-        this.props.onChange(model.map(item => item.value));
+        this.storage.setModel(model, callback);
     }
 
     getModel(name) {

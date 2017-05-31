@@ -21,6 +21,12 @@ const resetPasswordSchema = new Schema({
     }
 });
 
+const items = [
+    'test1',
+    'test2',
+    'test3'
+];
+
 const ForgotPasswordForm  = () => (
     <Form
         schema={resetPasswordSchema}

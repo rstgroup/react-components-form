@@ -4,6 +4,7 @@ export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
         constructor(props) {
             super(props);
+            this.listeners = [];
             this.onChangeData = this.onChangeData.bind(this);
             this.submit = this.submit.bind(this);
             this.getErrors = this.getErrors.bind(this);
@@ -14,7 +15,7 @@ export const FieldConnect = (Component) => {
         }
 
         updateModelWithValueOrOptions() {
-            const { name, value, options } = this.props;
+            const { name, value, options, defaultOption } = this.props;
             const { setModel } = this.context;
 
             if (!name || typeof setModel !== 'function') {
@@ -23,28 +24,75 @@ export const FieldConnect = (Component) => {
 
             if (value) {
                 setModel(name, value);
-            } else if (Array.isArray(options) && options.length) {
-                setModel(name, options[0].label ? options[0].value : options[0]);
+            } else if (Array.isArray(options) && options.length && defaultOption !== undefined) {
+                setModel(
+                    name,
+                    options[defaultOption].label ?
+                        options[defaultOption].value :
+                        options[defaultOption]
+                );
+            }
+        }
+
+        registerListeners() {
+            const { onChangeModel, onEmitEvents } = this.props;
+            const { eventsListener } = this.context;
+            if (eventsListener) {
+                if (typeof onChangeModel === 'function') {
+                    this.onChangeModelMethod = data => {
+                        return onChangeModel(data, this);
+                    };
+                    eventsListener.registerEventListener('changeModel', this.onChangeModelMethod);
+                }
+                if (onEmitEvents) {
+                    if(Array.isArray(onEmitEvents)){
+                        onEmitEvents.forEach(({name, method}) => {
+                            const listener = {
+                                name,
+                                method: data => {
+                                    return method(data, this);
+                                }
+                            };
+                            this.listeners.push(listener);
+                            eventsListener.registerEventListener(name, listener.method)
+                        });
+                        return;
+                    }
+                    const { name, method } = onEmitEvents;
+                    const listener = {
+                        name,
+                        method: data => {
+                            return method(data, this);
+                        }
+                    };
+                    this.listeners.push(listener);
+                    eventsListener.registerEventListener(name, listener.method);
+                }
+            }
+        }
+
+        unregisterListeners() {
+            const { onEmitEvents } = this.props;
+            const { eventsListener } = this.context;
+            if (eventsListener) {
+                if (typeof this.onChangeModelMethod === 'function') {
+                    eventsListener.unregisterEventListener('changeModel', this.onChangeModelMethod);
+                }
+                if (onEmitEvents && this.listeners.length > 0) {
+                    this.listeners.forEach(({name, method}) => {
+                        eventsListener.unregisterEventListener(name, method);
+                    });
+                }
             }
         }
 
         componentWillMount() {
-            const { name, value, onChangeModel } = this.props;
-            const { eventsListener } = this.context;
             this.updateModelWithValueOrOptions();
-            if (eventsListener && typeof onChangeModel === 'function') {
-                this.onChangeModelMethod = ({ name, value }) => {
-                    return onChangeModel({ name, value }, this);
-                };
-                eventsListener.registerEventListener('changeModel', this.onChangeModelMethod);
-            }
+            this.registerListeners();
         }
 
         componentWillUnmount() {
-            const { eventsListener } = this.context;
-            if (eventsListener && typeof this.onChangeModelMethod === 'function') {
-              eventsListener.unregisterEventListener('changeModel', this.onChangeModelMethod);
-            }
+            this.unregisterListeners();
         }
 
         getChildContext() {
@@ -157,7 +205,19 @@ export const FieldConnect = (Component) => {
         options: PropTypes.arrayOf(PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.shape({})
-        ]))
+        ])),
+        defaultOption: PropTypes.number,
+        onChangeModel: PropTypes.func,
+        onEmitEvents: PropTypes.oneOfType([
+            PropTypes.shape({
+                name: PropTypes.string,
+                method: PropTypes.func
+            }),
+            PropTypes.arrayOf(PropTypes.shape({
+                name: PropTypes.string,
+                method: PropTypes.func
+            }))
+        ])
     };
 
     return FieldConnector;

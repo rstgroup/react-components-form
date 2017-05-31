@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
 export class ObjectField extends React.Component {
@@ -9,10 +10,13 @@ export class ObjectField extends React.Component {
             model: props.value || {},
             errors: {}
         };
+
+        this.storage = new Storage(this.state.model);
         this.setModel = this.setModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.getErrors = this.getErrors.bind(this);
+        this.setStateModel = this.setStateModel.bind(this);
     }
 
     componentWillReceiveProps({ value = {} }){
@@ -22,14 +26,21 @@ export class ObjectField extends React.Component {
     componentWillMount() {
         const { getSchema } = this.context;
         const schema = getSchema(this.props.name).type;
-        this.setState({ schema })
+        this.setState({ schema });
+        this.storage.listen(this.setStateModel);
+    }
+
+    componentWillUnmount() {
+        this.storage.unlisten(this.setStateModel);
+    }
+
+    setStateModel(model, callback) {
+        this.setState({ model }, callback);
+        this.props.onChange(model);
     }
 
     setModel(name, value, callback) {
-        const model = Object.assign({}, this.state.model);
-        model[name] = value;
-        this.setState({ model }, callback);
-        this.props.onChange(model);
+        this.storage.set(name, value, callback);
     }
 
     getModel(name) {
