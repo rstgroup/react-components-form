@@ -67,6 +67,7 @@ export class AutocompleteField extends Component {
     render(){
         const {
             wrapperClassName,
+            name,
             className,
             theme,
             errors,
@@ -76,8 +77,8 @@ export class AutocompleteField extends Component {
             placeholder,
             errorStyles,
             fieldAttributes,
-            renderItem,
-            getValue
+            renderItem = AutocompleteField.renderSuggestion,
+            getValue = AutocompleteField.getSuggestion
         } = this.props;
         return (
             <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
@@ -87,6 +88,7 @@ export class AutocompleteField extends Component {
                         className,
                         placeholder,
                         value,
+                        name,
                         onChange: this.onChange,
                         ...fieldAttributes
                     }}
@@ -138,8 +140,7 @@ AutocompleteField.defaultProps = {
     errorStyles: {},
     fieldAttributes: {},
     theme: {},
-    renderItem: AutocompleteField.renderSuggestion,
-    getValue: AutocompleteField.getSuggestion
+    options: []
 };
 
 export default FieldConnect(AutocompleteField);

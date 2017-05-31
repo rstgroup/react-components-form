@@ -57,7 +57,9 @@ class AppointmentForm extends Component{
                         renderItem={renderItem}
                         getValue={this.getValue}
                         wrapperClassName={style.autocompleteListItemWrapper}
-                        optionsContainerClassName={style.suggestionsContainer}
+                        theme={{
+                            suggestionsContainer: style.suggestionsContainer
+                        }}
                     />
                     <TextField
                         name="name"
