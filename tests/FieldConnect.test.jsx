@@ -75,7 +75,8 @@ describe('FieldConnect', () => {
                 {label:'test1', value: ''},
                 {label:'test2', value: ''},
                 {label:'test3', value: ''},
-            ]
+            ],
+            defaultOption: 0
         };
         const wrapper = mount(<SelectFieldWithFormConnect {...props} />, {context});
         const field = wrapper.find(SelectField);
@@ -138,7 +139,8 @@ describe('FieldConnect', () => {
         };
         const props = {
             name: 'name',
-            options: [0, 1, 2]
+            options: [0, 1, 2],
+            defaultOption: 0
         };
         const wrapper = mount(<TextFieldWithFormConnect {...props} />, {context});
         expect(context.setModel).toHaveBeenCalledWith(props.name, props.options[0]);

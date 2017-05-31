@@ -15,7 +15,7 @@ export const FieldConnect = (Component) => {
         }
 
         updateModelWithValueOrOptions() {
-            const { name, value, options } = this.props;
+            const { name, value, options, defaultOption } = this.props;
             const { setModel } = this.context;
 
             if (!name || typeof setModel !== 'function') {
@@ -24,8 +24,13 @@ export const FieldConnect = (Component) => {
 
             if (value) {
                 setModel(name, value);
-            } else if (Array.isArray(options) && options.length) {
-                setModel(name, options[0].label ? options[0].value : options[0]);
+            } else if (Array.isArray(options) && options.length && defaultOption !== undefined) {
+                setModel(
+                    name,
+                    options[defaultOption].label ?
+                        options[defaultOption].value :
+                        options[defaultOption]
+                );
             }
         }
 
@@ -201,6 +206,7 @@ export const FieldConnect = (Component) => {
             PropTypes.string,
             PropTypes.shape({})
         ])),
+        defaultOption: PropTypes.number,
         onChangeModel: PropTypes.func,
         onEmitEvents: PropTypes.oneOfType([
             PropTypes.shape({

@@ -7,7 +7,7 @@ import Autocomplete from 'react-autosuggest';
 
 export class AutocompleteField extends Component {
     static renderSuggestion(value) {
-        return <div >{value}</div>
+        return <div>{value}</div>
     }
 
     static getSuggestion(value) {
@@ -21,26 +21,29 @@ export class AutocompleteField extends Component {
             suggestions: this.getSuggestions('')
         };
         this.onChange = this.onChange.bind(this);
+        this.suggestionsFilter = this.suggestionsFilter.bind(this);
+        this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
+        this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     }
 
     suggestionsFilter(escapedValue, searchKey) {
         if (searchKey) {
-            return item => !!get(item, searchKey ,'').match(escapedValue)
+            return option => !!get(option, searchKey ,'').match(escapedValue)
         }
-        return item => item.match(escapedValue);
+        return option => option.match(escapedValue);
     }
 
     getSuggestions(value) {
-        const { items, searchKey = '' } = this.props;
+        const { options, searchKey } = this.props;
         const escapedValue = value.trim();
         if (escapedValue === '') return [];
-        return items.filter(::this.suggestionsFilter(escapedValue, searchKey));
+        return options.filter(this.suggestionsFilter(escapedValue, searchKey));
     }
 
     onSuggestionsFetchRequested = ({ value }) => {
-        const { getOptions } = this.props;
+        const { getOptions, searchKey } = this.props;
         if (typeof getOptions === 'function') {
-            getOptions(value).then((suggestions) => {
+            getOptions(value, searchKey).then((suggestions) => {
                 this.setState({ suggestions });
             });
             return;
@@ -65,16 +68,16 @@ export class AutocompleteField extends Component {
         const {
             wrapperClassName,
             className,
+            theme,
             errors,
             error,
-            value = '',
+            value,
             label,
             placeholder,
-            errorStyles = {},
-            fieldAttributes = {},
-            renderItem = AutocompleteField.renderSuggestion,
-            getValue = AutocompleteField.getSuggestion,
-            optionsContainerClassName,
+            errorStyles,
+            fieldAttributes,
+            renderItem,
+            getValue
         } = this.props;
         return (
             <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
@@ -90,11 +93,9 @@ export class AutocompleteField extends Component {
                     suggestions={this.state.suggestions}
                     renderSuggestion={renderItem}
                     getSuggestionValue={getValue}
-                    onSuggestionsFetchRequested={::this.onSuggestionsFetchRequested}
-                    onSuggestionsClearRequested={::this.onSuggestionsClearRequested}
-                    theme={{
-                        suggestionsContainer: optionsContainerClassName
-                    }}
+                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                    theme={theme}
                 />
                 {error && <ErrorField errors={errors} {...errorStyles} />}
             </div>
@@ -130,6 +131,15 @@ AutocompleteField.propTypes = {
         itemClassName: PropTypes.string
     }),
     fieldAttributes: PropTypes.shape({})
+};
+
+AutocompleteField.defaultProps = {
+    value: '',
+    errorStyles: {},
+    fieldAttributes: {},
+    theme: {},
+    renderItem: AutocompleteField.renderSuggestion,
+    getValue: AutocompleteField.getSuggestion
 };
 
 export default FieldConnect(AutocompleteField);

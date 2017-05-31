@@ -52,7 +52,7 @@ class AppointmentForm extends Component{
                     <AutocompleteField
                         name="phone"
                         placeholder="Phone"
-                        items={clients}
+                        options={clients}
                         searchKey="phone"
                         renderItem={renderItem}
                         getValue={this.getValue}
