@@ -296,4 +296,60 @@ describe('Form', () => {
         eventListener.callEvent('submit');
         expect(mockSubmit).toBeCalledWith({title: 'new'});
     });
+
+    it('should register one listener of any type of event on field',() => {
+        const mockSubmit = jest.fn();
+        const mockListener = jest.fn();
+        const eventListener = new FormEventsListener();
+        eventListener.registerEvent('test');
+        const wrapper = mount(
+            <Form
+                onSubmit={mockSubmit}
+                eventsListener={eventListener}
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                    onEmitEvents={{name: 'test', method: mockListener}}
+                />
+            </Form>
+        );
+        eventListener.callEvent('test', {title: 'new'});
+        wrapper.unmount();
+        expect(mockListener).toBeCalled();
+    });
+
+    it('should register 3 listener of any type of event on field',() => {
+        const mockSubmit = jest.fn();
+        const mockListener = jest.fn();
+        const mockListener2 = jest.fn();
+        const mockListener3 = jest.fn();
+        const eventListener = new FormEventsListener();
+        eventListener.registerEvent('test');
+        eventListener.registerEvent('test2');
+        eventListener.registerEvent('test3');
+        const wrapper = mount(
+            <Form
+                onSubmit={mockSubmit}
+                eventsListener={eventListener}
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                    onEmitEvents={[
+                        {name: 'test', method: mockListener},
+                        {name: 'test2', method: mockListener2},
+                        {name: 'test3', method: mockListener3}
+                    ]}
+                />
+            </Form>
+        );
+        eventListener.callEvent('test', {title: 'new'});
+        eventListener.callEvent('test2', {title: 'new2'});
+        eventListener.callEvent('test3', {title: 'new3'});
+        wrapper.unmount();
+        expect(mockListener).toBeCalled();
+        expect(mockListener2).toBeCalled();
+        expect(mockListener3).toBeCalled();
+    });
 });

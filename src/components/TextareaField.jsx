@@ -42,7 +42,7 @@ TextareaField.propTypes = {
         PropTypes.shape({})
     ]),
     error: PropTypes.bool,
-    value: PropTypes.number,
+    value: PropTypes.string,
     label: PropTypes.string,
     placeholder: PropTypes.string,
     errorStyles: PropTypes.shape({

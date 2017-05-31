@@ -1,18 +1,18 @@
 export const clients = [
     {
-        phone: '508413046',
-        name: 'Mariusz',
-        email: ''
+        phone: '123456789',
+        name: 'Max',
+        email: 'max@test.com'
     },
     {
-        phone: '5084422111',
-        name: 'Maniek',
-        email: ''
+        phone: '123854924',
+        name: 'Jenifer',
+        email: 'jenifer@test.com'
     },
     {
-        phone: '508325845',
-        name: 'Malwina',
-        email: ''
+        phone: '123985564',
+        name: 'Alex',
+        email: 'alex@test.com'
     }
 ];
 

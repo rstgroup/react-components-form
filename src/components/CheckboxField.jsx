@@ -10,16 +10,26 @@ export class CheckboxField extends React.Component {
             checked: props.value || false,
             value: props.checkboxValue || true
         };
-        this.toggleValue = this.toggleValue.bind(this);
+    }
+
+    componentWillReceiveProps({ value, checkboxValue }) {
+        this.setState({ checked: value, value: checkboxValue });
+    }
+
+    getValue(checked) {
+        const { type } = this.props;
+        const { value } = this.state;
+        if (type === Boolean) return checked ? true : false;
+        return checked ? value : undefined;
     }
 
     toggleValue() {
-        let value = !this.state.checked ? this.state.value : undefined;
-        if (!value && this.props.type.name === 'Boolean') value = false;
+        const { onChange } = this.props;
+        const { checked } = this.state;
+        onChange(this.getValue(!checked));
         this.setState({
-            checked: !this.state.checked
+            checked: !checked
         });
-        this.props.onChange(value);
     }
 
     render() {
@@ -41,7 +51,7 @@ export class CheckboxField extends React.Component {
                         type="checkbox"
                         checked={this.state.checked}
                         name={name}
-                        onChange={this.toggleValue}
+                        onChange={::this.toggleValue}
                         placeholder={placeholder}
                         className={className}
                         {...fieldAttributes}
@@ -75,6 +85,10 @@ CheckboxField.propTypes = {
         itemClassName: PropTypes.string
     }),
     fieldAttributes: PropTypes.shape({})
+};
+
+CheckboxField.defaultProps = {
+    type: Boolean
 };
 
 export default FieldConnect(CheckboxField);

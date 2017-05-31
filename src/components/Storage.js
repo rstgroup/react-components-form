@@ -7,9 +7,9 @@ class Storage {
         this.model[name] = value;
         this.listeners.forEach(listener => listener(this.model, callback));
     }
-    setModel(model) {
+    setModel(model, callback) {
         this.model = model;
-        this.listeners.forEach(listener => listener(this.model));
+        this.listeners.forEach(listener => listener(this.model, callback));
     }
     listen(listener) {
         this.listeners.push(listener);

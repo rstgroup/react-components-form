@@ -20,6 +20,7 @@ export class AutocompleteField extends Component {
         this.state = {
             suggestions: this.getSuggestions('')
         };
+        this.onChange = this.onChange.bind(this);
     }
 
     suggestionsFilter(escapedValue, searchKey) {
@@ -83,7 +84,7 @@ export class AutocompleteField extends Component {
                         className,
                         placeholder,
                         value,
-                        onChange: ::this.onChange,
+                        onChange: this.onChange,
                         ...fieldAttributes
                     }}
                     suggestions={this.state.suggestions}

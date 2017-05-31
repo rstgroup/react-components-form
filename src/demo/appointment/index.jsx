@@ -21,13 +21,17 @@ const renderItem = ({phone, name}) => (
 );
 
 const el = new FormEventsListener();
-el.registerEvent('test');
+el.registerEvent('clientData');
 class AppointmentForm extends Component{
-    getAutoCompleteValue() {}
+    constructor(props) {
+        super(props);
+        this.getValue = this.getValue.bind(this);
+    }
+    getValue(value) {
+        el.callEvent('clientData', value);
+        return value.phone;
+    }
     render() {
-        setTimeout(()=>{
-            el.callEvent('test', {dupa:'test'});
-        },3000);
         return (
             <Form
                 eventsListener={el}
@@ -51,13 +55,20 @@ class AppointmentForm extends Component{
                         items={clients}
                         searchKey="phone"
                         renderItem={renderItem}
-                        onEmitEvents={{name:'test', method: (data) => console.log(data)}}
-                        getValue={(value) => value.phone}
+                        getValue={this.getValue}
                         wrapperClassName={style.autocompleteListItemWrapper}
                         optionsContainerClassName={style.suggestionsContainer}
                     />
-                    <TextField name="name" placeholder="Name & Surname"/>
-                    <TextField name="email" placeholder="Email"/>
+                    <TextField
+                        name="name"
+                        placeholder="Name & Surname"
+                        onEmitEvents={{name:'clientData', method: ({ name }, self) => self.onChangeData(name)}}
+                    />
+                    <TextField
+                        name="email"
+                        placeholder="Email"
+                        onEmitEvents={{name:'clientData', method: ({ email }, self) => self.onChangeData(email)}}
+                    />
                 </ObjectField>
                 <SelectField name="userId" label="Responsible person"/>
                 <SelectField name="serviceId" label="Service"/>
