@@ -125,6 +125,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | CheckboxField | This field is normal checkbox that return Boolean |
 | ObjectField | This field give You posibility to wrap another fields to object |
 | ListField | This field give You posibility to create list of fields with add and remove buttons |
+| AutocompleteField | You can use this field by import them from 'react-components-form/AutocompleteField' |
 
 #### Fields props
 
@@ -136,10 +137,12 @@ You can use current fields or create new fields. Here You have list of fields.
 | label | String, Node |
 | placeholder | String |
 | options | [String], [{label: String, value: String}] |
+| defaultOption | Number |
 | className | String |
 | wrapperClassName | String |
 | errorStyles | {className, itemClassName, fieldClassName, ErrorComponent} |
 | onChangeModel | Function(data: { name: String, value: Any }, componentInstance: FieldComponentInstance) |
+| onEmitEvents | Function(data, componentInstance: FieldComponentInstance) or array of functions |
 | fieldAttributes | Object with html attributes for input |
 | eventsListener (from context) | Instance of FormEventsListener (prop avaible if you have eventListener in form) |
 | path (from context) | String (this prop give you path to field "form.someObjectField.thisField") |
