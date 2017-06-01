@@ -20,14 +20,17 @@ const extendStyles = (
         itemWrapperClassName: classnames(get(styles,'itemWrapperClassName'), itemWrapperClassName),
         addButton: {
             ...addButton,
+            ...get(styles, 'addButton', {}),
             className: classnames(get(styles,'addButton.className'), addButton.className)
         },
         removeButton: {
             ...removeButton,
+            ...get(styles, 'removeButton', {}),
             className: classnames(get(styles,'removeButton.className'), removeButton.className)
         },
         errorStyles: {
             ...errorStyles,
+            ...get(styles, 'errorStyles', {}),
             className: classnames(get(styles,'errorStyles.className'), errorStyles.className),
             itemClassName: classnames(get(styles,'errorStyles.itemClassName'), errorStyles.itemClassName),
             fieldClassName: classnames(get(styles,'errorStyles.fieldClassName'), errorStyles.fieldClassName)
