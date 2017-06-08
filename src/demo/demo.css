@@ -1,9 +1,36 @@
+.leftNavigation{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 300px;
+    height: 100vh;
+    background: #ececec;
+}
+
+.leftNavigation a{
+    display: block;
+    padding: 10px 15px;
+    color: #555;
+}
+
+.leftNavigation a:hover{
+    background-color: #dddddd;
+}
+
 .row {
     display: block;
     width: 100%;
     border-bottom: 2px solid #ddd;
     vertical-align: top;
     padding: 15px 0;
+}
+
+pre {
+    background-color: #ffffff;
+    padding: 10px 15px;
+    width: 100%;
+    display: block;
+    color: #3d9970;
 }
 
 .column {

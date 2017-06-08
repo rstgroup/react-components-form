@@ -12,8 +12,8 @@ export class CheckboxField extends React.Component {
         };
     }
 
-    componentWillReceiveProps({ value, checkboxValue }) {
-        this.setState({ checked: value, value: checkboxValue });
+    componentWillReceiveProps({ value }) {
+        this.setState({ checked: value });
     }
 
     getValue(checked) {
