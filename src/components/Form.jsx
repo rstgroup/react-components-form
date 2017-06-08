@@ -52,6 +52,7 @@ class Form extends React.Component {
 
     componentWillUnmount() {
         this.storage.unlisten(this.setStateModel);
+        this.storage.setModel({});
         if (this.eventsListener) {
             this.eventsListener.unregisterEventListener('submit', this.submitListener);
             this.eventsListener.unregisterEventListener('validate', this.validateListener);
@@ -65,7 +66,7 @@ class Form extends React.Component {
     }
 
     setStateModel(model, callback) {
-        this.setState({ model }, callback)
+        this.setState({ model }, callback);
     }
 
     setModel(name, value, callback) {
@@ -105,7 +106,7 @@ class Form extends React.Component {
                 });
             })
         }
-        this.setState({errors});
+        this.setState({errors, validateOnChange: true});
         return errors;
     }
 
@@ -132,6 +133,7 @@ class Form extends React.Component {
             if (this.props.onError) this.props.onError(errors, model);
             return;
         }
+        this.setState({validateOnChange: false});
         this.props.onSubmit(model);
         return model;
     }

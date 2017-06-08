@@ -3,11 +3,15 @@ import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
 export class ObjectField extends React.Component {
+    static defaultProps = {
+        value: {}
+    };
+
     constructor(props) {
         super(props);
         this.state = {
             schema: {},
-            model: props.value || {},
+            model: props.value,
             errors: {}
         };
 
@@ -19,8 +23,9 @@ export class ObjectField extends React.Component {
         this.setStateModel = this.setStateModel.bind(this);
     }
 
-    componentWillReceiveProps({ value = {} }){
-        this.setState({model: value});
+    componentWillReceiveProps ({ value }) {
+        this.setState({ model: value });
+        this.storage.setModel(value, null, true);
     }
 
     componentWillMount() {
@@ -35,8 +40,7 @@ export class ObjectField extends React.Component {
     }
 
     setStateModel(model, callback) {
-        this.setState({ model }, callback);
-        this.props.onChange(model);
+        this.props.onChange(model, callback);
     }
 
     setModel(name, value, callback) {

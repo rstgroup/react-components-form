@@ -71,10 +71,24 @@ export class ListField extends React.Component {
         return errors[parseInt(key)] || [];
     }
 
+    getDefaultValueForListItem() {
+        if (
+            this.state.schema &&
+            this.state.schema.type &&
+            this.state.schema.type[0] &&
+            typeof this.state.schema.type[0] === 'object' &&
+            typeof this.state.schema.type[0].getDefaultValues === 'function'
+        ) {
+            return this.state.schema.type[0].getDefaultValues();
+        }
+        return undefined;
+    }
+
     addListElement(){
         const model = Array.from(this.state.model);
         model.push({
-            id: ListField.generateItemId()
+            id: ListField.generateItemId(),
+            value: this.getDefaultValueForListItem()
         });
         this.setState({ model });
     }
