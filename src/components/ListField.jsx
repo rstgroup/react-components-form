@@ -3,6 +3,10 @@ import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
 export class ListField extends React.Component {
+    static defaultProps = {
+        value: []
+    };
+
     static generateItemId() {
         return Math.random().toString(36).substring(7);
     }
@@ -25,6 +29,14 @@ export class ListField extends React.Component {
         this.setStateModel = this.setStateModel.bind(this);
     }
 
+    componentWillReceiveProps({ value }) {
+        let shouldSetState = false;
+        value.forEach((item, key) => {
+            if (item !== this.state.model[key].value) shouldSetState = true;
+        });
+        if (shouldSetState) this.storage.setModel(this.getModelFromProps({ value }));
+    }
+
     componentWillMount() {
         this.storage.listen(this.setStateModel);
     }
@@ -39,7 +51,7 @@ export class ListField extends React.Component {
     }
 
     getModelFromProps(props) {
-        if (props.value) {
+        if (props.value.length > 0) {
             return props.value.map(item => ({
                 id: ListField.generateItemId(),
                 value: item

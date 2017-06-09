@@ -6,6 +6,7 @@ import {
     TextField,
     NumberField,
     SubmitField,
+    ObjectField,
     FormEventsListener
 } from '../src/components';
 
@@ -295,6 +296,33 @@ describe('Form', () => {
         eventListener.callEvent('reset', {title: 'new'});
         eventListener.callEvent('submit');
         expect(mockSubmit).toBeCalledWith({title: 'new'});
+    });
+    it('should register changeModel listener and call it on change model',() => {
+        const mockListener = jest.fn();
+        const eventListener = new FormEventsListener();
+        const wrapper = mount(
+            <Form
+                onSubmit={()=>{}}
+                eventsListener={eventListener}
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                    onChangeModel={mockListener}
+                />
+                <ObjectField name="testObjectField">
+                    <TextField name="test"/>
+                </ObjectField>
+            </Form>
+        );
+
+        wrapper.find(ObjectField)
+                .find(TextField)
+                .find('input')
+                .first()
+                .simulate('change', {target: { value: 'test' } });
+
+        expect(mockListener).toHaveBeenCalledTimes(2);
     });
 
     it('should register one listener of any type of event on field',() => {
