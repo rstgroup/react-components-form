@@ -410,9 +410,9 @@ const countrySchema = new Schema({
 });
 
 const countrys = [
-    {lable:'Poland', value:'PL'},
-    {lable:'Germany', value:'DE'},
-    {lable:'England', value:'EN'}
+    {label:'Poland', value:'PL'},
+    {label:'Germany', value:'DE'},
+    {label:'England', value:'EN'}
 ];
 
 const CompanyForm  = () => (
