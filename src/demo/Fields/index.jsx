@@ -11,6 +11,9 @@ import {
     SubmitField,
 } from '../../components/styled/Bootstrap';
 import Schema from 'form-schema-validation';
+import Text from './Text';
+import Textarea from './Textarea';
+import Number from './Number';
 import { listWrapper, objectFormField, objectFieldClassName } from '../demo.css';
 
 
@@ -73,23 +76,11 @@ class FieldsForm extends Component {
                 onSubmit={data => this.setState({data})}
                 schema={fieldsFormSchema}
             >
-                <TextField name="TextField" label="TextField"/>
-            <pre>
-                {`<TextField name="TextField" label="TextField" />`}
-            </pre>
-                <hr/>
+                <Text />
 
-                <NumberField name="NumberField" label="NumberField"/>
-            <pre>
-                {`<NumberField name="NumberField" label="NumberField" />`}
-            </pre>
-                <hr/>
+                <Textarea />
 
-                <TextareaField name="TextareaField" label="TextareaField"/>
-            <pre>
-                {`<TextareaField name="TextareaField" label="TextareaField" />`}
-            </pre>
-                <hr/>
+                <Number />
 
                 <SelectField name="SelectField" label="SelectField" options={options}/>
             <pre>
