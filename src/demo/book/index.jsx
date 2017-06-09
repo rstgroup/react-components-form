@@ -88,6 +88,20 @@ const postSchema = new Schema({
         type: Boolean
     }
 });
+const resetModel = {
+    title: 'test',
+    category: 'horror',
+    authors: [
+        {
+            name: 'Tester',
+            surname: 'Testowy',
+            age: '18-21'
+        }
+    ],
+    published: false,
+    languages: ['test'],
+    status: true
+};
 
 const eventsListener = new FormEventsListener();
 const BookForm = () => (
@@ -118,6 +132,7 @@ const BookForm = () => (
         </ListField>
         <CheckboxField name="status" label="Published" />
         <SubmitField value="Submit" />
+        <a onClick={() => {eventsListener.callEvent('reset', resetModel)}} >RESET</a>
     </Form>
 );
 
