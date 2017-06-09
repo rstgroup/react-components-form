@@ -40,7 +40,8 @@ export class ObjectField extends React.Component {
     }
 
     setStateModel(model, callback) {
-        this.props.onChange(model, callback);
+        this.props.onChange(model);
+        if (typeof callback === 'function') callback();
     }
 
     setModel(name, value, callback) {
