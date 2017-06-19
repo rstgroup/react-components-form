@@ -77,7 +77,10 @@ const appointmentSchema = new Schema({
         type: String,
         required: true,
         options: services
-    }
+    },
+    place:{
+        type: String
+    },
 });
 
 export default appointmentSchema;

@@ -75,4 +75,67 @@ describe('AutocompleteField', () => {
     it('static renderSuggestion', () => {
         expect(AutocompleteField.renderSuggestion('test').props.children).toBe('test');
     });
+
+    it('static renderSectionTitle', () => {
+        expect(AutocompleteField.renderSectionTitle({ title: 'test' }).props.children).toBe('test');
+    });
+
+    it('static getSectionSuggestions', () => {
+        const suggestions = [
+            {
+                name: 'name1'
+            },
+            {
+                name: 'name2'
+            }
+        ];
+        expect(AutocompleteField.getSectionSuggestions({ suggestions: suggestions })).toEqual(suggestions);
+    });
+
+    it('applySectionFilter filters suggestions list properly', () => {
+        const places = [
+            {
+                title: 'Favourite',
+                suggestions: [
+                    {
+                        name: 'Office'
+                    },
+                    {
+                        name: 'Restaurant'
+                    }
+                ]
+            },
+            {
+                title: 'Other',
+                suggestions: [
+                    {
+                        name: 'Bar'
+                    },
+                    {
+                        name: 'Online'
+                    }
+                ]
+            }
+        ];
+        const filteredPlaces = [
+            {
+                title: 'Favourite',
+                suggestions: [
+                    {
+                        name: 'Office'
+                    }
+                ]
+            },
+            {
+                title: 'Other',
+                suggestions: [
+                    {
+                        name: 'Online'
+                    }
+                ]
+            }
+        ];
+        const wrapper = mount(<AutocompleteField {...props} />);
+        expect(wrapper.instance().applySectionFilter(places, 'o', 'name')).toEqual(filteredPlaces);
+    });
 });

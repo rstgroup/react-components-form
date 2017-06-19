@@ -52,6 +52,12 @@ label {
     border-top: 0px;
 }
 
+.autocompleteListSectionHeader {
+    font-weight: bold;
+    background: #eee;
+    padding: 5px;
+}
+
 .autocompleteListItemPhone {
 
 }
@@ -67,6 +73,7 @@ label {
 .autocompleteListItemWrapper ul{
     list-style: none;
     padding-left: 0px;
+    margin: 0;
 }
 
 .autocompleteListItemWrapper li{
