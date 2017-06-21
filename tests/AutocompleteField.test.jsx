@@ -80,6 +80,21 @@ describe('AutocompleteField', () => {
         expect(AutocompleteField.renderSectionTitle({ title: 'test' }).props.children).toBe('test');
     });
 
+    it('onSuggestionsClearRequested clears suggestions list', () => {
+        props.options = [
+            {name: 'test', value: 1},
+            {name: 'test2', value: 2},
+            {name: 'test3', value: 3}
+        ];
+        props.searchKey = 'name';
+        const wrapper = mount(<AutocompleteField {...props} />);
+        wrapper.find('input').simulate('change', { target: { value: 'test' } });
+        expect(wrapper.state().suggestions.length).toBe(3);
+        wrapper.instance().onSuggestionsClearRequested();
+        expect(wrapper.state().suggestions.length).toBe(0);
+
+    });
+
     it('static getSectionSuggestions', () => {
         const suggestions = [
             {
@@ -137,5 +152,78 @@ describe('AutocompleteField', () => {
         ];
         const wrapper = mount(<AutocompleteField {...props} />);
         expect(wrapper.instance().applySectionFilter(places, 'o', 'name')).toEqual(filteredPlaces);
+    });
+
+    it('onKeyDown when enter pressed', () => {
+        const preventDefaultSpy = jest.fn();
+        const stopPropagationSpy = jest.fn();
+        const wrapper = mount(<AutocompleteField {...props} />);
+        wrapper.instance().onKeyDown({
+            keyCode: 13,
+            preventDefault: preventDefaultSpy,
+            stopPropagation: stopPropagationSpy,
+        });
+        expect(preventDefaultSpy).toBeCalled();
+        expect(stopPropagationSpy).toBeCalled();
+    });
+
+    it('onKeyDown when different key than enter pressed', () => {
+        const preventDefaultSpy = jest.fn();
+        const stopPropagationSpy = jest.fn();
+        const wrapper = mount(<AutocompleteField {...props} />);
+        wrapper.instance().onKeyDown({
+            keyCode: 12,
+            preventDefault: preventDefaultSpy,
+            stopPropagation: stopPropagationSpy,
+        });
+        expect(preventDefaultSpy).not.toBeCalled();
+        expect(stopPropagationSpy).not.toBeCalled();
+    });
+
+    it('getSuggestions returns empty array when filter is empty and proper flag state passed', () => {
+        props.options = [
+            {name: 'test', value: 1},
+            {name: 'test2', value: 2},
+            {name: 'test3', value: 3}
+        ];
+        props.searchKey = 'name';
+        props.suggestionsShownIfFieldEmpty = false;
+        const wrapper = mount(<AutocompleteField {...props} />);
+        const suggestions = wrapper.instance().getSuggestions('');
+        expect(suggestions).toEqual([]);
+    });
+
+    it('getSuggestions returns whole options array when filter is empty and proper flag state passed', () => {
+        const options = [
+            {name: 'test', value: 1},
+            {name: 'test2', value: 2},
+            {name: 'test3', value: 3}
+        ];
+        props.options = options;
+        props.searchKey = 'name';
+        props.suggestionsShownIfFieldEmpty = true;
+        const wrapper = mount(<AutocompleteField {...props} />);
+        const suggestions = wrapper.instance().getSuggestions('');
+        expect(suggestions).toEqual(options);
+    });
+
+    it('getSuggestions returns whole options array', () => {
+        const options = [
+            {
+                title: 'test',
+                suggestions: [
+                    {name: 'test', value: 1},
+                    {name: 'test2', value: 2},
+                    {name: 'test3', value: 3}
+                ]
+            },
+        ];
+        props.options = options;
+        props.searchKey = 'name';
+        props.multiSection = true;
+        props.suggestionsShownIfFieldEmpty = true;
+        const wrapper = mount(<AutocompleteField {...props} />);
+        const suggestions = wrapper.instance().getSuggestions('test');
+        expect(suggestions).toEqual(options);
     });
 });
