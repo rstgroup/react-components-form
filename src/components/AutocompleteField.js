@@ -54,7 +54,7 @@ export class AutocompleteField extends Component {
         const { sectionSuggestionsIndex = defaultSectionSuggestionsIndex } = this.props;
         const copiedSections = cloneArray(sections);
         const newSections = [];
-        copiedSections.forEach((section, index) => {
+        copiedSections.forEach((section) => {
             const filteredSuggestions = AutocompleteField.getSectionSuggestions(section).filter(
                 this.suggestionsFilter(escapedValue, searchKey)
             );
@@ -176,7 +176,11 @@ AutocompleteField.propTypes = {
         className: PropTypes.string,
         itemClassName: PropTypes.string
     }),
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
+    renderInputComponent: PropTypes.func,
+    multiSection: PropTypes.bool,
+    renderSectionTitle: PropTypes.func,
+    getSectionSuggestions: PropTypes.func,
 };
 
 AutocompleteField.defaultProps = {
