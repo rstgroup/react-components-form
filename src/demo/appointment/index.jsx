@@ -76,6 +76,7 @@ class AppointmentForm extends Component{
                         theme={{
                             suggestionsContainer: style.suggestionsContainer
                         }}
+                        alwaysRenderSuggestions
                     />
                     <TextField
                         name="name"

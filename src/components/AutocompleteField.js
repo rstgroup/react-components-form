@@ -67,9 +67,12 @@ export class AutocompleteField extends Component {
     }
 
     getSuggestions(value) {
-        const { options, multiSection, searchKey } = this.props;
+        const { options, multiSection, searchKey, alwaysRenderSuggestions } = this.props;
         const escapedValue = value.trim();
-        if (escapedValue === '') return [];
+        if (escapedValue === ''){
+            if (alwaysRenderSuggestions) return options;
+            return [];
+        }
         if (multiSection) return this.applySectionFilter(options, escapedValue, searchKey);
         return options.filter(this.suggestionsFilter(escapedValue, searchKey));
     }
@@ -89,7 +92,7 @@ export class AutocompleteField extends Component {
 
     onSuggestionsClearRequested = () => {
         this.setState({
-            suggestions: []
+            suggestions: this.getSuggestions('')
         });
     };
 
@@ -118,6 +121,7 @@ export class AutocompleteField extends Component {
             renderSectionTitle = AutocompleteField.renderSectionTitle,
             getSectionSuggestions = AutocompleteField.getSectionSuggestions,
             sectionSuggestionsIndex = defaultSectionSuggestionsIndex,
+            alwaysRenderSuggestions
         } = this.props;
         return (
             <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
@@ -142,6 +146,7 @@ export class AutocompleteField extends Component {
                     renderSectionTitle={renderSectionTitle}
                     getSectionSuggestions={getSectionSuggestions}
                     sectionSuggestionsIndex={sectionSuggestionsIndex}
+                    alwaysRenderSuggestions={alwaysRenderSuggestions}
                 />
                 {error && <ErrorField errors={errors} {...errorStyles} />}
             </div>
@@ -181,6 +186,7 @@ AutocompleteField.propTypes = {
     multiSection: PropTypes.bool,
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
+    alwaysRenderSuggestions: PropTypes.bool,
 };
 
 AutocompleteField.defaultProps = {
