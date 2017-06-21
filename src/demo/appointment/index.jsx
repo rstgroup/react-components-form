@@ -10,13 +10,25 @@ import {
 } from '../../components/styled/Bootstrap';
 import { FormEventsListener } from '../../components';
 import appointmentSchema from './schema';
-import { clients } from './data';
+import { clients, places } from './data';
 import style from '../demo.css';
 
-const renderItem = ({phone, name}) => (
+const renderPhoneItem = ({phone, name}) => (
     <div className={style.autocompleteListItem}>
         <div className={style.autocompleteListItemPhone}>{phone}</div>
         <div className={style.autocompleteListItemName}>{name}</div>
+    </div>
+);
+
+const renderPlaceItem = ({name}) => (
+    <div className={style.autocompleteListItem}>
+        <div className={style.autocompleteListItemName}>{name}</div>
+    </div>
+);
+
+const renderPlaceSectionTitle = ({title}) => (
+    <div className={style.autocompleteListSectionHeader}>
+        {title}
     </div>
 );
 
@@ -25,11 +37,15 @@ el.registerEvent('clientData');
 class AppointmentForm extends Component{
     constructor(props) {
         super(props);
-        this.getValue = this.getValue.bind(this);
+        this.getPhoneValue = this.getPhoneValue.bind(this);
+        this.getPlaceValue = this.getPlaceValue.bind(this);
     }
-    getValue(value) {
+    getPhoneValue(value) {
         el.callEvent('clientData', value);
         return value.phone;
+    }
+    getPlaceValue(value) {
+        return value.name;
     }
     render() {
         return (
@@ -54,8 +70,8 @@ class AppointmentForm extends Component{
                         placeholder="Phone"
                         options={clients}
                         searchKey="phone"
-                        renderItem={renderItem}
-                        getValue={this.getValue}
+                        renderItem={renderPhoneItem}
+                        getValue={this.getPhoneValue}
                         wrapperClassName={style.autocompleteListItemWrapper}
                         theme={{
                             suggestionsContainer: style.suggestionsContainer
@@ -74,6 +90,21 @@ class AppointmentForm extends Component{
                 </ObjectField>
                 <SelectField name="userId" label="Responsible person"/>
                 <SelectField name="serviceId" label="Service"/>
+                <AutocompleteField
+                    name="place"
+                    placeholder="Place"
+                    options={places}
+                    searchKey="name"
+                    renderItem={renderPlaceItem}
+                    renderSectionTitle={renderPlaceSectionTitle}
+                    getValue={this.getPlaceValue}
+                    multiSection
+                    sectionSuggestionsIndex="suggestions"
+                    wrapperClassName={style.autocompleteListItemWrapper}
+                    theme={{
+                        suggestionsContainer: style.suggestionsContainer
+                    }}
+                />
                 <SubmitField value="Submit"/>
             </Form>
         );

@@ -16,4 +16,27 @@ export const clients = [
     }
 ];
 
-export default clients;
+export const places = [
+    {
+        title: 'Favourite',
+        suggestions: [
+            {
+                name: 'Office'
+            },
+            {
+                name: 'Restaurant'
+            }
+        ]
+    },
+    {
+        title: 'Other',
+        suggestions: [
+            {
+                name: 'Bar'
+            },
+            {
+                name: 'Online'
+            }
+        ]
+    }
+];

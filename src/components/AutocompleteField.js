@@ -1,17 +1,27 @@
 import React, { PropTypes, Component } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
-import { get } from '../helpers';
+import { get, cloneArray } from '../helpers';
 import classnames from 'classnames';
 import Autocomplete from 'react-autosuggest';
+
+const defaultSectionSuggestionsIndex = 'suggestions';
 
 export class AutocompleteField extends Component {
     static renderSuggestion(value) {
         return <div>{value}</div>
     }
 
+    static renderSectionTitle(section) {
+        return <div>{section.title}</div>
+    }
+
     static getSuggestion(value) {
         return value
+    }
+
+    static getSectionSuggestions(section) {
+        return section[defaultSectionSuggestionsIndex];
     }
 
     constructor(props) {
@@ -20,23 +30,47 @@ export class AutocompleteField extends Component {
         this.state = {
             suggestions: this.getSuggestions('')
         };
+        this.renderInputComponent = this.renderInputComponent.bind(this);
         this.onChange = this.onChange.bind(this);
         this.suggestionsFilter = this.suggestionsFilter.bind(this);
+        this.applySectionFilter = this.applySectionFilter.bind(this);
         this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
         this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     }
 
+    renderInputComponent(inputProps) {
+        return <input {...inputProps} />;
+    }
+
     suggestionsFilter(escapedValue, searchKey) {
         if (searchKey) {
-            return option => !!get(option, searchKey ,'').match(escapedValue)
+            return option => !!get(option, searchKey ,'').match(new RegExp(escapedValue, "i"))
         }
+
         return option => option.match(escapedValue);
     }
 
+    applySectionFilter(sections, escapedValue, searchKey) {
+        const { sectionSuggestionsIndex = defaultSectionSuggestionsIndex } = this.props;
+        const copiedSections = cloneArray(sections);
+        const newSections = [];
+        copiedSections.forEach((section) => {
+            const filteredSuggestions = AutocompleteField.getSectionSuggestions(section).filter(
+                this.suggestionsFilter(escapedValue, searchKey)
+            );
+            if (filteredSuggestions.length) {
+                section[sectionSuggestionsIndex] = filteredSuggestions;
+                newSections.push(section);
+            }
+        });
+        return newSections;
+    }
+
     getSuggestions(value) {
-        const { options, searchKey } = this.props;
+        const { options, multiSection, searchKey } = this.props;
         const escapedValue = value.trim();
         if (escapedValue === '') return [];
+        if (multiSection) return this.applySectionFilter(options, escapedValue, searchKey);
         return options.filter(this.suggestionsFilter(escapedValue, searchKey));
     }
 
@@ -77,8 +111,13 @@ export class AutocompleteField extends Component {
             placeholder,
             errorStyles,
             fieldAttributes,
+            renderInputComponent = this.renderInputComponent,
             renderItem = AutocompleteField.renderSuggestion,
-            getValue = AutocompleteField.getSuggestion
+            getValue = AutocompleteField.getSuggestion,
+            multiSection = false,
+            renderSectionTitle = AutocompleteField.renderSectionTitle,
+            getSectionSuggestions = AutocompleteField.getSectionSuggestions,
+            sectionSuggestionsIndex = defaultSectionSuggestionsIndex,
         } = this.props;
         return (
             <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
@@ -92,12 +131,17 @@ export class AutocompleteField extends Component {
                         onChange: this.onChange,
                         ...fieldAttributes
                     }}
+                    renderInputComponent={renderInputComponent}
                     suggestions={this.state.suggestions}
                     renderSuggestion={renderItem}
                     getSuggestionValue={getValue}
                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
                     theme={theme}
+                    multiSection={multiSection}
+                    renderSectionTitle={renderSectionTitle}
+                    getSectionSuggestions={getSectionSuggestions}
+                    sectionSuggestionsIndex={sectionSuggestionsIndex}
                 />
                 {error && <ErrorField errors={errors} {...errorStyles} />}
             </div>
@@ -132,7 +176,11 @@ AutocompleteField.propTypes = {
         className: PropTypes.string,
         itemClassName: PropTypes.string
     }),
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
+    renderInputComponent: PropTypes.func,
+    multiSection: PropTypes.bool,
+    renderSectionTitle: PropTypes.func,
+    getSectionSuggestions: PropTypes.func,
 };
 
 AutocompleteField.defaultProps = {
