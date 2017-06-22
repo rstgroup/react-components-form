@@ -77,10 +77,14 @@ export class AutocompleteField extends Component {
             options,
             multiSection,
             searchKey,
+            alwaysRenderSuggestions,
             suggestionsShownIfFieldEmpty = false,
         } = this.props;
         const escapedValue = value.trim();
-        if (escapedValue === '') return suggestionsShownIfFieldEmpty ? options : [];
+        if (escapedValue === ''){
+            if (suggestionsShownIfFieldEmpty || alwaysRenderSuggestions) return options;
+            return [];
+        }
         if (multiSection) return this.applySectionFilter(options, escapedValue, searchKey);
         return options.filter(this.suggestionsFilter(escapedValue, searchKey));
     }
@@ -100,7 +104,7 @@ export class AutocompleteField extends Component {
 
     onSuggestionsClearRequested = () => {
         this.setState({
-            suggestions: []
+            suggestions: this.getSuggestions('')
         });
     };
 
@@ -137,6 +141,7 @@ export class AutocompleteField extends Component {
             getSectionSuggestions = AutocompleteField.getSectionSuggestions,
             shouldRenderSuggestions = this.shouldRenderSuggestions,
             sectionSuggestionsIndex = defaultSectionSuggestionsIndex,
+            alwaysRenderSuggestions
         } = this.props;
         return (
             <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
@@ -163,6 +168,7 @@ export class AutocompleteField extends Component {
                     getSectionSuggestions={getSectionSuggestions}
                     sectionSuggestionsIndex={sectionSuggestionsIndex}
                     shouldRenderSuggestions={shouldRenderSuggestions}
+                    alwaysRenderSuggestions={alwaysRenderSuggestions}
                 />
                 {error && <ErrorField errors={errors} {...errorStyles} />}
             </div>
@@ -204,6 +210,7 @@ AutocompleteField.propTypes = {
     getSectionSuggestions: PropTypes.func,
     shouldRenderSuggestions: PropTypes.func,
     suggestionsShownIfFieldEmpty: PropTypes.bool,
+    alwaysRenderSuggestions: PropTypes.bool,
 };
 
 AutocompleteField.defaultProps = {

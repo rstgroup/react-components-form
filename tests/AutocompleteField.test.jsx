@@ -10,6 +10,10 @@ const promiseMock = (data) => {
     });
 };
 
+const MockItem = () => (
+    <div>test item</div>
+);
+
 describe('AutocompleteField', () => {
     let onChangeData,
         testError,
@@ -22,6 +26,7 @@ describe('AutocompleteField', () => {
         errorStyles = {
             className: 'errorClassName'
         };
+
         props = {
             name: 'firstName',
             label: 'first name',
@@ -66,6 +71,20 @@ describe('AutocompleteField', () => {
         const wrapper = mount(<AutocompleteField {...props} />);
         wrapper.find('input').simulate('change', { target: { value: 'test' } });
         expect(wrapper.state().suggestions.length).toBe(3);
+    });
+
+    it('should display all options if alwaysRenderSuggestions flag is active', () => {
+        props.options = [
+            {name: 'test', value: 1},
+            {name: 'test2', value: 2},
+            {name: 'test3', value: 3}
+        ];
+        props.searchKey = 'name';
+        props.renderItem = () => <MockItem />;
+        props.alwaysRenderSuggestions = true;
+        const wrapper = mount(<AutocompleteField {...props} />);
+        wrapper.find('input').simulate('change', { target: { value: '' } });
+        expect(wrapper.find(MockItem).length).toBe(3);
     });
 
     it('static getSuggestion', () => {
@@ -152,6 +171,7 @@ describe('AutocompleteField', () => {
         ];
         const wrapper = mount(<AutocompleteField {...props} />);
         expect(wrapper.instance().applySectionFilter(places, 'o', 'name')).toEqual(filteredPlaces);
+        expect(wrapper.instance().applySectionFilter(places, 'poland', 'name')).toEqual([]);
     });
 
     it('onKeyDown when enter pressed', () => {
