@@ -141,6 +141,7 @@ export class AutocompleteField extends Component {
             getSectionSuggestions = AutocompleteField.getSectionSuggestions,
             shouldRenderSuggestions = this.shouldRenderSuggestions,
             sectionSuggestionsIndex = defaultSectionSuggestionsIndex,
+            onSuggestionSelected = null,
             alwaysRenderSuggestions
         } = this.props;
         return (
@@ -169,6 +170,7 @@ export class AutocompleteField extends Component {
                     sectionSuggestionsIndex={sectionSuggestionsIndex}
                     shouldRenderSuggestions={shouldRenderSuggestions}
                     alwaysRenderSuggestions={alwaysRenderSuggestions}
+                    onSuggestionSelected={onSuggestionSelected}
                 />
                 {error && <ErrorField errors={errors} {...errorStyles} />}
             </div>
@@ -210,6 +212,7 @@ AutocompleteField.propTypes = {
     getSectionSuggestions: PropTypes.func,
     shouldRenderSuggestions: PropTypes.func,
     suggestionsShownIfFieldEmpty: PropTypes.bool,
+    onSuggestionSelected: PropTypes.func,
     alwaysRenderSuggestions: PropTypes.bool,
 };
 

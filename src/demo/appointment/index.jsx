@@ -102,6 +102,9 @@ class AppointmentForm extends Component{
                     multiSection
                     suggestionsShownIfFieldEmpty
                     sectionSuggestionsIndex="suggestions"
+                    onSuggestionSelected={(event, { suggestion }) => {
+                        console.log('suggestionSelected', event, suggestion);
+                    }}
                     wrapperClassName={style.autocompleteListItemWrapper}
                     theme={{
                         suggestionsContainer: style.suggestionsContainer
