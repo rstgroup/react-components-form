@@ -31,6 +31,7 @@ export const SelectField = ({
                 <option
                     value={option.label ? option.value : option}
                     key={option.label || option}
+                    disabled={option.disabled}
                 >
                     {option.label || option}
                 </option>
