@@ -31,7 +31,9 @@ export class AutocompleteField extends Component {
             suggestions: this.getSuggestions('')
         };
         this.renderInputComponent = this.renderInputComponent.bind(this);
+        this.shouldRenderSuggestions = this.shouldRenderSuggestions.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.onKeyDown = this.onKeyDown.bind(this);
         this.suggestionsFilter = this.suggestionsFilter.bind(this);
         this.applySectionFilter = this.applySectionFilter.bind(this);
         this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
@@ -40,6 +42,10 @@ export class AutocompleteField extends Component {
 
     renderInputComponent(inputProps) {
         return <input {...inputProps} />;
+    }
+
+    shouldRenderSuggestions() {
+        return true;
     }
 
     suggestionsFilter(escapedValue, searchKey) {
@@ -67,10 +73,16 @@ export class AutocompleteField extends Component {
     }
 
     getSuggestions(value) {
-        const { options, multiSection, searchKey, alwaysRenderSuggestions } = this.props;
+        const {
+            options,
+            multiSection,
+            searchKey,
+            alwaysRenderSuggestions,
+            suggestionsShownIfFieldEmpty = false,
+        } = this.props;
         const escapedValue = value.trim();
         if (escapedValue === ''){
-            if (alwaysRenderSuggestions) return options;
+            if (suggestionsShownIfFieldEmpty || alwaysRenderSuggestions) return options;
             return [];
         }
         if (multiSection) return this.applySectionFilter(options, escapedValue, searchKey);
@@ -101,6 +113,13 @@ export class AutocompleteField extends Component {
         onChange(newValue)
     }
 
+    onKeyDown(e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
     render(){
         const {
             wrapperClassName,
@@ -120,7 +139,9 @@ export class AutocompleteField extends Component {
             multiSection = false,
             renderSectionTitle = AutocompleteField.renderSectionTitle,
             getSectionSuggestions = AutocompleteField.getSectionSuggestions,
+            shouldRenderSuggestions = this.shouldRenderSuggestions,
             sectionSuggestionsIndex = defaultSectionSuggestionsIndex,
+            onSuggestionSelected = null,
             alwaysRenderSuggestions
         } = this.props;
         return (
@@ -133,6 +154,7 @@ export class AutocompleteField extends Component {
                         value,
                         name,
                         onChange: this.onChange,
+                        onKeyDown: this.onKeyDown,
                         ...fieldAttributes
                     }}
                     renderInputComponent={renderInputComponent}
@@ -146,7 +168,9 @@ export class AutocompleteField extends Component {
                     renderSectionTitle={renderSectionTitle}
                     getSectionSuggestions={getSectionSuggestions}
                     sectionSuggestionsIndex={sectionSuggestionsIndex}
+                    shouldRenderSuggestions={shouldRenderSuggestions}
                     alwaysRenderSuggestions={alwaysRenderSuggestions}
+                    onSuggestionSelected={onSuggestionSelected}
                 />
                 {error && <ErrorField errors={errors} {...errorStyles} />}
             </div>
@@ -186,6 +210,9 @@ AutocompleteField.propTypes = {
     multiSection: PropTypes.bool,
     renderSectionTitle: PropTypes.func,
     getSectionSuggestions: PropTypes.func,
+    shouldRenderSuggestions: PropTypes.func,
+    suggestionsShownIfFieldEmpty: PropTypes.bool,
+    onSuggestionSelected: PropTypes.func,
     alwaysRenderSuggestions: PropTypes.bool,
 };
 
