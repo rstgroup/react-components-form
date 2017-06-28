@@ -3,24 +3,29 @@ import { mount } from 'enzyme';
 import {NumberField} from '../src/components/NumberField';
 
 describe('NumberField', () => {
-    it('should receive props and call onChange method on change value', () => {
-        const onChangeData = (value) => {
-            expect(value).toBe(12);
-        };
-        const testError = ['testError'];
-        const errorStyles = {
-            className: 'errorClassName'
-        };
-        const props = {
+    let props = {};
+    beforeEach(() => {
+        props = {
             name: 'firstName',
             label: 'first name',
-            onChange: onChangeData,
+            onChange: jest.fn(),
             error: true,
-            errors: testError,
-            errorsStyles: errorStyles,
+            errors: ['testError'],
+            errorsStyles: {
+                className: 'errorClassName'
+            },
             className: 'testComponent'
         };
+    });
+    it('should receive props and call onChange method on change value', () => {
         const wrapper = mount(<NumberField {...props} />);
         wrapper.find('input').simulate('change', {target:{value: '12'}});
+        expect(props.onChange).toBeCalledWith(12)
+    });
+    it('should return float number on change', () => {
+        props.type = 'float';
+        const wrapper = mount(<NumberField {...props} />);
+        wrapper.find('input').simulate('change', {target:{value: '12.21'}});
+        expect(props.onChange).toBeCalledWith(12.21)
     });
 });
