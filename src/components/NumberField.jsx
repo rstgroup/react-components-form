@@ -3,11 +3,17 @@ import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 import classnames from 'classnames';
 
+const parseByType = (value, type) => {
+    if (type === 'float') return parseFloat(value);
+    return parseInt(value);
+};
+
 export const NumberField = ({
     wrapperClassName,
     className,
     onChange,
     name,
+    type,
     errors,
     error,
     value = '',
@@ -21,8 +27,9 @@ export const NumberField = ({
         <input
             type="number"
             name={name}
-            onChange={(e) => onChange(parseInt(e.target.value))}
+            onChange={(e) => onChange(parseByType(e.target.value, type))}
             value={value}
+            step={type === 'float' ? 0.01 : 1}
             placeholder={placeholder}
             className={className}
             {...fieldAttributes}

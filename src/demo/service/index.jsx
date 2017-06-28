@@ -36,7 +36,7 @@ const ServiceForm = () => (
         <h4>SERVICE FORM</h4>
         <TextField name="title" label="Title" />
         <TextareaField name="description" label="Description" />
-        <NumberField name="price" label="Price" />
+        <NumberField name="price" label="Price" type="float" />
         <NumberField name="time" label="Time (min)" />
         <SubmitField value="Save" />
     </Form>
