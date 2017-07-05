@@ -57,7 +57,7 @@ export class ListField extends React.Component {
                 value: item
             }));
         }
-        return [{ id: ListField.generateItemId() }];
+        return [];
     }
 
     setModel(name, value, callback) {
