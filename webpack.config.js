@@ -26,6 +26,7 @@ module.exports = {
         ]
     },
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        port: 9002
     }
 };

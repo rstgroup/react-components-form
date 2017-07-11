@@ -8,6 +8,7 @@ import {
     ObjectField,
     ListField
 } from '../src/components';
+import { addressFormSchema } from './data/schemas';
 
 
 describe('ObjectField', () => {
@@ -89,31 +90,13 @@ describe('ObjectField', () => {
             expect(data.address[0].street).toBe('testStreet');
             expect(data.address[0].postCode).toBe('testPostCode');
         };
-
-        const addressSchema = new Schema({
-            city: {
-               type: String
-            },
-            street: {
-                type: String
-            },
-            postCode: {
-                type: String
-            }
-        });
-
-        const formSchema = new Schema({
-            address: {
-                type: [addressSchema]
-            }
-        });
-
         const model={};
+        const addButton = { className: 'addButtonClass' };
 
         const wrapper = mount(
             <Form
                 onSubmit={submitMethod}
-                schema={formSchema}
+                schema={addressFormSchema}
                 model={model}
             >
                 <ListField name="address" label="Address">
@@ -127,9 +110,12 @@ describe('ObjectField', () => {
             </Form>
         );
         const list = wrapper.find(ListField);
+        list.find('span').last().simulate('click');
+
         const object = list.find(ObjectField);
         const fields = object.find(TextField);
         const submit = wrapper.find(SubmitField);
+
         fields.find('[name="city"]').simulate('change', {target: {value: 'testCity'}});
         fields.find('[name="street"]').simulate('change', {target: {value: 'testStreet'}});
         fields.find('[name="postCode"]').simulate('change', {target: {value: 'testPostCode'}});

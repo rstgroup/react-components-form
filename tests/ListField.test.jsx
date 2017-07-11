@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import Schema from 'form-schema-validation';
 import {
     Form,
     TextField,
@@ -8,32 +7,19 @@ import {
     ObjectField,
     ListField
 } from '../src/components';
+import { addressFormSchema, languagesFormSchema } from './data/schemas';
 
 
 describe('ListField', () => {
     it('should add and remove field',() => {
-        const submitMethod = (data) => {
-            expect(data.languages.length).toBe(3);
-        };
-
-        const formSchema = new Schema({
-            languages: {
-                type: [String]
-            }
-        });
-
-        const addButton = {
-            className: 'addButtonClass'
-        };
-
-        const removeButton = {
-            className: 'removeButtonClass'
-        };
+        const submitMethod = (data) => { expect(data.languages.length).toBe(3); };
+        const addButton = { className: 'addButtonClass' };
+        const removeButton = { className: 'removeButtonClass'};
 
         const wrapper = mount(
             <Form
                 onSubmit={submitMethod}
-                schema={formSchema}
+                schema={languagesFormSchema}
             >
                 <ListField name="languages" label="Languages" addButton={addButton} removeButton={removeButton}>
                     <TextField />
@@ -61,38 +47,14 @@ describe('ListField', () => {
             expect(data.address[1].postCode).toBe('testPostCode3');
         };
 
-        const addressSchema = new Schema({
-            city: {
-                type: String
-            },
-            street: {
-                type: String
-            },
-            postCode: {
-                type: String
-            }
-        });
-
-        const formSchema = new Schema({
-            address: {
-                type: [addressSchema]
-            }
-        });
-
         const model={};
-
-        const addButton = {
-            className: 'addButtonClass'
-        };
-
-        const removeButton = {
-            className: 'removeButtonClass'
-        };
+        const addButton = { className: 'addButtonClass' };
+        const removeButton = { className: 'removeButtonClass' };
 
         const wrapper = mount(
             <Form
                 onSubmit={submitMethod}
-                schema={formSchema}
+                schema={addressFormSchema}
                 model={model}
             >
                 <ListField name="address" label="Address" addButton={addButton} removeButton={removeButton}>
@@ -106,8 +68,8 @@ describe('ListField', () => {
             </Form>
         );
         const list = wrapper.find(ListField);
-        const object = list.find(ObjectField).first();
-        const fields = object.find(TextField);
+
+
         const submit = wrapper.find(SubmitField);
 
         const setDataToObjectField = (fields, number = '') => {
@@ -115,17 +77,22 @@ describe('ListField', () => {
             fields.find('[name="street"]').simulate('change', {target: {value: `testStreet${number}`}});
             fields.find('[name="postCode"]').simulate('change', {target: {value: `testPostCode${number}`}});
         };
-        setDataToObjectField(fields);
+
+        list.find('.addButtonClass').first().simulate('click');
         list.find('.addButtonClass').first().simulate('click');
         list.find('.addButtonClass').first().simulate('click');
         expect(list.find(ObjectField).length).toBe(3);
 
+        const object = list.find(ObjectField).first();
+        const fields = object.find(TextField);
+        setDataToObjectField(fields);
         const object2 = list.find(ObjectField).at(1);
         const fields2 = object2.find(TextField);
         setDataToObjectField(fields2, 2);
         const object3 = list.find(ObjectField).at(2);
         const fields3 = object3.find(TextField);
         setDataToObjectField(fields3, 3);
+
         list.find('.removeButtonClass').at(1).simulate('click');
         expect(list.find(ObjectField).length).toBe(2);
         submit.find('button').simulate('click');
