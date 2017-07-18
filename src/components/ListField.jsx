@@ -4,7 +4,8 @@ import FieldConnect from './FieldConnect';
 
 export class ListField extends React.Component {
     static defaultProps = {
-        value: []
+        value: [],
+        disableRemoveFirst: false,
     };
 
     static generateItemId() {
@@ -96,7 +97,7 @@ export class ListField extends React.Component {
         return undefined;
     }
 
-    addListElement(){
+    addListElement() {
         const model = Array.from(this.state.model);
         model.push({
             id: ListField.generateItemId(),
@@ -130,8 +131,15 @@ export class ListField extends React.Component {
                 value
             } = {},
             hideRemoveButton,
-            itemWrapperClassName
+            itemWrapperClassName,
+            disableRemoveFirst
         } = this.props;
+
+        const model = Array.from(this.state.model);
+
+        const removeAllowed = disableRemoveFirst
+            ? model.length > 1
+            : true;
 
         return this.state.model.map((item, key) => {
             const child = React.cloneElement(children, {
@@ -143,7 +151,7 @@ export class ListField extends React.Component {
             return (
                <div key={item.id} className={itemWrapperClassName}>
                    {child}
-                   {!hideRemoveButton && <div className={wrapperClassName}>
+                   {!hideRemoveButton && removeAllowed && <div className={wrapperClassName}>
                        <span
                            onClick={() => this.removeListElement(key)}
                            className={className}
