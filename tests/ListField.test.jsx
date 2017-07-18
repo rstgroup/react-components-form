@@ -36,7 +36,7 @@ describe('ListField', () => {
         wrapper.unmount();
     });
 
-    it('should add 3 object Fields and remove secound field',() => {
+    it('should add 3 object Fields and remove second field',() => {
         const submitMethod = (data) => {
             expect(data.address[0].city).toBe('testCity');
             expect(data.address[0].street).toBe('testStreet');
@@ -57,7 +57,13 @@ describe('ListField', () => {
                 schema={addressFormSchema}
                 model={model}
             >
-                <ListField name="address" label="Address" addButton={addButton} removeButton={removeButton}>
+                <ListField
+                    name="address" 
+                    label="Address"
+                    addButton={addButton}
+                    removeButton={removeButton}
+                    disableRemoveFirst
+                >
                     <ObjectField>
                         <TextField name="city" />
                         <TextField name="street" />
