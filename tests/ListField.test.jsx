@@ -7,7 +7,7 @@ import {
     ObjectField,
     ListField
 } from '../src/components';
-import { addressFormSchema, languagesFormSchema } from './data/schemas';
+import { addressFormSchema, languagesFormSchema, listSchema } from './data/schemas';
 
 
 describe('ListField', () => {
@@ -36,7 +36,7 @@ describe('ListField', () => {
         wrapper.unmount();
     });
 
-    it('should add 3 object Fields and remove secound field',() => {
+    it('should add 3 object Fields and remove second field',() => {
         const submitMethod = (data) => {
             expect(data.address[0].city).toBe('testCity');
             expect(data.address[0].street).toBe('testStreet');
@@ -57,7 +57,12 @@ describe('ListField', () => {
                 schema={addressFormSchema}
                 model={model}
             >
-                <ListField name="address" label="Address" addButton={addButton} removeButton={removeButton}>
+                <ListField
+                    name="address" 
+                    label="Address"
+                    addButton={addButton}
+                    removeButton={removeButton}
+                >
                     <ObjectField>
                         <TextField name="city" />
                         <TextField name="street" />
@@ -96,5 +101,70 @@ describe('ListField', () => {
         list.find('.removeButtonClass').at(1).simulate('click');
         expect(list.find(ObjectField).length).toBe(2);
         submit.find('button').simulate('click');
+    });
+
+    it('should hide new element button after two elements add', () => {
+        const submitMethod = () => {};
+        const addButton = { className: 'addButtonClass' };
+        const removeButton = { className: 'removeButtonClass'};
+        const wrapper = mount(
+            <Form
+                schema={listSchema}
+                onSubmit={submitMethod}
+            >
+                <ListField
+                    name="testList"
+                    maxLength={3}
+                    addButton={addButton}
+                    removeButton={removeButton}
+                >
+                    <ObjectField>
+                        <TextField name='testElement' className='testElement' />
+                    </ObjectField>
+                </ListField>
+                <SubmitField value="Submit"/>
+            </Form>
+        );
+        expect(wrapper.find('.addButtonClass').length).toBe(1);
+        expect(wrapper.find('input').length).toBe(1);
+
+        wrapper.find('.addButtonClass').first().simulate('click');
+        wrapper.find('.addButtonClass').first().simulate('click');
+
+        expect(wrapper.find('.addButtonClass').length).toBe(0);
+        expect(wrapper.find('input').length).toBe(3);
+    });
+
+    it('should show remove element button after element add', () => {
+        const submitMethod = () => {};
+        const addButton = { className: 'addButtonClass' };
+        const removeButton = { className: 'removeButtonClass'};
+        const wrapper = mount(
+            <Form
+                schema={listSchema}
+                onSubmit={submitMethod}
+            >
+                <ListField
+                    name="testList"
+                    minLength={1}
+                    addButton={addButton}
+                    removeButton={removeButton}
+                >
+                    <ObjectField>
+                        <TextField name='testElement' className='testElement' />
+                    </ObjectField>
+                </ListField>
+                <SubmitField value="Submit"/>
+            </Form>
+        );
+        expect(wrapper.find('.addButtonClass').length).toBe(1);
+        expect(wrapper.find('.removeButtonClass').length).toBe(0);
+        expect(wrapper.find('input').length).toBe(1);
+
+        wrapper.find('.addButtonClass').first().simulate('click');
+
+        expect(wrapper.find('.addButtonClass').length).toBe(1);
+        expect(wrapper.find('.removeButtonClass').length).toBe(2);
+        expect(wrapper.find('input').length).toBe(2);
     });
 });

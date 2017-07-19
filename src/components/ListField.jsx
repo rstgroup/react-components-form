@@ -4,7 +4,7 @@ import FieldConnect from './FieldConnect';
 
 export class ListField extends React.Component {
     static defaultProps = {
-        value: []
+        value: [],
     };
 
     static generateItemId() {
@@ -96,7 +96,7 @@ export class ListField extends React.Component {
         return undefined;
     }
 
-    addListElement(){
+    addListElement() {
         const model = Array.from(this.state.model);
         model.push({
             id: ListField.generateItemId(),
@@ -110,6 +110,20 @@ export class ListField extends React.Component {
         model.splice(key, 1);
         this.setState({ model });
         this.props.onChange(model.map(item => item.value));
+    }
+
+    isAddAllowed() {
+        const { maxLength } = this.props;
+        const { model } = this.state;
+        if (typeof maxLength === 'number') return model.length < maxLength;
+        return true;
+    }
+
+    isRemoveAllowed() {
+        const { minLength } = this.props;
+        const { model } = this.state;
+        if (typeof minLength === 'number') return model.length > minLength;
+        return true;
     }
 
     getChildContext() {
@@ -130,8 +144,10 @@ export class ListField extends React.Component {
                 value
             } = {},
             hideRemoveButton,
-            itemWrapperClassName
+            itemWrapperClassName,
         } = this.props;
+
+        const isRemoveAllowed = this.isRemoveAllowed();
 
         return this.state.model.map((item, key) => {
             const child = React.cloneElement(children, {
@@ -143,7 +159,7 @@ export class ListField extends React.Component {
             return (
                <div key={item.id} className={itemWrapperClassName}>
                    {child}
-                   {!hideRemoveButton && <div className={wrapperClassName}>
+                   {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
                        <span
                            onClick={() => this.removeListElement(key)}
                            className={className}
@@ -166,11 +182,14 @@ export class ListField extends React.Component {
             hideAddButton,
             fieldAttributes = {}
         } = this.props;
+
+        const isAddAllowed = this.isAddAllowed();
+
         return (
             <div className={wrapperClassName}>
                 {label && <label>{label}</label>}
                 <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
-                {!hideAddButton && <span
+                {!hideAddButton && isAddAllowed && <span
                     onClick={this.addListElement}
                     className={addButton.className}
                 >
@@ -212,7 +231,9 @@ ListField.propTypes = {
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
     value: PropTypes.any,
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
+    minLength: PropTypes.number,
+    maxLength: PropTypes.number,
 };
 
 export default FieldConnect(ListField);

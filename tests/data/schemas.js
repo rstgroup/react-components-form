@@ -23,3 +23,15 @@ export const languagesFormSchema = new Schema({
         type: [String]
     }
 });
+
+export const listElementSchema = new Schema({
+    testElement: {
+        type: String
+    },
+});
+
+export const listSchema = new Schema({
+    testList: {
+        type: [listElementSchema]
+    }
+});
