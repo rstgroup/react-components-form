@@ -5,11 +5,14 @@ import FieldConnect from './FieldConnect';
 export class ListField extends React.Component {
     static defaultProps = {
         value: [],
-        disableRemoveFirst: false,
     };
 
     static generateItemId() {
         return Math.random().toString(36).substring(7);
+    }
+
+    static isNaturalNumber(number) {
+        return Number.isInteger(number) && number > 0;
     }
     constructor(props, { getSchema }) {
         super(props);
@@ -113,6 +116,26 @@ export class ListField extends React.Component {
         this.props.onChange(model.map(item => item.value));
     }
 
+    isAddAllowed() {
+        const { minLength, maxLength } = this.props;
+        let newMaxLength = maxLength;
+        const model = Array.from(this.state.model);
+        if (newMaxLength && ListField.isNaturalNumber(newMaxLength)) {
+            if (minLength && ListField.isNaturalNumber(minLength) && newMaxLength < minLength)
+                newMaxLength = minLength;
+            return model.length < newMaxLength;
+        }
+        return true;
+    }
+
+    isRemoveAllowed() {
+        const { minLength } = this.props;
+        const model = Array.from(this.state.model);
+        return minLength && ListField.isNaturalNumber(minLength)
+            ? model.length >= minLength
+            : true;
+    }
+
     getChildContext() {
         return {
             setModel: this.setModel,
@@ -132,14 +155,9 @@ export class ListField extends React.Component {
             } = {},
             hideRemoveButton,
             itemWrapperClassName,
-            disableRemoveFirst
         } = this.props;
 
-        const model = Array.from(this.state.model);
-
-        const removeAllowed = disableRemoveFirst
-            ? model.length > 1
-            : true;
+        const isRemoveAllowed = this.isRemoveAllowed();
 
         return this.state.model.map((item, key) => {
             const child = React.cloneElement(children, {
@@ -151,7 +169,7 @@ export class ListField extends React.Component {
             return (
                <div key={item.id} className={itemWrapperClassName}>
                    {child}
-                   {!hideRemoveButton && removeAllowed && <div className={wrapperClassName}>
+                   {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
                        <span
                            onClick={() => this.removeListElement(key)}
                            className={className}
@@ -174,11 +192,14 @@ export class ListField extends React.Component {
             hideAddButton,
             fieldAttributes = {}
         } = this.props;
+
+        const isAddAllowed = this.isAddAllowed();
+
         return (
             <div className={wrapperClassName}>
                 {label && <label>{label}</label>}
                 <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
-                {!hideAddButton && <span
+                {!hideAddButton && isAddAllowed && <span
                     onClick={this.addListElement}
                     className={addButton.className}
                 >

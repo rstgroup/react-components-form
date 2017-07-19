@@ -114,7 +114,12 @@ const BookForm = () => (
         <h4>BOOK FORM</h4>
         <TextField name="title" type="text" />
         <SelectField name="category" />
-        <ListField name="authors" className={listWrapper} disableRemoveFirst>
+        <ListField
+            name="authors"
+            className={listWrapper}
+            minLength={2}
+            maxLength={3}
+        >
             <ObjectField wrapperClassName={objectFieldClassName}>
                 <div className={objectFormField}>
                     <TextField name="name" placeholder="name"/>
