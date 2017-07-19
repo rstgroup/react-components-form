@@ -151,7 +151,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | maxLength (**ListField**) | Number (number of maximal amount of listField elements) |
 | hideAddButton (**ListField**) | Boolean (you can hide add button) |
 | hideRemoveButton (**ListField**) | Boolean (you can hide remove buttons) |
-| addButton (**ListField**) | Object ({ className: PropTypes.string, value: PropTypes.node}) |
+| addButton (**ListField**) | Object ({ className: String, value: Node}) |
 | removeButton (**ListField**) | Object ({ className: String, value: Node}) |
 
 ### FormEventsListener
