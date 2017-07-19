@@ -146,7 +146,7 @@ describe('ListField', () => {
             >
                 <ListField
                     name="testList"
-                    minLength={2}
+                    minLength={1}
                     addButton={addButton}
                     removeButton={removeButton}
                 >
@@ -164,40 +164,6 @@ describe('ListField', () => {
         wrapper.find('.addButtonClass').first().simulate('click');
 
         expect(wrapper.find('.addButtonClass').length).toBe(1);
-        expect(wrapper.find('.removeButtonClass').length).toBe(2);
-        expect(wrapper.find('input').length).toBe(2);
-    });
-
-    it("should set maxLength as minLength when it's smaller", () => {
-        const submitMethod = () => {};
-        const addButton = { className: 'addButtonClass' };
-        const removeButton = { className: 'removeButtonClass'};
-        const wrapper = mount(
-            <Form
-                schema={listSchema}
-                onSubmit={submitMethod}
-            >
-                <ListField
-                    name="testList"
-                    minLength={2}
-                    maxLength={1}
-                    addButton={addButton}
-                    removeButton={removeButton}
-                >
-                    <ObjectField>
-                        <TextField name='testElement' className='testElement' />
-                    </ObjectField>
-                </ListField>
-                <SubmitField value="Submit"/>
-            </Form>
-        );
-        expect(wrapper.find('.addButtonClass').length).toBe(1);
-        expect(wrapper.find('.removeButtonClass').length).toBe(0);
-        expect(wrapper.find('input').length).toBe(1);
-
-        wrapper.find('.addButtonClass').first().simulate('click');
-
-        expect(wrapper.find('.addButtonClass').length).toBe(0);
         expect(wrapper.find('.removeButtonClass').length).toBe(2);
         expect(wrapper.find('input').length).toBe(2);
     });

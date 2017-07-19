@@ -10,10 +10,6 @@ export class ListField extends React.Component {
     static generateItemId() {
         return Math.random().toString(36).substring(7);
     }
-
-    static isNaturalNumber(number) {
-        return Number.isInteger(number) && number > 0;
-    }
     constructor(props, { getSchema }) {
         super(props);
         this.state = {
@@ -117,23 +113,17 @@ export class ListField extends React.Component {
     }
 
     isAddAllowed() {
-        const { minLength, maxLength } = this.props;
-        let newMaxLength = maxLength;
-        const model = Array.from(this.state.model);
-        if (newMaxLength && ListField.isNaturalNumber(newMaxLength)) {
-            if (minLength && ListField.isNaturalNumber(minLength) && newMaxLength < minLength)
-                newMaxLength = minLength;
-            return model.length < newMaxLength;
-        }
+        const { maxLength } = this.props;
+        const { model } = this.state;
+        if (typeof maxLength === 'number') return model.length < maxLength;
         return true;
     }
 
     isRemoveAllowed() {
         const { minLength } = this.props;
-        const model = Array.from(this.state.model);
-        return minLength && ListField.isNaturalNumber(minLength)
-            ? model.length >= minLength
-            : true;
+        const { model } = this.state;
+        if (typeof minLength === 'number') return model.length > minLength;
+        return true;
     }
 
     getChildContext() {
@@ -241,7 +231,9 @@ ListField.propTypes = {
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
     value: PropTypes.any,
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
+    minLength: PropTypes.number,
+    maxLength: PropTypes.number,
 };
 
 export default FieldConnect(ListField);

@@ -117,8 +117,7 @@ const BookForm = () => (
         <ListField
             name="authors"
             className={listWrapper}
-            minLength={2}
-            maxLength={3}
+            minLength={1}
         >
             <ObjectField wrapperClassName={objectFieldClassName}>
                 <div className={objectFormField}>
