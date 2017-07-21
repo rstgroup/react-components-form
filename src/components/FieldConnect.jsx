@@ -5,6 +5,8 @@ export const FieldConnect = (Component) => {
         constructor(props) {
             super(props);
             this.listeners = [];
+            this.fieldValue = null;
+            this.fieldErrors = null;
             this.onChangeData = this.onChangeData.bind(this);
             this.submit = this.submit.bind(this);
             this.getErrors = this.getErrors.bind(this);
@@ -12,6 +14,28 @@ export const FieldConnect = (Component) => {
             this.hasError = this.hasError.bind(this);
             this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
             this.getEventsListener = this.getEventsListener.bind(this);
+        }
+
+        static hasDiffrentErrors(newErrors, oldErrors) {
+            const newErrorsArray = Array.isArray(newErrors) ? newErrors : [];
+            const oldErrorsArray = Array.isArray(oldErrors) ? oldErrors : [];
+            if (newErrorsArray.length !== oldErrorsArray.length) return true;
+            let hasDifference = false;
+            newErrorsArray.forEach((error, key) => {
+                if(error !== oldErrorsArray[key]) hasDifference = true;
+            });
+            return hasDifference;
+        }
+
+        shouldComponentUpdate() {
+            const { name } = this.props;
+            const { getModel, getErrors } = this.context;
+            return (
+                typeof this.fieldValue === 'object' ||
+                Array.isArray(typeof this.fieldValue) ||
+                getModel(name)!== this.fieldValue ||
+                FieldConnector.hasDiffrentErrors(getErrors(name), this.fieldErrors)
+            );
         }
 
         updateModelWithValueOrOptions() {
@@ -122,10 +146,11 @@ export const FieldConnect = (Component) => {
             if (typeof getModel !== 'function') return value;
 
             const valueFromModel = getModel(name);
-
-            return valueFromModel !== undefined
+            this.fieldValue = valueFromModel !== undefined
                 ? valueFromModel
                 : value;
+
+            return this.fieldValue;
         }
 
         getPropsFromSchema() {
@@ -148,8 +173,10 @@ export const FieldConnect = (Component) => {
         getErrors() {
             const { name } = this.props;
             const { getErrors } = this.context;
-            if (typeof getErrors !== 'function') return [];
-            return getErrors(name);
+            let results = [];
+            if (typeof getErrors === 'function') results = getErrors(name);
+            this.fieldErrors = results;
+            return results;
         }
 
         getPath() {

@@ -9,6 +9,7 @@ import {
     ObjectField,
     FormEventsListener
 } from '../src/components';
+import { titleSchema, titleSchema2 } from './data/schemas';
 
 
 describe('Form', () => {
@@ -379,5 +380,34 @@ describe('Form', () => {
         expect(mockListener).toBeCalled();
         expect(mockListener2).toBeCalled();
         expect(mockListener3).toBeCalled();
+    });
+
+    it('should rerender field if errors has changes but errors length not changed',() => {
+        const mockSubmit = jest.fn();
+        const eventListener = new FormEventsListener();
+        const wrapper = mount(
+            <Form
+                onSubmit={mockSubmit}
+                schema={titleSchema}
+                eventsListener={eventListener}
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                />
+                <TextField
+                    name="title2"
+                    label="Title"
+                />
+                <SubmitField value="Submit"/>
+            </Form>
+        );
+        wrapper.find(SubmitField).find('button').first().simulate('click');
+        const textFields = wrapper.find(TextField);
+        expect(textFields.first().text().includes('is required')).toBeTruthy();
+        textFields.last().find('input').first().simulate('change', {target: { value: 'te' } });
+        expect(textFields.first().text().includes('test error')).toBeTruthy();
+        textFields.last().find('input').first().simulate('change', {target: { value: 'te' } });
+        wrapper.unmount();
     });
 });
