@@ -35,3 +35,28 @@ export const listSchema = new Schema({
         type: [listElementSchema]
     }
 });
+
+export const titleSchema = new Schema({
+    title: {
+        type: String,
+        validators: [
+            {
+                validator: (value, type, model) => {
+                    if (!model.title2) return value;
+                    return true;
+                },
+                errorMessage: 'is required'
+            },
+            {
+                validator: (value, type, model) => {
+                    if (model.title2) return value === model.title2;
+                    return true;
+                },
+                errorMessage: 'test error'
+            }
+        ]
+    },
+    title2: {
+        type: String,
+    }
+});
