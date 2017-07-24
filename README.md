@@ -1,3 +1,6 @@
-# My Awesome Book
+# About
 
-This file file serves as your book's preface, a great place to describe your book's content and ideas.
+---
+
+React components form give you posibility to create forms with schema validation using "form-schema-validation". You can easy create any form with any inputs and create Your own custom fields and validators. Also You can create object fields that represents some object data. Please read another sections of this readme to check what You can use in your project.
+
