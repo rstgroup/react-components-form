@@ -136,7 +136,7 @@ describe('helpers', () => {
             const compareObject = { foo: 'bar'};
             expect (isNotEqualObject(srcObject, compareObject)).toBeFalsy();
         });
-        it('should return true when objects keys are objects and has no diffrent values', () => {
+        it('should return true when object properties are objects and has the same values', () => {
             const srcObject = {
                 foo: {
                     foo2: 'bar'
@@ -149,7 +149,7 @@ describe('helpers', () => {
             };
             expect (isNotEqualObject(srcObject, compareObject)).toBeFalsy();
         });
-        it('should return true when objects keys are arrays and has no diffrent lengths and values', () => {
+        it('should return true when objects properties are arrays and has the same lengths and values', () => {
             const srcObject = {
                 foo: [
                     'bar'

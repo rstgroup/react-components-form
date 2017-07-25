@@ -42,34 +42,38 @@ export const cloneObject = (object) => {
     return results;
 };
 
-export const hasDiffrentKeysLength = (srcObject, compareObject) => {
-    return Object.keys(srcObject).length !== Object.keys(compareObject).length;
+export const hasDifferentKeysLength = (sourceObject, compareObject) => {
+    return Object.keys(sourceObject).length !== Object.keys(compareObject).length;
 };
 
-export const isNotEqualArray = (srcArray, compareArray) => {
-    if (srcArray.length !== compareArray.length) return true;
+export const isNotEqualArray = (sourceArray, compareArray) => {
+    if (sourceArray.length !== compareArray.length) return true;
     let result = false;
-    srcArray.forEach((value, index) => {
+    sourceArray.forEach((value, index) => {
         if (isNotEqualValue(compareArray[index], value)) result = true;
     });
     return result;
 };
 
-export const isNotEqualValue = (srcValue, compareValue) => {
-    const srcValueType = typeof srcValue;
+export const isNotEqualValue = (sourceValue, compareValue) => {
+    const sourceValueType = typeof sourceValue;
     const compareValueType = typeof compareValue;
-    if (srcValueType !== compareValueType || (srcValueType !== 'object') && srcValue !== compareValue) return true;
-    if (Array.isArray(srcValue)) {
-        return isNotEqualArray(srcValue, compareValue);
+    if (sourceValueType !== compareValueType || (sourceValueType !== 'object') && sourceValue !== compareValue) return true;
+    if (Array.isArray(sourceValue)) {
+        return isNotEqualArray(sourceValue, compareValue);
     }
-    if (srcValueType === 'object' && isNotEqualObject(srcValue, compareValue)) return true;
+    if (sourceValueType === 'object' && isNotEqualObject(sourceValue, compareValue)) return true;
 };
 
-export const isNotEqualObject = (srcObject, compareObject) => {
-    if (hasDiffrentKeysLength(srcObject, compareObject)) return true;
+export const isNotEqualObject = (sourceObject, compareObject) => {
+    if (hasDifferentKeysLength(sourceObject, compareObject)) return true;
+    const objectKeys = Object.keys(sourceObject);
     let result = false;
-    Object.keys(srcObject).forEach((key) => {
-        if(isNotEqualValue(srcObject[key], compareObject[key])) result = true;
-    });
+    let counter = 0;
+    while(!result && objectKeys.length >= counter ){
+        const key = objectKeys[counter];
+        if(isNotEqualValue(sourceObject[key], compareObject[key])) result = true;
+        counter += 1;
+    }
     return result;
 };
