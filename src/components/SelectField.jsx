@@ -7,7 +7,7 @@ export const SelectField = ({
     wrapperClassName,
     className,
     onChange,
-    name,
+    name = '',
     errors,
     error,
     options = [],
@@ -30,7 +30,7 @@ export const SelectField = ({
             {options.map(option => (
                 <option
                     value={option.label ? option.value : option}
-                    key={option.label || option}
+                    key={`${name}-${option.label || option}`}
                     disabled={option.disabled}
                 >
                     {option.label || option}
