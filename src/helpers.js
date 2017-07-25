@@ -41,3 +41,35 @@ export const cloneObject = (object) => {
     });
     return results;
 };
+
+export const hasDiffrentKeysLength = (srcObject, compareObject) => {
+    return Object.keys(srcObject).length !== Object.keys(compareObject).length;
+};
+
+export const isNotEqualArray = (srcArray, compareArray) => {
+    if (srcArray.length !== compareArray.length) return true;
+    let result = false;
+    srcArray.forEach((value, index) => {
+        if (isNotEqualValue(compareArray[index], value)) result = true;
+    });
+    return result;
+};
+
+export const isNotEqualValue = (srcValue, compareValue) => {
+    const srcPropType = typeof srcValue;
+    const comparePropType = typeof compareValue;
+    if (srcPropType !== comparePropType || (srcPropType !== 'object') && srcValue !== compareValue) return true;
+    if (Array.isArray(srcValue)) {
+        return isNotEqualArray(srcValue, compareValue);
+    }
+    if (srcPropType === 'object' && isNotEqualObject(srcValue, compareValue)) return true;
+};
+
+export const isNotEqualObject = (srcObject, compareObject) => {
+    if (hasDiffrentKeysLength(srcObject, compareObject)) return true;
+    let result = false;
+    Object.keys(srcObject).forEach((key) => {
+        if(isNotEqualValue(srcObject[key], compareObject[key])) result = true;
+    });
+    return result;
+};

@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { isNotEqualObject } from '../helpers';
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
@@ -27,14 +28,16 @@ export const FieldConnect = (Component) => {
             return hasDifference;
         }
 
-        shouldComponentUpdate() {
+        shouldComponentUpdate(nextProps) {
             const { name } = this.props;
             const { getModel, getErrors } = this.context;
             return (
                 typeof this.fieldValue === 'object' ||
                 Array.isArray(typeof this.fieldValue) ||
                 getModel(name)!== this.fieldValue ||
-                FieldConnector.hasDiffrentErrors(getErrors(name), this.fieldErrors)
+                nextProps.children ||
+                FieldConnector.hasDiffrentErrors(getErrors(name), this.fieldErrors) ||
+                isNotEqualObject(nextProps, this.props)
             );
         }
 
