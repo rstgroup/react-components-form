@@ -56,13 +56,13 @@ export const isNotEqualArray = (srcArray, compareArray) => {
 };
 
 export const isNotEqualValue = (srcValue, compareValue) => {
-    const srcPropType = typeof srcValue;
-    const comparePropType = typeof compareValue;
-    if (srcPropType !== comparePropType || (srcPropType !== 'object') && srcValue !== compareValue) return true;
+    const srcValueType = typeof srcValue;
+    const compareValueType = typeof compareValue;
+    if (srcValueType !== compareValueType || (srcValueType !== 'object') && srcValue !== compareValue) return true;
     if (Array.isArray(srcValue)) {
         return isNotEqualArray(srcValue, compareValue);
     }
-    if (srcPropType === 'object' && isNotEqualObject(srcValue, compareValue)) return true;
+    if (srcValueType === 'object' && isNotEqualObject(srcValue, compareValue)) return true;
 };
 
 export const isNotEqualObject = (srcObject, compareObject) => {
