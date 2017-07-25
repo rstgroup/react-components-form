@@ -8,6 +8,7 @@ import {
     ObjectField,
     ListField
 } from '../src/components';
+import { ObjectField as ObjectFieldSeperated } from '../src/components/ObjectField';
 import { addressFormSchema } from './data/schemas';
 
 
@@ -164,5 +165,13 @@ describe('ObjectField', () => {
         fields.find('[name="postCode"]').simulate('change', {target: {value: 'testPostCode'}});
         submit.find('button').simulate('click');
         expect(ErrorMockMethod.mock.calls.length).toBe(1);
+    });
+
+    it('should run callback only if callback is function', () => {
+        const onChangeMethod = jest.fn();
+        const callback = 'test';
+        const field = mount(<ObjectFieldSeperated onChange={onChangeMethod} />,{context: {getSchema: () => ({})}});
+        field.instance().setStateModel({test: 'test'}, callback);
+        expect(onChangeMethod).toBeCalled();
     });
 });
