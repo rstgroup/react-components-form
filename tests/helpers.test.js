@@ -1,4 +1,4 @@
-import { get, cloneObject, cloneArray } from '../src/helpers';
+import { get, cloneObject, cloneArray, isNotEqualObject } from '../src/helpers';
 
 describe('helpers', () => {
     describe('get', () => {
@@ -68,6 +68,99 @@ describe('helpers', () => {
             const clonedObject = cloneObject(objectWithArrays);
             expect (clonedObject).not.toBe(objectWithArrays);
             expect (clonedObject).toEqual(objectWithArrays);
+        });
+    });
+
+    describe('isNotEqualObject', () => {
+        it('should return true when objects has diffrent length', () => {
+            const srcObject = { foo: 'bar' };
+            const compareObject = { foo: 'bar', foo2: 'bar2'};
+            expect (isNotEqualObject(srcObject, compareObject)).toBeTruthy();
+        });
+        it('should return true when objects keys has diffrent types', () => {
+            const srcObject = { foo: 'bar' };
+            const compareObject = { foo: true};
+            expect (isNotEqualObject(srcObject, compareObject)).toBeTruthy();
+        });
+        it('should return true when objects keys has diffrent values', () => {
+            const srcObject = { foo: 'bar' };
+            const compareObject = { foo: 'bar2'};
+            expect (isNotEqualObject(srcObject, compareObject)).toBeTruthy();
+        });
+        it('should return true when objects keys are objects and has diffrent values', () => {
+            const srcObject = {
+                foo: {
+                    foo2: 'bar'
+                }
+            };
+            const compareObject = {
+                foo: {
+                    foo2: 'bar2'
+                }
+            };
+            expect (isNotEqualObject(srcObject, compareObject)).toBeTruthy();
+        });
+        it('should return true when objects keys are arrays and has diffrent lengths', () => {
+            const srcObject = {
+                foo: [
+                    'bar',
+                    'bar2'
+                ]
+            };
+            const compareObject = {
+                foo: [
+                    'bar'
+                ]
+            };
+            expect (isNotEqualObject(srcObject, compareObject)).toBeTruthy();
+        });
+        it('should return true when objects keys are arrays and has diffrent values', () => {
+            const srcObject = {
+                foo: [
+                    'bar',
+                    'bar2'
+                ]
+            };
+            const compareObject = {
+                foo: [
+                    'bar',
+                    'bar3'
+                ]
+            };
+            expect (isNotEqualObject(srcObject, compareObject)).toBeTruthy();
+        });
+
+
+        it('should return true when objects keys has no diffrent values', () => {
+            const srcObject = { foo: 'bar' };
+            const compareObject = { foo: 'bar'};
+            expect (isNotEqualObject(srcObject, compareObject)).toBeFalsy();
+        });
+        it('should return true when object properties are objects and has the same values', () => {
+            const srcObject = {
+                foo: {
+                    foo2: 'bar'
+                }
+            };
+            const compareObject = {
+                foo: {
+                    foo2: 'bar'
+                }
+            };
+            expect (isNotEqualObject(srcObject, compareObject)).toBeFalsy();
+        });
+        it('should return true when objects properties are arrays and has the same lengths and values', () => {
+            const srcObject = {
+                foo: [
+                    'bar'
+                ]
+            };
+            const compareObject = {
+                foo: [
+                    'bar'
+                ]
+            };
+            expect (isNotEqualObject(srcObject, compareObject)).toBeFalsy();
         });
     });
 });
