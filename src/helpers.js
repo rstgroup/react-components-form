@@ -42,6 +42,10 @@ export const cloneObject = (object) => {
     return results;
 };
 
+export const isNullOrUndefined = (value) => {
+    return value === null || value === undefined;
+};
+
 export const hasDifferentKeysLength = (sourceObject, compareObject) => {
     return Object.keys(sourceObject).length !== Object.keys(compareObject).length;
 };
@@ -66,6 +70,7 @@ export const isNotEqualValue = (sourceValue, compareValue) => {
 };
 
 export const isNotEqualObject = (sourceObject, compareObject) => {
+    if (isNullOrUndefined(sourceObject) || isNullOrUndefined(compareObject)) return true;
     if (hasDifferentKeysLength(sourceObject, compareObject)) return true;
     const objectKeys = Object.keys(sourceObject);
     let result = false;
