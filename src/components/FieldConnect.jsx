@@ -213,7 +213,6 @@ export const FieldConnect = (Component) => {
         }
 
         render() {
-            console.log(this.props.name);
             return (<Component
                 {...this.getPropsFromSchema()}
                 {...this.props}
