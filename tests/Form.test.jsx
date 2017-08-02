@@ -454,7 +454,7 @@ describe('Form', () => {
             </Form>
         );
         const textFields = wrapper.find(TextField);
-        textFields.first().find('input').first().simulate('change', {target: { value: 'te' } });
-        expect(onChange).toBeCalledWith('te');
+        textFields.first().find('input').first().simulate('change', {target: { value: 'test' } });
+        expect(onChange).toBeCalledWith('test');
     });
 });
