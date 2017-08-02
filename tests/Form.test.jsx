@@ -410,4 +410,51 @@ describe('Form', () => {
         textFields.last().find('input').first().simulate('change', {target: { value: 'te' } });
         wrapper.unmount();
     });
+
+    it('should run callback onError on field if field has error',() => {
+        const onError = jest.fn();
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={titleSchema}
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                    callbacks={{onError}}
+                />
+                <TextField
+                    name="title2"
+                    label="Title"
+                />
+                <SubmitField value="Submit" />
+            </Form>
+        );
+        wrapper.find(SubmitField).find('button').first().simulate('click');
+        expect(onError).toBeCalled();
+    });
+
+    it('should run callback onChange on field if field has change',() => {
+        const onChange = jest.fn();
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={titleSchema}
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                    callbacks={{onChange}}
+                />
+                <TextField
+                    name="title2"
+                    label="Title"
+                />
+                <SubmitField value="Submit" />
+            </Form>
+        );
+        const textFields = wrapper.find(TextField);
+        textFields.first().find('input').first().simulate('change', {target: { value: 'te' } });
+        expect(onChange).toBeCalledWith('te');
+    });
 });

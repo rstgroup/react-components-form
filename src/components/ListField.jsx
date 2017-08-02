@@ -180,7 +180,7 @@ export class ListField extends React.Component {
             label,
             addButton = {},
             hideAddButton,
-            fieldAttributes = {}
+            fieldAttributes
         } = this.props;
 
         const isAddAllowed = this.isAddAllowed();

@@ -18,17 +18,6 @@ export const FieldConnect = (Component) => {
             this.getFieldAttributes = this.getFieldAttributes.bind(this);
         }
 
-        static hasDiffrentErrors(newErrors, oldErrors) {
-            const newErrorsArray = Array.isArray(newErrors) ? newErrors : [];
-            const oldErrorsArray = Array.isArray(oldErrors) ? oldErrors : [];
-            if (newErrorsArray.length !== oldErrorsArray.length) return true;
-            let hasDifference = false;
-            newErrorsArray.forEach((error, key) => {
-                if(error !== oldErrorsArray[key]) hasDifference = true;
-            });
-            return hasDifference;
-        }
-
         shouldComponentUpdate(nextProps) {
             const newProps = Object.assign({}, nextProps, { children: '' });
             const oldProps = Object.assign({}, this.props, { children: '' });
