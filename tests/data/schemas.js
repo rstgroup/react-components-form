@@ -42,7 +42,7 @@ export const titleSchema = new Schema({
         validators: [
             {
                 validator: (value, type, model) => {
-                    if (!model.title2) return value;
+                    if (!model.title2) return !!value;
                     return true;
                 },
                 errorMessage: 'is required'
