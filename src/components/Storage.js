@@ -13,6 +13,9 @@ class Storage {
         if (runWithoutListeners) return;
         this.listeners.forEach(listener => listener(this.model, callback));
     }
+    getModel() {
+        return this.model;
+    }
     listen(listener) {
         this.listeners.push(listener);
     }

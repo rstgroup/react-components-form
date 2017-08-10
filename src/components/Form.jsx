@@ -33,7 +33,7 @@ class Form extends React.Component {
     }
 
     validateListener(schema) {
-        return this.validateModel(this.state.model, schema || this.state.schema);
+        return this.validateModel(this.storage.getModel(), schema || this.state.schema);
     }
 
     resetListener(model) {
