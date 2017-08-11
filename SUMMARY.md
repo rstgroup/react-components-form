@@ -30,6 +30,7 @@
 * [ListField](fields/listfield.md)
 * [SubmitField](fields/submitfield.md)
 * [AutocompleteField](fields/autocompletefield.md)
+* [Create field](fields/create-field.md)
 
-## Info
+## Advanced
 
