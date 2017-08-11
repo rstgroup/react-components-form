@@ -38,7 +38,7 @@ export default TestForm;
 
 #### model structure from example
 
-if we will write "name" in input and we will click on "name1" suggestion
+If we will write "name" in input and we will click on "name1" suggestion.
 
 ```json
 {
