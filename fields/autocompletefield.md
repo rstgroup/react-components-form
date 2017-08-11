@@ -39,7 +39,7 @@ export default TestForm;
 #### model structure from example
 
 ```json
-// ifwe will write "name" and we will click on "name1"
+/* if we will write "name" in input and we will click on "name1" suggestion /*
 {
     "username": "name1"
 }
