@@ -17,13 +17,6 @@
 | fieldAttributes | Object with html attributes for input |
 | eventsListener \(from context\) | Instance of FormEventsListener \(prop avaible if you have eventListener in form\) |
 | path \(from context\) | String \(this prop give you path to field "form.someObjectField.thisField"\) |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
 
-
+**Some fields has additional props. Additional props are described on field details.**
 
