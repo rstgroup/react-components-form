@@ -146,6 +146,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | fieldAttributes | Object with html attributes for input |
 | eventsListener (from context) | Instance of FormEventsListener (prop avaible if you have eventListener in form) |
 | path (from context) | String (this prop give you path to field "form.someObjectField.thisField") |
+| callbacks | Object ({ onError: Function, onChange: Function, onBlur: Function, onFocus: Function }) |
 | trim (**TextField**) | boolean (trims values passed to `onChange` if set) |
 | minLength (**ListField**) | Number (number of minimal amount of listField elements) |
 | maxLength (**ListField**) | Number (number of maximal amount of listField elements) |
