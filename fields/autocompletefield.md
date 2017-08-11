@@ -14,9 +14,21 @@ const submitMethod = (model) => {
     //do something with model when submit success
 };
 
+const members = [
+    {name: "name1", surname:"surname1", age:"1"},
+    {name: "name2", surname:"surname2", age:"2"},
+    {name: "name3", surname:"surname3", age:"3"},
+    {name: "name4", surname:"surname4", age:"4"},
+];
+
 const TestForm = () => (
     <Form onSubmit={submitMethod}>
-        <AutocompleteField name="username" />
+        <AutocompleteField
+            name="username"
+            options={members}
+            searchKey="name"
+            getValue={option => option.name}
+        />
         <SubmitField value="Submit" />
     </Form>
 );
@@ -28,7 +40,7 @@ export default TestForm;
 
 ```json
 {
-    "members": [
+    "username": [
         {
             "name": "some name",
             "surname": "some surname",
