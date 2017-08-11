@@ -11,7 +11,7 @@ eventsEmitter prop receive instance of FormEventsEmitter. eventsEmitter give you
 * validate
 * reset
 
-### Example of use
+### Example
 
 ```js
 import { Form, TextField, NumberField, SubmitField, FormEventsEmitter } from 'react-components-form';

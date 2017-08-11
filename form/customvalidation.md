@@ -8,17 +8,17 @@ customValidation prop receive function that will be called on click submit butto
 
 model - object reprezentation of form structure and values
 
-### Example of use
+### Example
 
 ```js
 import { Form, TextField, NumberField, SubmitField } from 'react-components-form';
 
 const customValidator = (model) => {
-    //validate model and return object
+    //validate model and return object with errors or empty object if validation success
 }
 
 const submitMethod = (model) => {
-    //do something with model
+    //do something with model when submit success
 };
 
 const TestForm = () => (
@@ -56,7 +56,14 @@ const customValidator = (model) => {
     return new Promise((resolve) => {
         setTimeout(() => {
             // some validation logic
+            
+            // on success
             resolve({});
+            
+            // on error
+            resolve({
+                "fieldName": ["error message"]
+            });
         }, 100);
     });
 }
