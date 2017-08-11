@@ -39,14 +39,9 @@ export default TestForm;
 #### model structure from example
 
 ```json
+// ifwe will write "name" and we will click on "name1"
 {
-    "username": [
-        {
-            "name": "some name",
-            "surname": "some surname",
-            "age": "18",
-        }
-    ],
+    "username": "name1"
 }
 ```
 
