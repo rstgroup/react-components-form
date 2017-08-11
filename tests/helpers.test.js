@@ -72,10 +72,10 @@ describe('helpers', () => {
     });
 
     describe('isNotEqualObject', () => {
-        it('should return true when one of objects is null', () => {
+        it('should return false when one of objects is null', () => {
             const srcObject = null;
             const compareObject = { foo: 'bar', foo2: 'bar2'};
-            expect (isNotEqualObject(srcObject, compareObject)).toBeTruthy();
+            expect (isNotEqualObject(srcObject, compareObject)).toBeFalsy();
         });
         it('should return true when objects has diffrent length', () => {
             const srcObject = { foo: 'bar' };

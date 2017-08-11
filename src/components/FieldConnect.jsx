@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { isNotEqualObject } from '../helpers';
+import { isNotEqualObject, isNotEqualValue, cloneArray, cloneObject } from '../helpers';
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
@@ -15,29 +15,18 @@ export const FieldConnect = (Component) => {
             this.hasError = this.hasError.bind(this);
             this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
             this.getEventsListener = this.getEventsListener.bind(this);
-        }
-
-        static hasDiffrentErrors(newErrors, oldErrors) {
-            const newErrorsArray = Array.isArray(newErrors) ? newErrors : [];
-            const oldErrorsArray = Array.isArray(oldErrors) ? oldErrors : [];
-            if (newErrorsArray.length !== oldErrorsArray.length) return true;
-            let hasDifference = false;
-            newErrorsArray.forEach((error, key) => {
-                if(error !== oldErrorsArray[key]) hasDifference = true;
-            });
-            return hasDifference;
+            this.getFieldAttributes = this.getFieldAttributes.bind(this);
         }
 
         shouldComponentUpdate(nextProps) {
+            const newProps = Object.assign({}, nextProps, { children: '' });
+            const oldProps = Object.assign({}, this.props, { children: '' });
             const { name } = this.props;
             const { getModel, getErrors } = this.context;
             return (
-                typeof this.fieldValue === 'object' ||
-                Array.isArray(typeof this.fieldValue) ||
-                getModel(name)!== this.fieldValue ||
-                nextProps.children ||
-                FieldConnector.hasDiffrentErrors(getErrors(name), this.fieldErrors) ||
-                isNotEqualObject(nextProps, this.props)
+                isNotEqualValue(getModel(name), this.fieldValue) ||
+                isNotEqualValue(getErrors(name), this.fieldErrors) ||
+                isNotEqualObject(newProps, oldProps)
             );
         }
 
@@ -130,7 +119,7 @@ export const FieldConnect = (Component) => {
         }
 
         onChangeData(value) {
-            const { name } = this.props;
+            const { name, callbacks: { onChange } } = this.props;
             const { setModel, eventsListener, getPath } = this.context;
             if (typeof setModel === 'function') {
                 setModel(name, value, () => {
@@ -138,8 +127,21 @@ export const FieldConnect = (Component) => {
                         name:`${getPath()}.${name}`,
                         value
                     });
+                    if (typeof onChange === 'function') onChange(value);
                 });
             }
+        }
+
+        setCurrentFielValue(value) {
+            if (Array.isArray(value)) {
+                this.fieldValue = cloneArray(value);
+                return;
+            }
+            if (typeof value === 'object') {
+                this.fieldValue = cloneObject(value);
+                return;
+            }
+            this.fieldValue = value;
         }
 
         getValue() {
@@ -149,11 +151,11 @@ export const FieldConnect = (Component) => {
             if (typeof getModel !== 'function') return value;
 
             const valueFromModel = getModel(name);
-            this.fieldValue = valueFromModel !== undefined
+            const fieldValue = valueFromModel !== undefined
                 ? valueFromModel
                 : value;
-
-            return this.fieldValue;
+            this.setCurrentFielValue(fieldValue);
+            return fieldValue;
         }
 
         getPropsFromSchema() {
@@ -174,11 +176,12 @@ export const FieldConnect = (Component) => {
         }
 
         getErrors() {
-            const { name } = this.props;
+            const { name, callbacks: { onError } } = this.props;
             const { getErrors } = this.context;
             let results = [];
             if (typeof getErrors === 'function') results = getErrors(name);
             this.fieldErrors = results;
+            if (typeof onError === 'function' && Object.keys(results).length > 0) onError(results);
             return results;
         }
 
@@ -187,6 +190,11 @@ export const FieldConnect = (Component) => {
             const { getPath } = this.context;
             if (typeof getPath !== 'function') return name;
             return `${getPath()}.${name}`;
+        }
+
+        getFieldAttributes() {
+            const { fieldAttributes, callbacks: { onFocus, onBlur } } = this.props;
+            return Object.assign({}, { onFocus, onBlur }, fieldAttributes);
         }
 
         hasError() {
@@ -204,6 +212,7 @@ export const FieldConnect = (Component) => {
                 value={this.getValue()}
                 eventsListener={this.getEventsListener()}
                 path={this.getPath()}
+                fieldAttributes={this.getFieldAttributes()}
             />);
         }
     }
@@ -229,6 +238,10 @@ export const FieldConnect = (Component) => {
         getPath: PropTypes.func
     };
 
+    FieldConnector.defaultProps = {
+        callbacks: {}
+    };
+
     FieldConnector.propTypes = {
         name: PropTypes.string,
         value: PropTypes.any,
@@ -247,7 +260,13 @@ export const FieldConnect = (Component) => {
                 name: PropTypes.string,
                 method: PropTypes.func
             }))
-        ])
+        ]),
+        callbacks: PropTypes.shape({
+            onChange: PropTypes.func,
+            onError: PropTypes.func,
+            onFocus: PropTypes.func,
+            onBlur: PropTypes.func
+        })
     };
 
     return FieldConnector;

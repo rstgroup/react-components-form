@@ -62,15 +62,15 @@ export const isNotEqualArray = (sourceArray, compareArray) => {
 export const isNotEqualValue = (sourceValue, compareValue) => {
     const sourceValueType = typeof sourceValue;
     const compareValueType = typeof compareValue;
-    if (sourceValueType !== compareValueType || (sourceValueType !== 'object') && sourceValue !== compareValue) return true;
+    if (sourceValueType !== compareValueType || ((sourceValueType !== 'object' || compareValueType !== 'object') && sourceValue !== compareValue)) return true;
     if (Array.isArray(sourceValue)) {
         return isNotEqualArray(sourceValue, compareValue);
     }
-    if (sourceValueType === 'object' && isNotEqualObject(sourceValue, compareValue)) return true;
+    return sourceValueType === 'object' && isNotEqualObject(sourceValue, compareValue);
 };
 
 export const isNotEqualObject = (sourceObject, compareObject) => {
-    if (isNullOrUndefined(sourceObject) || isNullOrUndefined(compareObject)) return true;
+    if (isNullOrUndefined(sourceObject) || isNullOrUndefined(compareObject)) return false;
     if (hasDifferentKeysLength(sourceObject, compareObject)) return true;
     const objectKeys = Object.keys(sourceObject);
     let result = false;
