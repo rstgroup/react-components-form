@@ -56,10 +56,10 @@ const customValidator = (model) => {
     return new Promise((resolve) => {
         setTimeout(() => {
             // some validation logic
-            
+
             // on success
             resolve({});
-            
+
             // on error
             resolve({
                 "fieldName": ["error message"]
