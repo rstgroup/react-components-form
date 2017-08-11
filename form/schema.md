@@ -4,7 +4,7 @@
 
 schema prop is instance of Schema from "[form-schema-validation](https://github.com/mprzodala/form-schema-validation)". Schema give you posibility to validate model structure and values. You can validate model by types and set fields as required or write your own validators for fields.
 
-### Example of use
+### Example
 
 ```js
 import { Form, TextField, NumberField, SubmitField } from 'react-components-form';

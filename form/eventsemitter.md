@@ -19,13 +19,13 @@ import { Form, TextField, NumberField, SubmitField, FormEventsEmitter } from 're
 const eventsEmitter = new FormEventsEmitter();
 
 const changeModelListener = (data) => {
-    //do something with data
+    //do something with data when model will change
 }
 
 eventsEmitter.listen('changeModel', changeModelListener);
 
 const submitMethod = (model) => {
-    //do something with model
+    //do something with model when submit success
 };
 
 const TestForm = () => (
@@ -40,12 +40,14 @@ const TestForm = () => (
 export default TestForm;
 ```
 
-#### changeModelListener data on field "name" change
+#### changeModelListener attributes:
 
 ```json
 {
-    "name": "form.name",
-    "value": "some name",
+    "data": {
+        "name": "form.name",
+        "value": "some name"
+    }
 }
 ```
 

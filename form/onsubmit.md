@@ -8,13 +8,13 @@ onSubmit receive function that will be called when user click on submit button a
 
 model - object reprezentation of form structure
 
-### Example of use
+### Example
 
 ```js
 import { Form, TextField, SubmitField } from 'react-components-form';
 
 const submitMethod = (model) => {
-    //do something with model
+    //do something with model when submit success
 };
 
 const TestForm = () => (
@@ -26,7 +26,6 @@ const TestForm = () => (
 );
 
 export default TestForm;
-
 ```
 
 #### model structure from example

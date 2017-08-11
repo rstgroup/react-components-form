@@ -10,17 +10,17 @@ errors - object reprezentation of form errors
 
 model - object reprezentation of form structure
 
-### Example of use
+### Example
 
 ```js
 import { Form, TextField, SubmitField } from 'react-components-form';
 
 const errorMethod = (errors, model) => {
-    //do something with errors and model
+    //do something with errors and model when submit has errors
 };
 
 const submitMethod = (model) => {
-    //do something with model
+    //do something with model when submit success
 };
 
 const TestForm = () => (
@@ -32,7 +32,6 @@ const TestForm = () => (
 );
 
 export default TestForm;
-
 ```
 
 #### errors structure from example

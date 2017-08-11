@@ -4,7 +4,7 @@
 
 model prop is object representation of form structure. Form will automatic propagation model data to fields that match to model keys.
 
-### Example of use
+### Example
 
 ```js
 import { Form, TextField, SubmitField } from 'react-components-form';
@@ -15,7 +15,7 @@ const user = {
 };
 
 const submitMethod = (model) => {
-    //do something with model
+    //do something with model when submit success
 };
 
 const TestForm = () => (
@@ -27,7 +27,6 @@ const TestForm = () => (
 );
 
 export default TestForm;
-
 ```
 
 #### model structure recived in submitMethod on submit form
