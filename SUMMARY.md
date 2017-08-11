@@ -24,6 +24,12 @@
 * [NumberField](fields/numberfield.md)
 * [TextareaField](fields/textareafield.md)
 * [SelectField](fields/selectfield.md)
+* [DateField](fields/datefield.md)
+* [CheckboxField](fields/checkboxfield.md)
+* [ObjectField](fields/objectfield.md)
+* [ListField](fields/listfield.md)
+* [SubmitField](fields/submitfield.md)
+* AutocompleteField
 
 ## Info
 
