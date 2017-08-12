@@ -14,7 +14,7 @@ describe('FieldConnect', () => {
     it('should recive context from form and give props to TextField',() => {
         const context = {
             getModel: jest.fn(),
-            getErrors: () => []
+            getValidationErrors: () => []
         };
         const props = {
             name: 'firstName',
@@ -64,7 +64,7 @@ describe('FieldConnect', () => {
             getModel: jest.fn(),
             getSchema: jest.fn(),
             submitForm: jest.fn(),
-            getErrors: () => []
+            getValidationErrors: () => []
         };
         const props = {
             name: 'selectName',

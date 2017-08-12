@@ -8,8 +8,8 @@ export const SelectField = ({
     className,
     onChange,
     name,
-    errors,
-    error,
+    validationErrors,
+    hasValidationError,
     options = [],
     value = '',
     label,
@@ -17,7 +17,7 @@ export const SelectField = ({
     errorStyles = {},
     fieldAttributes = {}
 }) => (
-    <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
+    <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <select
             name={name}
@@ -37,7 +37,7 @@ export const SelectField = ({
                 </option>
             ))}
         </select>
-        {error && <ErrorField errors={errors} {...errorStyles} />}
+        {hasValidationError && <ErrorField errors={validationErrors} {...errorStyles} />}
     </div>
 );
 
@@ -46,13 +46,13 @@ SelectField.propTypes = {
     className: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    errors: PropTypes.oneOfType([
+    validationErrors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
         PropTypes.shape({})
     ]),
-    error: PropTypes.bool,
+    hasValidationError: PropTypes.bool,
     value: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,

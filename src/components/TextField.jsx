@@ -18,8 +18,8 @@ export class TextField extends Component {
             className,
             name,
             type = 'text',
-            errors,
-            error,
+            validationErrors,
+            hasValidationError,
             value = '',
             label,
             placeholder,
@@ -28,7 +28,7 @@ export class TextField extends Component {
         } = this.props;
 
         return (
-            <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
+            <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
                 {label && <label>{label}</label>}
                 <input
                     type={type === String ? 'text' : type}
@@ -39,7 +39,7 @@ export class TextField extends Component {
                     className={className}
                     {...fieldAttributes}
                 />
-                {error && <ErrorField errors={errors} {...errorStyles} />}
+                {hasValidationError && <ErrorField errors={validationErrors} {...errorStyles} />}
             </div>
         );
     }
@@ -51,13 +51,13 @@ TextField.propTypes = {
     name: PropTypes.string,
     type: PropTypes.any,
     onChange: PropTypes.func.isRequired,
-    errors: PropTypes.oneOfType([
+    validationErrors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
         PropTypes.shape({})
     ]),
-    error: PropTypes.bool,
+    hasValidationError: PropTypes.bool,
     value: PropTypes.string,
     label: PropTypes.string,
     placeholder: PropTypes.string,

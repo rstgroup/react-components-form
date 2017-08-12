@@ -9,8 +9,8 @@ describe('NumberField', () => {
             name: 'firstName',
             label: 'first name',
             onChange: jest.fn(),
-            error: true,
-            errors: ['testError'],
+            hasValidationError: true,
+            validationErrors: ['testError'],
             errorsStyles: {
                 className: 'errorClassName'
             },

@@ -31,7 +31,7 @@ const ServiceForm = () => (
     <Form
         schema={serviceSchema}
         onSubmit={data => console.log(data)}
-        onError={(errors, data) => console.log('error', errors, data)}
+        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
     >
         <h4>SERVICE FORM</h4>
         <TextField name="title" label="Title" />

@@ -69,8 +69,8 @@ describe('Form', () => {
         });
 
         const onSubmit = (model) => {};
-        const onError = (errors) => {
-            expect(errors.login[0]).toBe('async validation failed');
+        const onError = (validationErrors) => {
+            expect(validationErrors.login[0]).toBe('async validation failed');
             done();
         };
 
@@ -93,7 +93,7 @@ describe('Form', () => {
 
     });
 
-    it('should have error and return undefined if dont have onError method from props',() => {
+    it('should have hasValidationError and return undefined if dont have onError method from props',() => {
         const loginSchema = new Schema({
             login:{
                 type: String,
@@ -378,7 +378,7 @@ describe('Form', () => {
         expect(mockListener3).toBeCalled();
     });
 
-    it('should rerender field if errors has changes but errors length not changed',() => {
+    it('should rerender field if validationErrors has changes but validationErrors length not changed',() => {
         const mockSubmit = jest.fn();
         const eventEmitter = new FormEventsEmitter();
         const wrapper = mount(
@@ -407,7 +407,7 @@ describe('Form', () => {
         wrapper.unmount();
     });
 
-    it('should run callback onError on field if field has error',() => {
+    it('should run callback onError on field if field has hasValidationError',() => {
         const onError = jest.fn();
         const wrapper = mount(
             <Form

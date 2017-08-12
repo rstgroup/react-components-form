@@ -7,12 +7,12 @@ export const FieldConnect = (Component) => {
             super(props);
             this.listeners = [];
             this.fieldValue = null;
-            this.fieldErrors = null;
+            this.fieldValidationErrors = null;
             this.onChangeData = this.onChangeData.bind(this);
             this.submit = this.submit.bind(this);
-            this.getErrors = this.getErrors.bind(this);
+            this.getValidationErrors = this.getValidationErrors.bind(this);
             this.getPath = this.getPath.bind(this);
-            this.hasError = this.hasError.bind(this);
+            this.hasValidationError = this.hasValidationError.bind(this);
             this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
             this.getEventsEmitter = this.getEventsEmitter.bind(this);
             this.getFieldAttributes = this.getFieldAttributes.bind(this);
@@ -22,10 +22,10 @@ export const FieldConnect = (Component) => {
             const newProps = Object.assign({}, nextProps, { children: '' });
             const oldProps = Object.assign({}, this.props, { children: '' });
             const { name } = this.props;
-            const { getModel, getErrors } = this.context;
+            const { getModel, getValidationErrors } = this.context;
             return (
                 isNotEqualValue(getModel(name), this.fieldValue) ||
-                isNotEqualValue(getErrors(name), this.fieldErrors) ||
+                isNotEqualValue(getValidationErrors(name), this.fieldValidationErrors) ||
                 isNotEqualObject(newProps, oldProps)
             );
         }
@@ -175,12 +175,12 @@ export const FieldConnect = (Component) => {
             submitForm(event);
         }
 
-        getErrors() {
+        getValidationErrors() {
             const { name, callbacks: { onError } } = this.props;
-            const { getErrors } = this.context;
+            const { getValidationErrors } = this.context;
             let results = [];
-            if (typeof getErrors === 'function') results = getErrors(name);
-            this.fieldErrors = results;
+            if (typeof getValidationErrors === 'function') results = getValidationErrors(name);
+            this.fieldValidationErrors = results;
             if (typeof onError === 'function' && Object.keys(results).length > 0) onError(results);
             return results;
         }
@@ -197,8 +197,8 @@ export const FieldConnect = (Component) => {
             return Object.assign({}, { onFocus, onBlur }, fieldAttributes);
         }
 
-        hasError() {
-            return this.getErrors().length > 0;
+        hasValidationError() {
+            return this.getValidationErrors().length > 0;
         }
 
         render() {
@@ -207,8 +207,8 @@ export const FieldConnect = (Component) => {
                 {...this.props}
                 onChange={this.onChangeData}
                 submit={this.submit}
-                errors={this.getErrors()}
-                error={this.hasError()}
+                validationErrors={this.getValidationErrors()}
+                hasValidationError={this.hasValidationError()}
                 value={this.getValue()}
                 eventsEmitter={this.getEventsEmitter()}
                 path={this.getPath()}
@@ -222,7 +222,7 @@ export const FieldConnect = (Component) => {
         getModel: PropTypes.func,
         getSchema: PropTypes.func,
         submitForm: PropTypes.func,
-        getErrors: PropTypes.func,
+        getValidationErrors: PropTypes.func,
         getPath: PropTypes.func,
         eventsEmitter: PropTypes.shape({
             emit: PropTypes.func,

@@ -14,15 +14,15 @@ export const NumberField = ({
     onChange,
     name,
     type,
-    errors,
-    error,
+    validationErrors,
+    hasValidationError,
     value = '',
     label,
     placeholder,
     errorStyles = {},
     fieldAttributes = {}
 }) => (
-    <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
+    <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <input
             type="number"
@@ -34,7 +34,7 @@ export const NumberField = ({
             className={className}
             {...fieldAttributes}
         />
-        {error && <ErrorField errors={errors} {...errorStyles} />}
+        {hasValidationError && <ErrorField errors={validationErrors} {...errorStyles} />}
     </div>
 );
 
@@ -43,13 +43,13 @@ NumberField.propTypes = {
     className: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    errors: PropTypes.oneOfType([
+    validationErrors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
         PropTypes.shape({})
     ]),
-    error: PropTypes.bool,
+    hasValidationError: PropTypes.bool,
     value: PropTypes.number,
     label: PropTypes.string,
     placeholder: PropTypes.string,

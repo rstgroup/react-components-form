@@ -123,7 +123,7 @@ describe('ObjectField', () => {
         submit.find('button').simulate('click');
     });
 
-    it('should recive errors',() => {
+    it('should recive validationErrors',() => {
         const ErrorMockMethod = jest.fn();
 
         const addressSchema = new Schema({

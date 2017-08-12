@@ -104,7 +104,7 @@ const TimeManageForm = () => (
     <Form
         schema={timeManageSchema}
         onSubmit={data => console.log(data)}
-        onError={(errors, data) => console.log('error', errors, data)}
+        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
     >
         <h4>WORK MANAGE FORM</h4>
         <div className="row">

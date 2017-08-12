@@ -15,7 +15,7 @@ export class ListField extends React.Component {
         this.state = {
             schema: getSchema(props.name),
             model: this.getModelFromProps(props),
-            errors: {}
+            validationErrors: {}
         };
 
         this.storage = new Storage(this.state.model);
@@ -25,7 +25,7 @@ export class ListField extends React.Component {
         this.addListElement = this.addListElement.bind(this);
         this.removeListElement = this.removeListElement.bind(this);
         this.getSchema = this.getSchema.bind(this);
-        this.getErrors = this.getErrors.bind(this);
+        this.getValidationErrors = this.getValidationErrors.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
     }
 
@@ -76,11 +76,11 @@ export class ListField extends React.Component {
         return this.state.schema;
     }
 
-    getErrors(name) {
+    getValidationErrors(name) {
         const [fieldName, key] = name.split('-');
-        const { getErrors } = this.context;
-        const errors = getErrors(fieldName);
-        return errors[parseInt(key)] || [];
+        const { getValidationErrors } = this.context;
+        const validationErrors = getValidationErrors(fieldName);
+        return validationErrors[parseInt(key)] || [];
     }
 
     getDefaultValueForListItem() {
@@ -131,7 +131,7 @@ export class ListField extends React.Component {
             setModel: this.setModel,
             getModel: this.getModel,
             getSchema: this.getSchema,
-            getErrors: this.getErrors
+            getValidationErrors: this.getValidationErrors
         }
     }
 
@@ -202,14 +202,14 @@ export class ListField extends React.Component {
 
 ListField.contextTypes = {
     getSchema: PropTypes.func,
-    getErrors: PropTypes.func
+    getValidationErrors: PropTypes.func
 };
 
 ListField.childContextTypes = {
     setModel: PropTypes.func,
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
-    getErrors: PropTypes.func
+    getValidationErrors: PropTypes.func
 };
 
 ListField.propTypes = {

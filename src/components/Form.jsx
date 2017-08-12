@@ -8,7 +8,7 @@ class Form extends React.Component {
         this.state = {
             schema: props.schema || {},
             model: props.model || this.getDefaultModelValue(props.schema),
-            errors: {},
+            validationErrors: {},
             validateOnChange: props.validateOnChange,
         };
 
@@ -20,7 +20,7 @@ class Form extends React.Component {
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.runSubmit = this.runSubmit.bind(this);
-        this.getErrors = this.getErrors.bind(this);
+        this.getValidationErrors = this.getValidationErrors.bind(this);
         this.getPath = this.getPath.bind(this);
         this.validateModel = this.validateModel.bind(this);
         this.submitListener = this.submitListener.bind(this);
@@ -85,8 +85,8 @@ class Form extends React.Component {
         return this.state.schema.getField(name);
     }
 
-    getErrors(name) {
-        return this.state.errors[name] || {};
+    getValidationErrors(name) {
+        return this.state.validationErrors[name] || {};
     }
 
     getPath() {
@@ -95,42 +95,42 @@ class Form extends React.Component {
 
     validateModel(model, schema) {
         const { customValidation } = this.props;
-        let errors = {};
-        if (typeof schema.validate === 'function') errors = schema.validate(model);
-        if (typeof customValidation === 'function') errors = customValidation(model);
-        if (errors instanceof Promise) {
+        let validationErrors = {};
+        if (typeof schema.validate === 'function') validationErrors = schema.validate(model);
+        if (typeof customValidation === 'function') validationErrors = customValidation(model);
+        if (validationErrors instanceof Promise) {
             return new Promise((resolve) => {
-                errors.then(errorsFromPromise => {
-                    this.setState({errors: errorsFromPromise});
-                    resolve(errorsFromPromise);
+                validationErrors.then(validationErrorsFromPromise => {
+                    this.setState({validationErrors: validationErrorsFromPromise});
+                    resolve(validationErrorsFromPromise);
                 });
             })
         }
-        this.setState({errors, validateOnChange: true});
-        return errors;
+        this.setState({validationErrors, validateOnChange: true});
+        return validationErrors;
     }
 
     submitForm(event) {
         const model = Object.assign({}, this.state.model);
-        const errors = this.validateModel(model, this.state.schema);
+        const validationErrors = this.validateModel(model, this.state.schema);
 
         if (event) {
             event.preventDefault();
         }
 
-        if (errors instanceof Promise){
-            errors.then((errors) => {
+        if (validationErrors instanceof Promise){
+            validationErrors.then((errors) => {
                 this.runSubmit(errors, model);
             });
             return;
         }
-        return this.runSubmit(errors, model);
+        return this.runSubmit(validationErrors, model);
     }
 
-    runSubmit(errors, modelData) {
+    runSubmit(validationErrors, modelData) {
         const model = cloneObject(modelData);
-        if (Object.keys(errors).length > 0) {
-            if (this.props.onError) this.props.onError(errors, model);
+        if (Object.keys(validationErrors).length > 0) {
+            if (this.props.onError) this.props.onError(validationErrors, model);
             return;
         }
         this.setState({validateOnChange: false});
@@ -144,7 +144,7 @@ class Form extends React.Component {
             getModel: this.getModel,
             getSchema: this.getSchema,
             submitForm: this.submitForm,
-            getErrors: this.getErrors,
+            getValidationErrors: this.getValidationErrors,
             getPath: this.getPath,
             eventsEmitter: this.eventsEmitter,
         }
@@ -173,7 +173,7 @@ Form.childContextTypes = {
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
     submitForm: PropTypes.func,
-    getErrors: PropTypes.func,
+    getValidationErrors: PropTypes.func,
     getPath: PropTypes.func,
     eventsEmitter: PropTypes.shape({
         emit: PropTypes.func,

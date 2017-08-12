@@ -53,7 +53,7 @@ class AppointmentForm extends Component{
                 eventsEmitter={el}
                 schema={appointmentSchema}
                 onSubmit={data => console.log(data)}
-                onError={(errors, data) => console.log('error', errors, data)}
+                onError={(validationErrors, data) => console.log('error', validationErrors, data)}
             >
                 <h4>APPOINTMENT FORM</h4>
                 <div className="row">

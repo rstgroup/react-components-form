@@ -12,14 +12,14 @@ export class ObjectField extends React.Component {
         this.state = {
             schema: {},
             model: props.value,
-            errors: {}
+            validationErrors: {}
         };
 
         this.storage = new Storage(this.state.model);
         this.setModel = this.setModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
-        this.getErrors = this.getErrors.bind(this);
+        this.getValidationErrors = this.getValidationErrors.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
     }
 
@@ -58,13 +58,13 @@ export class ObjectField extends React.Component {
         return this.state.schema.getField(name);
     }
 
-    getErrors(name) {
-        const { getErrors } = this.context;
-        const errors = getErrors(this.props.name);
-        if(Array.isArray(errors) && errors.length === 1){
-            return errors[0][name] || [];
+    getValidationErrors(name) {
+        const { getValidationErrors } = this.context;
+        const validationErrors = getValidationErrors(this.props.name);
+        if(Array.isArray(validationErrors) && validationErrors.length === 1){
+            return validationErrors[0][name] || [];
         }
-        return errors[name] || [];
+        return validationErrors[name] || [];
     }
 
     getChildContext() {
@@ -72,7 +72,7 @@ export class ObjectField extends React.Component {
             setModel: this.setModel,
             getModel: this.getModel,
             getSchema: this.getSchema,
-            getErrors: this.getErrors
+            getValidationErrors: this.getValidationErrors
         }
     }
 
@@ -88,14 +88,14 @@ export class ObjectField extends React.Component {
 
 ObjectField.contextTypes = {
     getSchema: PropTypes.func,
-    getErrors: PropTypes.func
+    getValidationErrors: PropTypes.func
 };
 
 ObjectField.childContextTypes = {
     setModel: PropTypes.func,
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
-    getErrors: PropTypes.func
+    getValidationErrors: PropTypes.func
 };
 
 ObjectField.propTypes = {

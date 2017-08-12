@@ -16,8 +16,8 @@ describe('SelectField', () => {
             name: 'firstName',
             label: 'first name',
             onChange: onChangeData,
-            error: true,
-            errors: testError,
+            hasValidationError: true,
+            validationErrors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent'
         };
@@ -52,8 +52,8 @@ describe('SelectField', () => {
             name: 'options',
             label: 'Options',
             onChange: onChangeData,
-            error: true,
-            errors: testError,
+            hasValidationError: true,
+            validationErrors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent',
             options
@@ -86,8 +86,8 @@ describe('SelectField', () => {
             name: 'firstName',
             label: 'first name',
             onChange: () => {},
-            error: true,
-            errors: testError,
+            hasValidationError: true,
+            validationErrors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent',
             options

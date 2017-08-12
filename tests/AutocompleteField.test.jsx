@@ -31,8 +31,8 @@ describe('AutocompleteField', () => {
             name: 'firstName',
             label: 'first name',
             onChange: onChangeData,
-            error: true,
-            errors: testError,
+            hasValidationError: true,
+            validationErrors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent',
             options: ['test', 'test2', 'test3']

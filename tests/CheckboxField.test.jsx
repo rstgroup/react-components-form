@@ -12,8 +12,8 @@ describe('CheckboxField', () => {
         name: 'firstName',
         label: 'first name',
         onChange: onChangeData,
-        error: true,
-        errors: testError,
+        hasValidationError: true,
+        validationErrors: testError,
         errorsStyles: errorStyles,
         className: 'testComponent'
     };
