@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 import classnames from 'classnames';

@@ -33,7 +33,6 @@ const renderPlaceSectionTitle = ({title}) => (
 );
 
 const el = new FormEventsEmitter();
-el.registerEvent('clientData');
 class AppointmentForm extends Component{
     constructor(props) {
         super(props);

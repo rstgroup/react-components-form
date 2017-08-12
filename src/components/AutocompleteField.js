@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 import { get, cloneArray } from '../helpers';
