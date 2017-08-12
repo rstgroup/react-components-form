@@ -8,7 +8,7 @@ import {
     AutocompleteField,
     SubmitField,
 } from '../../components/styled/Bootstrap';
-import { FormEventsListener } from '../../components';
+import { FormEventsEmitter } from '../../components';
 import appointmentSchema from './schema';
 import { clients, places } from './data';
 import style from '../demo.css';
@@ -32,7 +32,7 @@ const renderPlaceSectionTitle = ({title}) => (
     </div>
 );
 
-const el = new FormEventsListener();
+const el = new FormEventsEmitter();
 el.registerEvent('clientData');
 class AppointmentForm extends Component{
     constructor(props) {
@@ -41,7 +41,7 @@ class AppointmentForm extends Component{
         this.getPlaceValue = this.getPlaceValue.bind(this);
     }
     getPhoneValue(value) {
-        el.callEvent('clientData', value);
+        el.emit('clientData', value);
         return value.phone;
     }
     getPlaceValue(value) {
@@ -50,7 +50,7 @@ class AppointmentForm extends Component{
     render() {
         return (
             <Form
-                eventsListener={el}
+                eventsEmitter={el}
                 schema={appointmentSchema}
                 onSubmit={data => console.log(data)}
                 onError={(errors, data) => console.log('error', errors, data)}

@@ -10,7 +10,7 @@ import {
 } from '../../components/styled/Bootstrap';
 import Schema from 'form-schema-validation';
 import { listWrapper, objectFormField, objectFieldClassName } from '../demo.css';
-import { FormEventsListener } from '../../components';
+import { FormEventsEmitter } from '../../components';
 
 const options = [
     {
@@ -103,13 +103,13 @@ const resetModel = {
     status: true
 };
 
-const eventsListener = new FormEventsListener();
+const eventsEmitter = new FormEventsEmitter();
 const BookForm = () => (
     <Form
         schema={postSchema}
         onSubmit={data => console.log(data)}
         onError={(errors, data) => console.log('error', errors, data)}
-        eventsListener={eventsListener}
+        eventsEmitter={eventsEmitter}
     >
         <h4>BOOK FORM</h4>
         <TextField name="title" type="text" />
@@ -136,7 +136,7 @@ const BookForm = () => (
         </ListField>
         <CheckboxField name="status" label="Published" />
         <SubmitField value="Submit" />
-        <a onClick={() => {eventsListener.callEvent('reset', resetModel)}} >RESET</a>
+        <a onClick={() => {eventsEmitter.emit('reset', resetModel)}} >RESET</a>
     </Form>
 );
 

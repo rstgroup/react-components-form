@@ -13,7 +13,7 @@ class Form extends React.Component {
         };
 
         this.storage = new Storage(this.state.model);
-        this.eventsListener = props.eventsListener;
+        this.eventsEmitter = props.eventsEmitter;
         this.setModel = this.setModel.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
         this.getModel = this.getModel.bind(this);
@@ -43,20 +43,20 @@ class Form extends React.Component {
 
     componentWillMount() {
         this.storage.listen(this.setStateModel);
-        if (this.eventsListener) {
-            this.eventsListener.registerEventListener('submit', this.submitListener);
-            this.eventsListener.registerEventListener('validate', this.validateListener);
-            this.eventsListener.registerEventListener('reset', this.resetListener);
+        if (this.eventsEmitter) {
+            this.eventsEmitter.listen('submit', this.submitListener);
+            this.eventsEmitter.listen('validate', this.validateListener);
+            this.eventsEmitter.listen('reset', this.resetListener);
         }
     }
 
     componentWillUnmount() {
         this.storage.unlisten(this.setStateModel);
         this.storage.setModel({});
-        if (this.eventsListener) {
-            this.eventsListener.unregisterEventListener('submit', this.submitListener);
-            this.eventsListener.unregisterEventListener('validate', this.validateListener);
-            this.eventsListener.unregisterEventListener('reset', this.resetListener);
+        if (this.eventsEmitter) {
+            this.eventsEmitter.unlisten('submit', this.submitListener);
+            this.eventsEmitter.unlisten('validate', this.validateListener);
+            this.eventsEmitter.unlisten('reset', this.resetListener);
         }
     }
 
@@ -146,7 +146,7 @@ class Form extends React.Component {
             submitForm: this.submitForm,
             getErrors: this.getErrors,
             getPath: this.getPath,
-            eventsListener: this.eventsListener,
+            eventsEmitter: this.eventsEmitter,
         }
     }
 
@@ -175,12 +175,12 @@ Form.childContextTypes = {
     submitForm: PropTypes.func,
     getErrors: PropTypes.func,
     getPath: PropTypes.func,
-    eventsListener: PropTypes.shape({
-        callEvent: PropTypes.func,
+    eventsEmitter: PropTypes.shape({
+        emit: PropTypes.func,
         registerEvent: PropTypes.func,
-        registerEventListener: PropTypes.func,
+        listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
-        unregisterEventListener: PropTypes.func,
+        unlisten: PropTypes.func,
     })
 };
 
@@ -192,12 +192,12 @@ Form.propTypes = {
     validateOnChange: PropTypes.bool,
     customValidation: PropTypes.func,
     subform: PropTypes.bool,
-    eventsListener: PropTypes.shape({
-        callEvent: PropTypes.func,
+    eventsEmitter: PropTypes.shape({
+        emit: PropTypes.func,
         registerEvent: PropTypes.func,
-        registerEventListener: PropTypes.func,
+        listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
-        unregisterEventListener: PropTypes.func,
+        unlisten: PropTypes.func,
     })
 };
 

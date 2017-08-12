@@ -14,7 +14,7 @@ export const FieldConnect = (Component) => {
             this.getPath = this.getPath.bind(this);
             this.hasError = this.hasError.bind(this);
             this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
-            this.getEventsListener = this.getEventsListener.bind(this);
+            this.getEventsEmitter = this.getEventsEmitter.bind(this);
             this.getFieldAttributes = this.getFieldAttributes.bind(this);
         }
 
@@ -51,14 +51,14 @@ export const FieldConnect = (Component) => {
         }
 
         registerListeners() {
-            const { onChangeModel, onEmitEvents } = this.props;
-            const { eventsListener } = this.context;
-            if (eventsListener) {
-                if (typeof onChangeModel === 'function') {
-                    this.onChangeModelMethod = data => {
-                        return onChangeModel(data, this);
+            const { onModelChange, onEmitEvents } = this.props;
+            const { eventsEmitter } = this.context;
+            if (eventsEmitter) {
+                if (typeof onModelChange === 'function') {
+                    this.onModelChangeMethod = data => {
+                        return onModelChange(data, this);
                     };
-                    eventsListener.registerEventListener('changeModel', this.onChangeModelMethod);
+                    eventsEmitter.listen('modelChange', this.onModelChangeMethod);
                 }
                 if (onEmitEvents) {
                     if(Array.isArray(onEmitEvents)){
@@ -70,7 +70,7 @@ export const FieldConnect = (Component) => {
                                 }
                             };
                             this.listeners.push(listener);
-                            eventsListener.registerEventListener(name, listener.method)
+                            eventsEmitter.listen(name, listener.method)
                         });
                         return;
                     }
@@ -82,21 +82,21 @@ export const FieldConnect = (Component) => {
                         }
                     };
                     this.listeners.push(listener);
-                    eventsListener.registerEventListener(name, listener.method);
+                    eventsEmitter.listen(name, listener.method);
                 }
             }
         }
 
         unregisterListeners() {
             const { onEmitEvents } = this.props;
-            const { eventsListener } = this.context;
-            if (eventsListener) {
-                if (typeof this.onChangeModelMethod === 'function') {
-                    eventsListener.unregisterEventListener('changeModel', this.onChangeModelMethod);
+            const { eventsEmitter } = this.context;
+            if (eventsEmitter) {
+                if (typeof this.onModelChangeMethod === 'function') {
+                    eventsEmitter.unlisten('modelChange', this.onModelChangeMethod);
                 }
                 if (onEmitEvents && this.listeners.length > 0) {
                     this.listeners.forEach(({name, method}) => {
-                        eventsListener.unregisterEventListener(name, method);
+                        eventsEmitter.unlisten(name, method);
                     });
                 }
             }
@@ -120,10 +120,10 @@ export const FieldConnect = (Component) => {
 
         onChangeData(value) {
             const { name, callbacks: { onChange } } = this.props;
-            const { setModel, eventsListener, getPath } = this.context;
+            const { setModel, eventsEmitter, getPath } = this.context;
             if (typeof setModel === 'function') {
                 setModel(name, value, () => {
-                    if (eventsListener) eventsListener.callEvent('changeModel', {
+                    if (eventsEmitter) eventsEmitter.emit('modelChange', {
                         name:`${getPath()}.${name}`,
                         value
                     });
@@ -165,8 +165,8 @@ export const FieldConnect = (Component) => {
             return getSchema(name);
         }
 
-        getEventsListener() {
-            return this.context.eventsListener;
+        getEventsEmitter() {
+            return this.context.eventsEmitter;
         }
 
         submit(event) {
@@ -210,7 +210,7 @@ export const FieldConnect = (Component) => {
                 errors={this.getErrors()}
                 error={this.hasError()}
                 value={this.getValue()}
-                eventsListener={this.getEventsListener()}
+                eventsEmitter={this.getEventsEmitter()}
                 path={this.getPath()}
                 fieldAttributes={this.getFieldAttributes()}
             />);
@@ -224,12 +224,12 @@ export const FieldConnect = (Component) => {
         submitForm: PropTypes.func,
         getErrors: PropTypes.func,
         getPath: PropTypes.func,
-        eventsListener: PropTypes.shape({
-            callEvent: PropTypes.func,
+        eventsEmitter: PropTypes.shape({
+            emit: PropTypes.func,
             registerEvent: PropTypes.func,
-            registerEventListener: PropTypes.func,
+            listen: PropTypes.func,
             unregisterEvent: PropTypes.func,
-            unregisterEventListener: PropTypes.func,
+            unlisten: PropTypes.func,
         })
     };
 
@@ -250,7 +250,7 @@ export const FieldConnect = (Component) => {
             PropTypes.shape({})
         ])),
         defaultOption: PropTypes.number,
-        onChangeModel: PropTypes.func,
+        onModelChange: PropTypes.func,
         onEmitEvents: PropTypes.oneOfType([
             PropTypes.shape({
                 name: PropTypes.string,
