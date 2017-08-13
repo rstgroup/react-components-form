@@ -1,4 +1,4 @@
-import { get, cloneObject, cloneArray, isNotEqualObject } from '../src/helpers';
+import { get, cloneObject, cloneArray, isNotEqualObject } from '../../src/helpers';
 
 describe('helpers', () => {
     describe('get', () => {

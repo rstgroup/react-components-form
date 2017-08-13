@@ -1,6 +1,6 @@
 {
   "name": "react-components-form",
-  "version": "2.9.0",
+  "version": "3.0.0-rc.0",
   "description": "React form components",
   "main": "main.js",
   "jsnext:main": "src/index.js",
@@ -11,10 +11,10 @@
     "test": "jest",
     "build": "webpack -p --config webpack-prod.config.js",
     "build:demo": "webpack -p --config webpack.config.js",
-    "prepublish": "npm run build",
+    "prepublish": "npm run lint && npm run test && npm run build",
     "coverage": "jest --coverage",
     "coverage:report": "cat ./coverage/lcov.info | coveralls",
-    "lint": "eslint -c .eslintrc.json src/**/*.js? ",
+    "lint": "eslint -c .eslintrc.json src/**/*.js?",
     "lint:fix": "eslint --fix -c .eslintrc.json src/**/*.js?"
   },
   "pre-commit": [

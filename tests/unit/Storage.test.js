@@ -1,4 +1,4 @@
-import Storage from '../src/components/Storage';
+import Storage from '../../src/components/Storage';
 
 describe('Storage', () => {
     const storage = new Storage();

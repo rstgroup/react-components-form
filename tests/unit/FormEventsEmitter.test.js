@@ -1,4 +1,4 @@
-import FormEventsEmitter from '../src/components/FormEventsEmitter';
+import FormEventsEmitter from '../../src/components/FormEventsEmitter';
 
 describe('FormEventsEmitter', () => {
     describe('listen', () => {
