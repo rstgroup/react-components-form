@@ -66,6 +66,12 @@ export class CheckboxField extends React.Component {
 }
 
 CheckboxField.propTypes = {
+    type: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.shape({})
+    ]),
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
     name: PropTypes.string,

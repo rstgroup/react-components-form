@@ -1,4 +1,3 @@
-import React from 'react';
 import FormEventsEmitter from '../src/components/FormEventsEmitter';
 
 describe('FormEventsEmitter', () => {
@@ -35,7 +34,7 @@ describe('FormEventsEmitter', () => {
         const fakeListener = {};
         eventsEmitter.listen('testEvent', mockListener);
         eventsEmitter.listen('testEvent2', fakeListener);
-        
+
         it('should not unregistered listener if event not exist', () => {
             eventsEmitter.unlisten('testEvent3', mockListener);
             expect(eventsEmitter.listeners.testEvent3).toBe(undefined);
@@ -69,7 +68,7 @@ describe('FormEventsEmitter', () => {
         });
 
         it('should return response from listeners', () => {
-            const listener = () => { return 'test' };
+            const listener = () => 'test';
             eventsEmitter.listen('testEvent', listener);
             const response = eventsEmitter.emit('testEvent');
             expect(response).toEqual(['test']);

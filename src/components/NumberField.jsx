@@ -21,14 +21,14 @@ export const NumberField = ({
     label,
     placeholder,
     errorStyles = {},
-    fieldAttributes = {}
+    fieldAttributes = {},
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <input
             type="number"
             name={name}
-            onChange={(e) => onChange(parseByType(e.target.value, type))}
+            onChange={e => onChange(parseByType(e.target.value, type))}
             value={value}
             step={type === 'float' ? 0.01 : 1}
             placeholder={placeholder}
@@ -40,6 +40,7 @@ export const NumberField = ({
 );
 
 NumberField.propTypes = {
+    type: PropTypes.string,
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
     name: PropTypes.string,
@@ -48,7 +49,7 @@ NumberField.propTypes = {
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.shape({}),
     ]),
     hasValidationError: PropTypes.bool,
     value: PropTypes.number,
@@ -56,9 +57,9 @@ NumberField.propTypes = {
     placeholder: PropTypes.string,
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
-        itemClassName: PropTypes.string
+        itemClassName: PropTypes.string,
     }),
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
 };
 
 export default FieldConnect(NumberField);

@@ -82,7 +82,7 @@ class Form extends React.Component {
     }
 
     getSchema(name) {
-        if(typeof this.state.schema.getField !== 'function') return {};
+        if (typeof this.state.schema.getField !== 'function') return {};
         return this.state.schema.getField(name);
     }
 
@@ -101,13 +101,13 @@ class Form extends React.Component {
         if (typeof customValidation === 'function') validationErrors = customValidation(model);
         if (validationErrors instanceof Promise) {
             return new Promise((resolve) => {
-                validationErrors.then(validationErrorsFromPromise => {
-                    this.setState({validationErrors: validationErrorsFromPromise});
+                validationErrors.then((validationErrorsFromPromise) => {
+                    this.setState({ validationErrors: validationErrorsFromPromise });
                     resolve(validationErrorsFromPromise);
                 });
-            })
+            });
         }
-        this.setState({validationErrors, validateOnChange: true});
+        this.setState({ validationErrors, validateOnChange: true });
         return validationErrors;
     }
 
@@ -119,7 +119,7 @@ class Form extends React.Component {
             event.preventDefault();
         }
 
-        if (validationErrors instanceof Promise){
+        if (validationErrors instanceof Promise) {
             validationErrors.then((errors) => {
                 this.runSubmit(errors, model);
             });
@@ -134,7 +134,7 @@ class Form extends React.Component {
             if (this.props.onError) this.props.onError(validationErrors, model);
             return;
         }
-        this.setState({validateOnChange: false});
+        this.setState({ validateOnChange: false });
         this.props.onSubmit(model);
         return model;
     }
@@ -148,7 +148,7 @@ class Form extends React.Component {
             getValidationErrors: this.getValidationErrors,
             getPath: this.getPath,
             eventsEmitter: this.eventsEmitter,
-        }
+        };
     }
 
     render() {
@@ -182,10 +182,12 @@ Form.childContextTypes = {
         listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
-    })
+    }),
 };
 
 Form.propTypes = {
+    id: PropTypes.string,
+    className: PropTypes.string,
     model: PropTypes.shape({}),
     schema: PropTypes.shape({}),
     onError: PropTypes.func,
@@ -193,17 +195,18 @@ Form.propTypes = {
     validateOnChange: PropTypes.bool,
     customValidation: PropTypes.func,
     subform: PropTypes.bool,
+    children: PropTypes.node,
     eventsEmitter: PropTypes.shape({
         emit: PropTypes.func,
         registerEvent: PropTypes.func,
         listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
-        unlisten: PropTypes.func,
+        unlisten: PropTypes.func
     })
 };
 
 Form.defaultProps = {
-    id: 'form'
+    id: 'form',
 };
 
 export default Form;

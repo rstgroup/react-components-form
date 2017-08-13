@@ -9,7 +9,7 @@ const getDateString = (date = new Date()) => {
     let month = date.getMonth();
     const year = date.getFullYear();
     if (month < 10) {
-        if(month === 0) month += 1;
+        if (month === 0) month += 1;
         month = `0${month}`;
     }
     return `${year}-${month}-${day}`;
@@ -26,14 +26,14 @@ export const DateField = ({
     label,
     placeholder,
     errorStyles = {},
-    fieldAttributes = {}
+    fieldAttributes = {},
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <input
-            type='date'
+            type="date"
             name={name}
-            onChange={(e) => onChange(new Date(e.target.value))}
+            onChange={e => onChange(new Date(e.target.value))}
             value={getDateString(value)}
             placeholder={placeholder}
             className={className}
@@ -52,7 +52,7 @@ DateField.propTypes = {
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.shape({}),
     ]),
     hasValidationError: PropTypes.bool,
     value: PropTypes.shape({}),
@@ -60,9 +60,9 @@ DateField.propTypes = {
     placeholder: PropTypes.string,
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
-        itemClassName: PropTypes.string
+        itemClassName: PropTypes.string,
     }),
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
 };
 
 export default FieldConnect(DateField);

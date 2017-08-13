@@ -15,13 +15,13 @@ export const TextareaField = ({
     label,
     placeholder,
     errorStyles = {},
-    fieldAttributes = {}
+    fieldAttributes = {},
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <textarea
             name={name}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={e => onChange(e.target.value)}
             value={value}
             placeholder={placeholder}
             className={className}
@@ -40,7 +40,7 @@ TextareaField.propTypes = {
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.shape({}),
     ]),
     hasValidationError: PropTypes.bool,
     value: PropTypes.string,
@@ -48,9 +48,9 @@ TextareaField.propTypes = {
     placeholder: PropTypes.string,
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
-        itemClassName: PropTypes.string
+        itemClassName: PropTypes.string,
     }),
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
 };
 
 export default FieldConnect(TextareaField);

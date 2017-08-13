@@ -56,31 +56,25 @@ export const FieldConnect = (Component) => {
             const { eventsEmitter } = this.context;
             if (eventsEmitter) {
                 if (typeof onModelChange === 'function') {
-                    this.onModelChangeMethod = data => {
-                        return onModelChange(data, this);
-                    };
+                    this.onModelChangeMethod = data => onModelChange(data, this);
                     eventsEmitter.listen('modelChange', this.onModelChangeMethod);
                 }
                 if (onEmitEvents) {
-                    if(Array.isArray(onEmitEvents)){
-                        onEmitEvents.forEach(({name, method}) => {
+                    if (Array.isArray(onEmitEvents)) {
+                        onEmitEvents.forEach(({ name, method }) => {
                             const listener = {
                                 name,
-                                method: data => {
-                                    return method(data, this);
-                                }
+                                method: data => method(data, this),
                             };
                             this.listeners.push(listener);
-                            eventsEmitter.listen(name, listener.method)
+                            eventsEmitter.listen(name, listener.method);
                         });
                         return;
                     }
                     const { name, method } = onEmitEvents;
                     const listener = {
                         name,
-                        method: data => {
-                            return method(data, this);
-                        }
+                        method: data => method(data, this),
                     };
                     this.listeners.push(listener);
                     eventsEmitter.listen(name, listener.method);
@@ -96,7 +90,7 @@ export const FieldConnect = (Component) => {
                     eventsEmitter.unlisten('modelChange', this.onModelChangeMethod);
                 }
                 if (onEmitEvents && this.listeners.length > 0) {
-                    this.listeners.forEach(({name, method}) => {
+                    this.listeners.forEach(({ name, method }) => {
                         eventsEmitter.unlisten(name, method);
                     });
                 }
@@ -115,8 +109,8 @@ export const FieldConnect = (Component) => {
         getChildContext() {
             return {
                 getSchema: this.context.getSchema,
-                getPath: this.getPath
-            }
+                getPath: this.getPath,
+            };
         }
 
         onChangeData(value) {
@@ -124,10 +118,12 @@ export const FieldConnect = (Component) => {
             const { setModel, eventsEmitter, getPath } = this.context;
             if (typeof setModel === 'function') {
                 setModel(name, value, () => {
-                    if (eventsEmitter) eventsEmitter.emit('modelChange', {
-                        name:`${getPath()}.${name}`,
-                        value
-                    });
+                    if (eventsEmitter) {
+                        eventsEmitter.emit('modelChange', {
+                            name: `${getPath()}.${name}`,
+                            value,
+                        });
+                    }
                     if (typeof onChange === 'function') onChange(value);
                 });
             }
@@ -231,43 +227,44 @@ export const FieldConnect = (Component) => {
             listen: PropTypes.func,
             unregisterEvent: PropTypes.func,
             unlisten: PropTypes.func,
-        })
+        }),
     };
 
     FieldConnector.childContextTypes = {
         getSchema: PropTypes.func,
-        getPath: PropTypes.func
+        getPath: PropTypes.func,
     };
 
     FieldConnector.defaultProps = {
-        callbacks: {}
+        callbacks: {},
     };
 
     FieldConnector.propTypes = {
         name: PropTypes.string,
         value: PropTypes.any,
+        fieldAttributes: PropTypes.shape({}),
         options: PropTypes.arrayOf(PropTypes.oneOfType([
             PropTypes.string,
-            PropTypes.shape({})
+            PropTypes.shape({}),
         ])),
         defaultOption: PropTypes.number,
         onModelChange: PropTypes.func,
         onEmitEvents: PropTypes.oneOfType([
             PropTypes.shape({
                 name: PropTypes.string,
-                method: PropTypes.func
+                method: PropTypes.func,
             }),
             PropTypes.arrayOf(PropTypes.shape({
                 name: PropTypes.string,
-                method: PropTypes.func
-            }))
+                method: PropTypes.func,
+            })),
         ]),
         callbacks: PropTypes.shape({
             onChange: PropTypes.func,
             onError: PropTypes.func,
             onFocus: PropTypes.func,
-            onBlur: PropTypes.func
-        })
+            onBlur: PropTypes.func,
+        }),
     };
 
     return FieldConnector;

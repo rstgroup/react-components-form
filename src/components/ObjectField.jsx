@@ -74,7 +74,7 @@ export class ObjectField extends React.Component {
             getModel: this.getModel,
             getSchema: this.getSchema,
             getValidationErrors: this.getValidationErrors
-        }
+        };
     }
 
     render() {

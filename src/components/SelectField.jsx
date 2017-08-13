@@ -16,13 +16,13 @@ export const SelectField = ({
     label,
     placeholder,
     errorStyles = {},
-    fieldAttributes = {}
+    fieldAttributes = {},
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <select
             name={name}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={e => onChange(e.target.value)}
             value={value}
             placeholder={placeholder}
             className={className}
@@ -51,25 +51,25 @@ SelectField.propTypes = {
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.shape({}),
     ]),
     hasValidationError: PropTypes.bool,
     value: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
-        PropTypes.shape({})
+        PropTypes.shape({}),
     ]),
     label: PropTypes.string,
     placeholder: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.oneOfType([
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.shape({}),
     ])),
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
-        itemClassName: PropTypes.string
+        itemClassName: PropTypes.string,
     }),
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
 };
 
 export default FieldConnect(SelectField);

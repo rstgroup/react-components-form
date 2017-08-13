@@ -62,14 +62,14 @@ export class ListField extends React.Component {
     }
 
     setModel(name, value, callback) {
-        const [fieldName, key] = name.split('-');
+        const key = name.split('-')[1];
         const model = Array.from(this.state.model);
         model[parseInt(key)].value = value;
         this.storage.setModel(model, callback);
     }
 
     getModel(name) {
-        const [fieldName, key] = name.split('-');
+        const key = name.split('-')[1];
         return this.state.model[key].value;
     }
 
@@ -133,7 +133,7 @@ export class ListField extends React.Component {
             getModel: this.getModel,
             getSchema: this.getSchema,
             getValidationErrors: this.getValidationErrors
-        }
+        };
     }
 
     getList(children) {
@@ -158,17 +158,17 @@ export class ListField extends React.Component {
             });
 
             return (
-               <div key={item.id} className={itemWrapperClassName}>
-                   {child}
-                   {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
-                       <span
-                           onClick={() => this.removeListElement(key)}
-                           className={className}
-                       >
-                           {value || 'Remove'}
-                       </span>
-                   </div>}
-               </div>
+                <div key={item.id} className={itemWrapperClassName}>
+                    {child}
+                    {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
+                        <span
+                            onClick={() => this.removeListElement(key)}
+                            className={className}
+                        >
+                            {value || 'Remove'}
+                        </span>
+                    </div>}
+                </div>
             );
         });
     }
@@ -214,6 +214,7 @@ ListField.childContextTypes = {
 };
 
 ListField.propTypes = {
+    children: PropTypes.node,
     className: PropTypes.string,
     wrapperClassName: PropTypes.string,
     itemWrapperClassName: PropTypes.string,
