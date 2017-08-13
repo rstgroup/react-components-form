@@ -15,8 +15,7 @@
     "coverage": "jest --coverage",
     "coverage:report": "cat ./coverage/lcov.info | coveralls",
     "lint": "eslint -c .eslintrc.json src/**/*.js? ",
-    "lint:fix": "eslint --fix -c .eslintrc.json src/**/*.js?",
-    "precommit": ""
+    "lint:fix": "eslint --fix -c .eslintrc.json src/**/*.js?"
   },
   "pre-commit": [
     "lint",
