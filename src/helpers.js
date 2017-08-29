@@ -71,6 +71,7 @@ export const isNotEqualValue = (sourceValue, compareValue) => {
 
 export const isNotEqualObject = (sourceObject, compareObject) => {
     if (isNullOrUndefined(sourceObject) || isNullOrUndefined(compareObject)) return false;
+    if (isReactComponentOrElement(sourceObject) || isReactComponentOrElement(compareObject)) return sourceObject !== compareObject;
     if (hasDifferentKeysLength(sourceObject, compareObject)) return true;
     const objectKeys = Object.keys(sourceObject);
     let result = false;
@@ -81,4 +82,28 @@ export const isNotEqualObject = (sourceObject, compareObject) => {
         counter += 1;
     }
     return result;
+};
+
+export const isClassConstructor = (value) => {
+    try {
+        new value();
+    } catch (error) {
+        return false;
+    }
+    return true;
+};
+
+export const isReactComponentOrElement = (value) => {
+    if (isClassConstructor(value)) {
+        const classInstance = new value();
+        return typeof classInstance.isReactComponent === 'object' ||
+            isReactComponentOrElement(classInstance)
+    }
+    if (typeof value === 'object') {
+        const reactSymbol = Symbol('react.element').toString();
+        if (value.$$typeof && value.$$typeof.toString() === reactSymbol) {
+            return true;
+        }
+    }
+    return false;
 };

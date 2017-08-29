@@ -1,4 +1,6 @@
-import { get, cloneObject, cloneArray, isNotEqualObject } from '../src/helpers';
+import React from 'react';
+
+import { get, cloneObject, cloneArray, isNotEqualObject, isReactComponentOrElement } from '../src/helpers';
 
 describe('helpers', () => {
     describe('get', () => {
@@ -166,6 +168,53 @@ describe('helpers', () => {
                 ]
             };
             expect (isNotEqualObject(srcObject, compareObject)).toBeFalsy();
+        });
+        it('should return true when objects properties are the same components', () => {
+            const TestComponent = () => (<span>test</span>);
+            expect (isNotEqualObject(TestComponent, TestComponent)).toBeFalsy();
+        });
+    });
+
+    describe('isReactComponentOrElement', () => {
+        class ClassComponent extends React.Component {
+            render() {
+                return (
+                    <span>test</span>
+                );
+            }
+        }
+        const StatlessComponent = () => (
+            <span>test</span>
+        );
+
+        const nodeElement = <span>test</span>;
+
+        it('should return true if detect class component', () => {
+            expect(isReactComponentOrElement(ClassComponent)).toEqual(true);
+        });
+
+        it('should return true if detect stateless component', () => {
+            expect(isReactComponentOrElement(StatlessComponent)).toEqual(true);
+        });
+
+        it('should return true if detect node element', () => {
+            expect(isReactComponentOrElement(nodeElement)).toEqual(true);
+        });
+
+        it('should return false if detect object that is not react element', () => {
+            expect(isReactComponentOrElement({})).toEqual(false);
+        });
+
+        it('should return false if detect arrow function that is not react component', () => {
+            expect(isReactComponentOrElement(() => {})).toEqual(false);
+        });
+
+        it('should return false if detect function that is not react component', () => {
+            expect(isReactComponentOrElement(jest.fn())).toEqual(false);
+        });
+
+        it('should return false if detect string that is not react component', () => {
+            expect(isReactComponentOrElement('foo')).toEqual(false);
         });
     });
 });
