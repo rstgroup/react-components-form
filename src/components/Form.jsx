@@ -21,6 +21,7 @@ class Form extends React.Component {
         this.submitForm = this.submitForm.bind(this);
         this.runSubmit = this.runSubmit.bind(this);
         this.getErrors = this.getErrors.bind(this);
+        this.getAllErrors = this.getAllErrors.bind(this);
         this.getPath = this.getPath.bind(this);
         this.validateModel = this.validateModel.bind(this);
         this.submitListener = this.submitListener.bind(this);
@@ -89,6 +90,10 @@ class Form extends React.Component {
         return this.state.errors[name] || {};
     }
 
+    getAllErrors() {
+        return this.state.errors || {};
+    }
+
     getPath() {
         return this.props.id;
     }
@@ -145,6 +150,7 @@ class Form extends React.Component {
             getSchema: this.getSchema,
             submitForm: this.submitForm,
             getErrors: this.getErrors,
+            getAllErrors: this.getAllErrors,
             getPath: this.getPath,
             eventsListener: this.eventsListener,
         }
@@ -174,6 +180,7 @@ Form.childContextTypes = {
     getSchema: PropTypes.func,
     submitForm: PropTypes.func,
     getErrors: PropTypes.func,
+    getAllErrors: PropTypes.func,
     getPath: PropTypes.func,
     eventsListener: PropTypes.shape({
         callEvent: PropTypes.func,

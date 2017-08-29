@@ -6,3 +6,4 @@ export {NumberField} from '../NumberField';
 export {DateField} from '../DateField';
 export {CheckboxField} from '../CheckboxField';
 export {ErrorField} from '../ErrorField';
+export {ErrorsContainer} from '../ErrorsContainer';

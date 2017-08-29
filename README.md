@@ -126,6 +126,7 @@ You can use current fields or create new fields. Here You have list of fields.
 | ObjectField | This field give You posibility to wrap another fields to object |
 | ListField | This field give You posibility to create list of fields with add and remove buttons |
 | AutocompleteField | You can use this field by import them from 'react-components-form/AutocompleteField' |
+| ErrorsContainer | This component renders all form errors |
 
 #### Fields props
 

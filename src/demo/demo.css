@@ -86,3 +86,7 @@ label {
     top: 100%;
     width: 100%;
 }
+
+.errorItem {
+    color: red;
+}
