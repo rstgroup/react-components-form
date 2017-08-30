@@ -2,19 +2,26 @@ import React, { Component, PropTypes } from 'react';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 
-class ErrorsContainer extends Component {
-    constructor(props) {
-        super(props);
-        this.getErrors = this.getErrors.bind(this);
+const parseErrors = (data) => {
+    let preparedData = [];
+    if (Array.isArray(data)) {
+        data.forEach((obj) => {
+            preparedData = preparedData.concat(parseErrors(obj));
+        });
+    } else if (typeof data === 'object') {
+        Object.keys(data).forEach((errorIndex) => {
+            preparedData = preparedData.concat(parseErrors(data[errorIndex]));
+        });
+    } else if (typeof data === 'string') {
+        preparedData.push(data);
     }
+    return preparedData;
+}
+
+class ErrorsContainer extends Component {
     getErrors() {
         const { getAllErrors } = this.context;
-        const errorsObj = getAllErrors();
-        let errors = [];
-        Object.keys(errorsObj).forEach((errorIndex) => {
-            errorsObj[errorIndex].forEach(error => errors.push(error));
-        });
-        return errors;
+        return parseErrors(getAllErrors());
     }
     render() {
         const errors = this.getErrors();
