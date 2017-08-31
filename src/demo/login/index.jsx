@@ -1,7 +1,8 @@
 import React from 'react';
 import Schema from 'form-schema-validation';
 import { Form, TextField, SubmitField } from '../../components/styled/Bootstrap';
-import { FormEventsListener } from '../../components';
+import { FormEventsListener, ErrorsContainer } from '../../components';
+import { errorItem } from '../demo.css';
 
 const loginSchema = new Schema({
     login:{
@@ -24,6 +25,9 @@ const LoginForm  = () => {
                 onError={(errors, data) => console.log('error', errors, data)}
                 eventsListener={eventsListener}
             >
+                <ErrorsContainer
+                    itemClassName={errorItem}
+                />
                 <h4>LOGIN FORM</h4>
                 <TextField name="login" label="Login" type="text" />
                 <TextField name="password" label="Password" type="text" />
