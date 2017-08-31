@@ -91,7 +91,7 @@ class Form extends React.Component {
     }
 
     getAllErrors() {
-        return this.state.errors || {};
+        return this.state.errors;
     }
 
     getPath() {

@@ -94,7 +94,15 @@ describe('ErrorsContainer', () => {
         };
         const wrapper = mount(<ErrorsContainer />, { context });
         expect(wrapper.find(ErrorField).props().errors).toEqual(errorsArray);
-    })
+    });
+
+    it('should prepare errors list properly when errors data is undefined', () => {
+        const context = {
+            getAllErrors: () => undefined,
+        };
+        const wrapper = mount(<ErrorsContainer />, { context });
+        expect(wrapper.find(ErrorField).props().errors).toEqual([]);
+    });
 
     it('should pass ErrorComponent prop to ErrorField', () => {
         const context = {
