@@ -45,7 +45,6 @@ class Form extends React.Component {
     componentWillMount() {
         this.storage.listen(this.setStateModel);
         if (this.eventsListener) {
-            this.eventsListener.registerEvent('onError');
             this.eventsListener.registerEventListener('submit', this.submitListener);
             this.eventsListener.registerEventListener('validate', this.validateListener);
             this.eventsListener.registerEventListener('reset', this.resetListener);
@@ -56,7 +55,6 @@ class Form extends React.Component {
         this.storage.unlisten(this.setStateModel);
         this.storage.setModel({});
         if (this.eventsListener) {
-            this.eventsListener.unregisterEvent('onError');
             this.eventsListener.unregisterEventListener('submit', this.submitListener);
             this.eventsListener.unregisterEventListener('validate', this.validateListener);
             this.eventsListener.unregisterEventListener('reset', this.resetListener);
@@ -137,7 +135,7 @@ class Form extends React.Component {
     runSubmit(errors, modelData) {
         const model = cloneObject(modelData);
         if (Object.keys(errors).length > 0) {
-            if (this.eventsListener) this.eventsListener.callEvent('onError', errors);
+            if (this.eventsListener) this.eventsListener.callEvent('error', errors);
             if (this.props.onError) this.props.onError(errors, model);
             return;
         }
