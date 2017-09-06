@@ -71,6 +71,10 @@ describe('helpers', () => {
             expect (clonedObject).not.toBe(objectWithArrays);
             expect (clonedObject).toEqual(objectWithArrays);
         });
+        it('should do return recived argument when argument isnt object', () => {
+            const clonedObject = cloneObject(null);
+            expect (clonedObject).toEqual(null);
+        });
     });
 
     describe('isNotEqualObject', () => {
