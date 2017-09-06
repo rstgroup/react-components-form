@@ -93,10 +93,30 @@ const resetModel = {
     category: 'horror',
     authors: [
         {
-            name: 'Tester',
-            surname: 'Testowy',
+            name: 'Test2',
+            surname: 'Test2',
+            age: '22-28'
+        },
+    ],
+    published: false,
+    languages: ['test2323', '34234', '3243'],
+    status: true
+};
+
+const model = {
+    title: 'asd',
+    category: 'horror',
+    authors: [
+        {
+            name: 'te',
+            surname: 'tes',
             age: '18-21'
-        }
+        },
+        {
+            name: 'Test3',
+            surname: 'Test3',
+            age: '29-40'
+        },
     ],
     published: false,
     languages: ['test'],
@@ -106,6 +126,7 @@ const resetModel = {
 const eventsListener = new FormEventsListener();
 const BookForm = () => (
     <Form
+        model={model}
         schema={postSchema}
         onSubmit={data => console.log(data)}
         onError={(errors, data) => console.log('error', errors, data)}

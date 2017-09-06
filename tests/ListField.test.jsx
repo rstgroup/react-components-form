@@ -5,9 +5,12 @@ import {
     TextField,
     SubmitField,
     ObjectField,
-    ListField
+    ListField,
+    SelectField,
+    FormEventsListener,
 } from '../src/components';
-import { addressFormSchema, languagesFormSchema, listSchema } from './data/schemas';
+import { listModel, newListModel } from './data/models';
+import { addressFormSchema, languagesFormSchema, listSchema, resetSchema } from './data/schemas';
 
 
 describe('ListField', () => {
@@ -166,5 +169,43 @@ describe('ListField', () => {
         expect(wrapper.find('.addButtonClass').length).toBe(1);
         expect(wrapper.find('.removeButtonClass').length).toBe(2);
         expect(wrapper.find('input').length).toBe(2);
+    });
+
+    it('should reset form', () => {
+        const submitMethod = () => {};
+        const eventsListener = new FormEventsListener();
+        const wrapper = mount(
+            <Form
+                model={listModel}
+                schema={resetSchema}
+                onSubmit={submitMethod}
+                eventsListener={eventsListener}
+            >
+                <TextField name="title" type="text" />
+                <ListField name="authors">
+                    <ObjectField>
+                        <TextField name="name" placeholder="name"/>
+                        <TextField name="surname" placeholder="surname"/>
+                    </ObjectField>
+                </ListField>
+                <ListField name="languages" label="Languages">
+                    <TextField placeholder="language" />
+                </ListField>
+                <a className='resetButton' onClick={() => eventsListener.callEvent('reset', newListModel)}>RESET</a>
+                <SubmitField value="Submit"/>
+            </Form>
+        );
+
+        const titleInput = wrapper.find('input[name="title"]');
+
+        expect(titleInput.exists()).toBeTruthy();
+        expect(titleInput.get(0).value).toEqual('titleTest');
+
+        expect(wrapper.find('.resetButton').length).toBe(1);
+
+        wrapper.find('.resetButton').first().simulate('click');
+
+        expect(titleInput.exists()).toBeTruthy();
+        expect(titleInput.get(0).value).toEqual('');
     });
 });
