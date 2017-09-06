@@ -5,6 +5,7 @@ class FormEventsListener {
             validate: [],
             changeModel: [],
             reset: [],
+            error: [],
         };
     }
     registerEvent(name) {
