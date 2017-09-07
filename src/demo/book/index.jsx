@@ -104,41 +104,56 @@ const resetModel = {
 };
 
 const eventsListener = new FormEventsListener();
-const BookForm = () => (
-    <Form
-        schema={postSchema}
-        onSubmit={data => console.log(data)}
-        onError={(errors, data) => console.log('error', errors, data)}
-        eventsListener={eventsListener}
-    >
-        <h4>BOOK FORM</h4>
-        <TextField name="title" type="text" />
-        <SelectField name="category" />
-        <ListField
-            name="authors"
-            className={listWrapper}
-            addButton={{value: <span>add button</span>}}
-            minLength={1}
-        >
-            <ObjectField wrapperClassName={objectFieldClassName}>
-                <div className={objectFormField}>
-                    <TextField name="name" placeholder="name"/>
-                </div>
-                <div className={objectFormField}>
-                    <TextField name="surname" placeholder="surname"/>
-                </div>
-                <div>
-                    <SelectField name="age" />
-                </div>
-            </ObjectField>
-        </ListField>
-        <ListField name="languages" label="Languages" className={listWrapper}>
-            <TextField placeholder="language" />
-        </ListField>
-        <CheckboxField name="status" label="Published" />
-        <SubmitField value="Submit" />
-        <a onClick={() => {eventsListener.callEvent('reset', resetModel)}} >RESET</a>
-    </Form>
-);
+class BookForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            counter: 0,
+        }
+    }
+    render() {
+        console.log(this.state.counter);
+        return (
+            <Form
+                schema={postSchema}
+                onSubmit={data => console.log(data)}
+                onError={(errors, data) => console.log('error', errors, data)}
+                eventsListener={eventsListener}
+            >
+
+                <h4>BOOK FORM</h4>
+                <TextField name="title" type="text" />
+                <SelectField name="category" />
+                <ListField
+                    name="authors"
+                    className={listWrapper}
+                    addButton={{value: <span>add button</span>}}
+                    minLength={1}
+                >
+                    <ObjectField wrapperClassName={objectFieldClassName}>
+                        {this.state.counter}
+                        <div className={objectFormField}>
+                            <TextField name="name" placeholder="name"/>
+                        </div>
+                        <div className={objectFormField}>
+                            <TextField name="surname" placeholder="surname"/>
+                        </div>
+                        <div>
+                            <SelectField name="age" />
+                        </div>
+                    </ObjectField>
+                </ListField>
+                <ListField name="languages" label="Languages" className={listWrapper}>
+                    <TextField placeholder="language" />
+                </ListField>
+                <CheckboxField name="status" label="Published" />
+                <SubmitField value="Submit" />
+                <a onClick={() => {eventsListener.callEvent('reset', resetModel)}} >RESET</a>
+                <a onClick={() => { this.setState({counter: this.state.counter + 1 }) }} >ddd</a>
+            </Form>
+        )
+    }
+}
+
 
 export default BookForm;

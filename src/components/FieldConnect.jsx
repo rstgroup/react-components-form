@@ -19,8 +19,8 @@ export const FieldConnect = (Component) => {
         }
 
         shouldComponentUpdate(nextProps) {
-            const newProps = Object.assign({}, nextProps, { children: '' });
-            const oldProps = Object.assign({}, this.props, { children: '' });
+            const newProps = Object.assign({}, nextProps);
+            const oldProps = Object.assign({}, this.props);
             const { name } = this.props;
             const { getModel, getErrors } = this.context;
             return (
