@@ -1,8 +1,8 @@
 export const get = (object, path, defaultValue) => {
     const paths = path.split('.');
     let getter = object;
-    if (typeof object === 'object') {
-        paths.forEach((key) => {
+    if(typeof object === 'object'){
+        paths.forEach(key => {
             if (getter !== defaultValue && getter[key]) {
                 getter = getter[key];
                 return;
@@ -16,7 +16,7 @@ export const get = (object, path, defaultValue) => {
 
 export const cloneArray = (array) => {
     if (Array.isArray(array)) {
-        return array.map((item) => {
+        return array.map(item => {
             if (Array.isArray(item)) return cloneArray(item);
             if (typeof item === 'object' && !(item instanceof Date)) return cloneObject(item);
             return item;
@@ -42,10 +42,13 @@ export const cloneObject = (object) => {
     return results;
 };
 
-export const isNullOrUndefined = value => value === null || value === undefined;
+export const isNullOrUndefined = (value) => {
+    return value === null || value === undefined;
+};
 
-export const hasDifferentKeysLength = (sourceObject, compareObject) =>
-    Object.keys(sourceObject).length !== Object.keys(compareObject).length;
+export const hasDifferentKeysLength = (sourceObject, compareObject) => {
+    return Object.keys(sourceObject).length !== Object.keys(compareObject).length;
+};
 
 export const isNotEqualArray = (sourceArray, compareArray) => {
     if (sourceArray.length !== compareArray.length) return true;
@@ -68,14 +71,39 @@ export const isNotEqualValue = (sourceValue, compareValue) => {
 
 export const isNotEqualObject = (sourceObject, compareObject) => {
     if (isNullOrUndefined(sourceObject) || isNullOrUndefined(compareObject)) return false;
+    if (isReactComponentOrElement(sourceObject) || isReactComponentOrElement(compareObject)) return sourceObject !== compareObject;
     if (hasDifferentKeysLength(sourceObject, compareObject)) return true;
     const objectKeys = Object.keys(sourceObject);
     let result = false;
     let counter = 0;
-    while (!result && objectKeys.length >= counter) {
+    while(!result && objectKeys.length >= counter ){
         const key = objectKeys[counter];
-        if (isNotEqualValue(sourceObject[key], compareObject[key])) result = true;
+        if(isNotEqualValue(sourceObject[key], compareObject[key])) result = true;
         counter += 1;
     }
     return result;
+};
+
+export const isClassConstructor = (value) => {
+    try {
+        new value();
+    } catch (error) {
+        return false;
+    }
+    return true;
+};
+
+export const isReactComponentOrElement = (value) => {
+    if (isClassConstructor(value)) {
+        const classInstance = new value();
+        return typeof classInstance.isReactComponent === 'object' ||
+            isReactComponentOrElement(classInstance)
+    }
+    if (typeof value === 'object') {
+        const reactSymbol = Symbol('react.element').toString();
+        if (value.$$typeof && value.$$typeof.toString() === reactSymbol) {
+            return true;
+        }
+    }
+    return false;
 };

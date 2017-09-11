@@ -46,17 +46,50 @@ describe('Form', () => {
         expect(mockError.mock.calls.length).toBe(1);
     });
 
-    it('should support promise validation', (done) => {
+    it('return all validation errors from form', () => {
+        const loginSchema = new Schema({
+            login:{
+                type: String,
+                required: true
+            },
+            password: {
+                type: String,
+                required: true
+            }
+        });
+
+        const mockSubmit = jest.fn();
+        const mockError = jest.fn();
+
+        const wrapper = mount(
+            <Form
+                schema={loginSchema}
+                onError={mockError}
+                onSubmit={mockSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const fieldSubmit = wrapper.find(SubmitField);
+        fieldSubmit.find('button').simulate('click');
+        const errors = wrapper.instance().getAllValidationErrors();
+        expect(Object.keys(errors).length).toBe(2);
+    });
+
+    it('should support schema promise validation', () => {
         const asyncValidator = () => ({
             validator(value) {
                 return new Promise((resolve) => {
                     setTimeout(() => {
                         resolve(value === 'test');
-                    },100);
+                    }, 1000);
                 });
             },
             errorMessage: `async validation failed`
         });
+
 
         const loginSchema = new Schema({
             login:{
@@ -68,16 +101,12 @@ describe('Form', () => {
             }
         });
 
-        const onSubmit = (model) => {};
-        const onError = (validationErrors) => {
-            expect(validationErrors.login[0]).toBe('async validation failed');
-            done();
-        };
+        const onSubmit = () => {};
+
 
         const wrapper = mount(
             <Form
                 schema={loginSchema}
-                onError={onError}
                 onSubmit={onSubmit}
             >
                 <TextField name="login" label="Login" type="text" />
@@ -85,12 +114,68 @@ describe('Form', () => {
                 <SubmitField value="Login" />
             </Form>
         );
-        const fieldSubmit = wrapper.find(SubmitField);
-        const loginField = wrapper.find(TextField).first();
-        loginField.find('input').simulate('change', { target: {value: 'test2'} });
-        fieldSubmit.find('button').simulate('click');
+        const results = wrapper.instance().validateModel({ login: 'test2', password: ''}, loginSchema);
         jest.runOnlyPendingTimers();
+        return results.then((errors) => {
+            expect(errors).toEqual({login: ['async validation failed']});
+        });
 
+    });
+
+    it('should support customValidation promise validation', () => {
+        const validator = () => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({login: ['async validation failed']});
+                }, 1000);
+            });
+        };
+
+        const onSubmit = () => {};
+
+        const wrapper = mount(
+            <Form
+                customValidation={validator}
+                onSubmit={onSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const results = wrapper.instance().validateModel({ login: 'test2', password: ''}, {});
+        jest.runOnlyPendingTimers();
+        return results.then((errors) => {
+            expect(errors).toEqual({login: ['async validation failed']});
+        });
+    });
+
+    it('should support promise validation', () => {
+        const validator = () => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({login: ['async validation failed']});
+                }, 1000);
+            });
+        };
+
+        const onSubmit = () => {};
+
+        const wrapper = mount(
+            <Form
+                customValidation={validator}
+                onSubmit={onSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const results = wrapper.instance().submitForm();
+        jest.runOnlyPendingTimers();
+        return results.then((errors) => {
+            expect(errors).toEqual({login: ['async validation failed']});
+        });
     });
 
     it('should have hasValidationError and return undefined if dont have onError method from props',() => {
