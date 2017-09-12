@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import {NumberField} from '../src/components/NumberField';
+import {NumberField} from '../../src/components/NumberField';
 
 describe('NumberField', () => {
     let props = {};

@@ -7,9 +7,9 @@ import {
     SubmitField,
     ObjectField,
     ListField
-} from '../src/components';
-import { ObjectField as ObjectFieldSeperated } from '../src/components/ObjectField';
-import { addressFormSchema } from './data/schemas';
+} from '../../src/components';
+import { ObjectField as ObjectFieldSeperated } from '../../src/components/ObjectField';
+import { addressFormSchema } from '../data/schemas';
 
 
 describe('ObjectField', () => {

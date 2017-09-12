@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import {AutocompleteField} from '../src/components/AutocompleteField';
+import {AutocompleteField} from '../../src/components/AutocompleteField';
 
 const promiseMock = (data) => {
     return () => ({

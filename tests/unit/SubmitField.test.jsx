@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import {SubmitField} from '../src/components/SubmitField';
+import {SubmitField} from '../../src/components/SubmitField';
 
 describe('SubmitField', () => {
     it('should receive props and call onChange method on change value', () => {

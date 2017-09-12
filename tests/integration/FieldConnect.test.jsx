@@ -4,10 +4,10 @@ import {
     TextField,
     SubmitField,
     SelectField
-} from '../src/components/separate';
-import TextFieldWithFormConnect from '../src/components/TextField';
-import SelectFieldWithFormConnect from '../src/components/SelectField';
-import SubmitFieldWithFormConnect from '../src/components/SubmitField';
+} from '../../src/components/separate';
+import TextFieldWithFormConnect from '../../src/components/TextField';
+import SelectFieldWithFormConnect from '../../src/components/SelectField';
+import SubmitFieldWithFormConnect from '../../src/components/SubmitField';
 
 
 describe('FieldConnect', () => {

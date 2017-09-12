@@ -8,8 +8,8 @@ import {
     SubmitField,
     ObjectField,
     FormEventsEmitter
-} from '../src/components';
-import { titleSchema, titleSchema2 } from './data/schemas';
+} from '../../src/components';
+import { titleSchema, titleSchema2 } from '../data/schemas';
 
 
 describe('Form', () => {
