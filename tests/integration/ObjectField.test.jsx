@@ -7,9 +7,9 @@ import {
     SubmitField,
     ObjectField,
     ListField
-} from '../src/components';
-import { ObjectField as ObjectFieldSeperated } from '../src/components/ObjectField';
-import { addressFormSchema } from './data/schemas';
+} from '../../src/components';
+import { ObjectField as ObjectFieldSeperated } from '../../src/components/ObjectField';
+import { addressFormSchema } from '../data/schemas';
 
 
 describe('ObjectField', () => {
@@ -123,7 +123,7 @@ describe('ObjectField', () => {
         submit.find('button').simulate('click');
     });
 
-    it('should recive errors',() => {
+    it('should recive validationErrors',() => {
         const ErrorMockMethod = jest.fn();
 
         const addressSchema = new Schema({

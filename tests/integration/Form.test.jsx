@@ -7,9 +7,9 @@ import {
     NumberField,
     SubmitField,
     ObjectField,
-    FormEventsListener
-} from '../src/components';
-import { titleSchema, titleSchema2 } from './data/schemas';
+    FormEventsEmitter
+} from '../../src/components';
+import { titleSchema, titleSchema2 } from '../data/schemas';
 
 
 describe('Form', () => {
@@ -46,17 +46,50 @@ describe('Form', () => {
         expect(mockError.mock.calls.length).toBe(1);
     });
 
-    it('should support promise validation', (done) => {
+    it('return all validation errors from form', () => {
+        const loginSchema = new Schema({
+            login:{
+                type: String,
+                required: true
+            },
+            password: {
+                type: String,
+                required: true
+            }
+        });
+
+        const mockSubmit = jest.fn();
+        const mockError = jest.fn();
+
+        const wrapper = mount(
+            <Form
+                schema={loginSchema}
+                onError={mockError}
+                onSubmit={mockSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const fieldSubmit = wrapper.find(SubmitField);
+        fieldSubmit.find('button').simulate('click');
+        const errors = wrapper.instance().getAllValidationErrors();
+        expect(Object.keys(errors).length).toBe(2);
+    });
+
+    it('should support schema promise validation', () => {
         const asyncValidator = () => ({
             validator(value) {
                 return new Promise((resolve) => {
                     setTimeout(() => {
                         resolve(value === 'test');
-                    },100);
+                    }, 1000);
                 });
             },
             errorMessage: `async validation failed`
         });
+
 
         const loginSchema = new Schema({
             login:{
@@ -68,16 +101,12 @@ describe('Form', () => {
             }
         });
 
-        const onSubmit = (model) => {};
-        const onError = (errors) => {
-            expect(errors.login[0]).toBe('async validation failed');
-            done();
-        };
+        const onSubmit = () => {};
+
 
         const wrapper = mount(
             <Form
                 schema={loginSchema}
-                onError={onError}
                 onSubmit={onSubmit}
             >
                 <TextField name="login" label="Login" type="text" />
@@ -85,15 +114,71 @@ describe('Form', () => {
                 <SubmitField value="Login" />
             </Form>
         );
-        const fieldSubmit = wrapper.find(SubmitField);
-        const loginField = wrapper.find(TextField).first();
-        loginField.find('input').simulate('change', { target: {value: 'test2'} });
-        fieldSubmit.find('button').simulate('click');
+        const results = wrapper.instance().validateModel({ login: 'test2', password: ''}, loginSchema);
         jest.runOnlyPendingTimers();
+        return results.then((errors) => {
+            expect(errors).toEqual({login: ['async validation failed']});
+        });
 
     });
 
-    it('should have error and return undefined if dont have onError method from props',() => {
+    it('should support customValidation promise validation', () => {
+        const validator = () => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({login: ['async validation failed']});
+                }, 1000);
+            });
+        };
+
+        const onSubmit = () => {};
+
+        const wrapper = mount(
+            <Form
+                customValidation={validator}
+                onSubmit={onSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const results = wrapper.instance().validateModel({ login: 'test2', password: ''}, {});
+        jest.runOnlyPendingTimers();
+        return results.then((errors) => {
+            expect(errors).toEqual({login: ['async validation failed']});
+        });
+    });
+
+    it('should support promise validation', () => {
+        const validator = () => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({login: ['async validation failed']});
+                }, 1000);
+            });
+        };
+
+        const onSubmit = () => {};
+
+        const wrapper = mount(
+            <Form
+                customValidation={validator}
+                onSubmit={onSubmit}
+            >
+                <TextField name="login" label="Login" type="text" />
+                <TextField name="password" label="Password" type="text" />
+                <SubmitField value="Login" />
+            </Form>
+        );
+        const results = wrapper.instance().submitForm();
+        jest.runOnlyPendingTimers();
+        return results.then((errors) => {
+            expect(errors).toEqual({login: ['async validation failed']});
+        });
+    });
+
+    it('should have hasValidationError and return undefined if dont have onError method from props',() => {
         const loginSchema = new Schema({
             login:{
                 type: String,
@@ -193,32 +278,32 @@ describe('Form', () => {
         expect(mockCustomValidation.mock.calls.length).toBe(1);
     });
 
-    it('should submit form from eventListener and run onModelChangeListeners',() => {
+    it('should submit form from eventEmitter and run onModelChangeListeners',() => {
         const mockSubmit = jest.fn();
         const mockOnChangeModel = jest.fn();
-        const onChangeModel = ({ name, value }, componentInstance) => {
+        const onModelChange = ({ name, value }, componentInstance) => {
             expect(name).toBe('form.title');
             expect(value).toBe('test');
             expect(componentInstance.getPath()).toBe('form.description');
             mockOnChangeModel();
         };
-        const eventsListener = new FormEventsListener();
+        const eventsEmitter = new FormEventsEmitter();
         const TestComponent = () => {
             return (
                 <div>
                     <Form
                         onSubmit={() => mockSubmit()}
-                        eventsListener={eventsListener}
+                        eventsEmitter={eventsEmitter}
                     >
                         <TextField name="title" label="Title" />
                         <TextField
                             name="description"
                             label="Description"
-                            onChangeModel={onChangeModel}
+                            onModelChange={onModelChange}
                         />
                     </Form>
-                    <button className="testValidate" onClick={() => eventsListener.callEvent('validate')}>Outside validate</button>
-                    <button className="testSubmit" onClick={() => eventsListener.callEvent('submit')}>Outside submit</button>
+                    <button className="testValidate" onClick={() => eventsEmitter.emit('validate')}>Outside validate</button>
+                    <button className="testSubmit" onClick={() => eventsEmitter.emit('submit')}>Outside submit</button>
                 </div>
             );
         };
@@ -230,7 +315,7 @@ describe('Form', () => {
         expect(mockSubmit.mock.calls.length).toBe(1);
         expect(mockOnChangeModel.mock.calls.length).toBe(1);
         wrapper.unmount();
-        expect(eventsListener.eventsListeners.changeModel.length).toBe(0);
+        expect(eventsEmitter.listeners.modelChange.length).toBe(0);
     });
 
     it('should submit form by default form submit',() => {
@@ -262,54 +347,54 @@ describe('Form', () => {
         expect(formElement.length).toBe(0);
     });
 
-    it('should reset form by FormEventsListener',() => {
+    it('should reset form by FormEventsEmitter',() => {
         const mockSubmit = jest.fn();
-        const eventListener = new FormEventsListener();
+        const eventEmitter = new FormEventsEmitter();
         const wrapper = mount(
             <Form
                 onSubmit={mockSubmit}
-                eventsListener={eventListener}
+                eventsEmitter={eventEmitter}
             >
                 <TextField name="title" label="Title" />
             </Form>
         );
         const titleField = wrapper.find(TextField);
         titleField.find('input').first().simulate('change', {target: {value: 'test'}});
-        eventListener.callEvent('reset');
-        eventListener.callEvent('submit');
+        eventEmitter.emit('reset');
+        eventEmitter.emit('submit');
         wrapper.unmount();
         expect(mockSubmit).toBeCalledWith({});
     });
 
-    it('should reset form by FormEventsListener with new model',() => {
+    it('should reset form by FormEventsEmitter with new model',() => {
         const mockSubmit = jest.fn();
-        const eventListener = new FormEventsListener();
+        const eventEmitter = new FormEventsEmitter();
         const wrapper = mount(
             <Form
                 onSubmit={mockSubmit}
-                eventsListener={eventListener}
+                eventsEmitter={eventEmitter}
             >
                 <TextField name="title" label="Title" />
             </Form>
         );
         const titleField = wrapper.find(TextField);
         titleField.find('input').first().simulate('change', {target: {value: 'test'}});
-        eventListener.callEvent('reset', {title: 'new'});
-        eventListener.callEvent('submit');
+        eventEmitter.emit('reset', {title: 'new'});
+        eventEmitter.emit('submit');
         expect(mockSubmit).toBeCalledWith({title: 'new'});
     });
-    it('should register changeModel listener and call it on change model',() => {
+    it('should register modelChange listener and call it on change model',() => {
         const mockListener = jest.fn();
-        const eventListener = new FormEventsListener();
+        const eventEmitter = new FormEventsEmitter();
         const wrapper = mount(
             <Form
                 onSubmit={()=>{}}
-                eventsListener={eventListener}
+                eventsEmitter={eventEmitter}
             >
                 <TextField
                     name="title"
                     label="Title"
-                    onChangeModel={mockListener}
+                    onModelChange={mockListener}
                 />
                 <ObjectField name="testObjectField">
                     <TextField name="test"/>
@@ -329,12 +414,11 @@ describe('Form', () => {
     it('should register one listener of any type of event on field',() => {
         const mockSubmit = jest.fn();
         const mockListener = jest.fn();
-        const eventListener = new FormEventsListener();
-        eventListener.registerEvent('test');
+        const eventEmitter = new FormEventsEmitter();
         const wrapper = mount(
             <Form
                 onSubmit={mockSubmit}
-                eventsListener={eventListener}
+                eventsEmitter={eventEmitter}
             >
                 <TextField
                     name="title"
@@ -343,7 +427,7 @@ describe('Form', () => {
                 />
             </Form>
         );
-        eventListener.callEvent('test', {title: 'new'});
+        eventEmitter.emit('test', {title: 'new'});
         wrapper.unmount();
         expect(mockListener).toBeCalled();
     });
@@ -353,14 +437,11 @@ describe('Form', () => {
         const mockListener = jest.fn();
         const mockListener2 = jest.fn();
         const mockListener3 = jest.fn();
-        const eventListener = new FormEventsListener();
-        eventListener.registerEvent('test');
-        eventListener.registerEvent('test2');
-        eventListener.registerEvent('test3');
+        const eventEmitter = new FormEventsEmitter();
         const wrapper = mount(
             <Form
                 onSubmit={mockSubmit}
-                eventsListener={eventListener}
+                eventsEmitter={eventEmitter}
             >
                 <TextField
                     name="title"
@@ -373,23 +454,23 @@ describe('Form', () => {
                 />
             </Form>
         );
-        eventListener.callEvent('test', {title: 'new'});
-        eventListener.callEvent('test2', {title: 'new2'});
-        eventListener.callEvent('test3', {title: 'new3'});
+        eventEmitter.emit('test', {title: 'new'});
+        eventEmitter.emit('test2', {title: 'new2'});
+        eventEmitter.emit('test3', {title: 'new3'});
         wrapper.unmount();
         expect(mockListener).toBeCalled();
         expect(mockListener2).toBeCalled();
         expect(mockListener3).toBeCalled();
     });
 
-    it('should rerender field if errors has changes but errors length not changed',() => {
+    it('should rerender field if validationErrors has changes but validationErrors length not changed',() => {
         const mockSubmit = jest.fn();
-        const eventListener = new FormEventsListener();
+        const eventEmitter = new FormEventsEmitter();
         const wrapper = mount(
             <Form
                 onSubmit={mockSubmit}
                 schema={titleSchema}
-                eventsListener={eventListener}
+                eventsEmitter={eventEmitter}
             >
                 <TextField
                     name="title"
@@ -411,7 +492,7 @@ describe('Form', () => {
         wrapper.unmount();
     });
 
-    it('should run callback onError on field if field has error',() => {
+    it('should run callback onError on field if field has hasValidationError',() => {
         const onError = jest.fn();
         const wrapper = mount(
             <Form

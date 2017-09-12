@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import FieldConnect from './FieldConnect';
 
 export const SubmitField = ({
@@ -6,7 +7,7 @@ export const SubmitField = ({
     className,
     submit,
     value,
-    fieldAttributes = {}
+    fieldAttributes = {},
 }) => (
     <div className={wrapperClassName}>
         <button
@@ -24,7 +25,7 @@ SubmitField.propTypes = {
     className: PropTypes.string,
     submit: PropTypes.func.isRequired,
     value: PropTypes.string,
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
 };
 
 export default FieldConnect(SubmitField);

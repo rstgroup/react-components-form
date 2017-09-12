@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
@@ -15,7 +16,7 @@ export class ListField extends React.Component {
         this.state = {
             schema: getSchema(props.name),
             model: this.getModelFromProps(props),
-            errors: {}
+            validationErrors: {}
         };
 
         this.storage = new Storage(this.state.model);
@@ -25,7 +26,7 @@ export class ListField extends React.Component {
         this.addListElement = this.addListElement.bind(this);
         this.removeListElement = this.removeListElement.bind(this);
         this.getSchema = this.getSchema.bind(this);
-        this.getErrors = this.getErrors.bind(this);
+        this.getValidationErrors = this.getValidationErrors.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
     }
 
@@ -61,14 +62,14 @@ export class ListField extends React.Component {
     }
 
     setModel(name, value, callback) {
-        const [fieldName, key] = name.split('-');
+        const key = name.split('-')[1];
         const model = Array.from(this.state.model);
         model[parseInt(key)].value = value;
         this.storage.setModel(model, callback);
     }
 
     getModel(name) {
-        const [fieldName, key] = name.split('-');
+        const key = name.split('-')[1];
         return this.state.model[key].value;
     }
 
@@ -76,11 +77,11 @@ export class ListField extends React.Component {
         return this.state.schema;
     }
 
-    getErrors(name) {
+    getValidationErrors(name) {
         const [fieldName, key] = name.split('-');
-        const { getErrors } = this.context;
-        const errors = getErrors(fieldName);
-        return errors[parseInt(key)] || [];
+        const { getValidationErrors } = this.context;
+        const validationErrors = getValidationErrors(fieldName);
+        return validationErrors[parseInt(key)] || [];
     }
 
     getDefaultValueForListItem() {
@@ -131,8 +132,8 @@ export class ListField extends React.Component {
             setModel: this.setModel,
             getModel: this.getModel,
             getSchema: this.getSchema,
-            getErrors: this.getErrors
-        }
+            getValidationErrors: this.getValidationErrors
+        };
     }
 
     getList(children) {
@@ -157,17 +158,17 @@ export class ListField extends React.Component {
             });
 
             return (
-               <div key={item.id} className={itemWrapperClassName}>
-                   {child}
-                   {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
-                       <span
-                           onClick={() => this.removeListElement(key)}
-                           className={className}
-                       >
-                           {value || 'Remove'}
-                       </span>
-                   </div>}
-               </div>
+                <div key={item.id} className={itemWrapperClassName}>
+                    {child}
+                    {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
+                        <span
+                            onClick={() => this.removeListElement(key)}
+                            className={className}
+                        >
+                            {value || 'Remove'}
+                        </span>
+                    </div>}
+                </div>
             );
         });
     }
@@ -202,17 +203,18 @@ export class ListField extends React.Component {
 
 ListField.contextTypes = {
     getSchema: PropTypes.func,
-    getErrors: PropTypes.func
+    getValidationErrors: PropTypes.func
 };
 
 ListField.childContextTypes = {
     setModel: PropTypes.func,
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
-    getErrors: PropTypes.func
+    getValidationErrors: PropTypes.func
 };
 
 ListField.propTypes = {
+    children: PropTypes.node,
     className: PropTypes.string,
     wrapperClassName: PropTypes.string,
     itemWrapperClassName: PropTypes.string,

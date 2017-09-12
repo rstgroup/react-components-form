@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import TextField from '../src/components/TextField';
-import fieldsRestyle from '../src/components/FieldsRestyle';
+import TextField from '../../src/components/TextField';
+import fieldsRestyle from '../../src/components/FieldsRestyle';
 
 describe('FieldsRestyle', () => {
     it('should restyle field TextField',() => {

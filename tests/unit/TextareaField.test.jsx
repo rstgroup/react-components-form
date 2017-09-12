@@ -1,26 +1,23 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import {TextareaField} from '../src/components/TextareaField';
+import {TextareaField} from '../../src/components/TextareaField';
 
 describe('TextareaField', () => {
     it('should call onChange method on change value', () => {
-        const onChangeData = (value) => {
-            expect(value).toBe('testValue');
-        };
-        const testError = ['testError'];
-        const errorStyles = {
-            className: 'errorClassName'
-        };
+        const onChangeData = jest.fn();
         const props = {
             name: 'firstName',
             label: 'first name',
             onChange: onChangeData,
-            error: true,
-            errors: testError,
-            errorsStyles: errorStyles,
+            hasValidationError: true,
+            validationErrors: ['testError'],
+            errorsStyles: {
+                className: 'errorClassName'
+            },
             className: 'testComponent'
         };
         const wrapper = mount(<TextareaField {...props} />);
         wrapper.find('textarea').simulate('change', {target:{value:'testValue'}});
+        expect(onChangeData).toBeCalledWith('testValue');
     });
 });

@@ -79,7 +79,7 @@ class Example2 extends React.Component {
             <Form
                 schema={exampleSchema}
                 onSubmit={data => this.setState({data})}
-                onError={(errors, data) => console.log('error', errors, data)}
+                onError={(validationErrors, data) => console.log('error', validationErrors, data)}
             >
                 <h4>ALL FIELDS FORM</h4>
                 <TextField name="textField" type="text" />

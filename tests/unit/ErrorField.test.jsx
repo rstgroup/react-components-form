@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import {ErrorField} from '../src/components/ErrorField';
+import { ErrorField } from '../../src/components/ErrorField';
 
 describe('ErrorField', () => {
     it('should receive props and display errors in custom ErrorComponent', () => {

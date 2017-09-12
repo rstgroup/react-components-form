@@ -7,7 +7,6 @@ import ResetPasswordForm from './resetPassword';
 import AppointmentForm from './appointment';
 import ServiceForm from './service';
 import TimeManageForm from './timeManage';
-import { row, column, form } from './demo.css';
 
 const Demo = () => (
     <div className="container">

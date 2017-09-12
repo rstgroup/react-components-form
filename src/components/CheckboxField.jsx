@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 import classnames from 'classnames';
@@ -37,15 +38,15 @@ export class CheckboxField extends React.Component {
             wrapperClassName,
             className,
             name,
-            errors,
-            error,
+            validationErrors,
+            hasValidationError,
             label,
             placeholder,
             errorStyles = {},
             fieldAttributes = {}
         } = this.props;
         return (
-            <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
+            <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
                 <label>
                     <input
                         type="checkbox"
@@ -58,24 +59,31 @@ export class CheckboxField extends React.Component {
                     />
                     {label}
                 </label>
-                {error && <ErrorField errors={errors} {...errorStyles} />}
+                {hasValidationError && <ErrorField errors={validationErrors} {...errorStyles} />}
             </div>
         );
     }
 }
 
 CheckboxField.propTypes = {
+    type: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.shape({}),
+        PropTypes.func,
+    ]),
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    errors: PropTypes.oneOfType([
+    validationErrors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
         PropTypes.shape({})
     ]),
-    error: PropTypes.bool,
+    hasValidationError: PropTypes.bool,
     value: PropTypes.any,
     checkboxValue: PropTypes.any,
     label: PropTypes.string,

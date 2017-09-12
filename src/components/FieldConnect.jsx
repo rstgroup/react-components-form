@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { isNotEqualObject, isNotEqualValue, cloneArray, cloneObject } from '../helpers';
 
 export const FieldConnect = (Component) => {
@@ -7,25 +8,25 @@ export const FieldConnect = (Component) => {
             super(props);
             this.listeners = [];
             this.fieldValue = null;
-            this.fieldErrors = null;
+            this.fieldValidationErrors = null;
             this.onChangeData = this.onChangeData.bind(this);
             this.submit = this.submit.bind(this);
-            this.getErrors = this.getErrors.bind(this);
+            this.getValidationErrors = this.getValidationErrors.bind(this);
             this.getPath = this.getPath.bind(this);
-            this.hasError = this.hasError.bind(this);
+            this.hasValidationError = this.hasValidationError.bind(this);
             this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
-            this.getEventsListener = this.getEventsListener.bind(this);
+            this.getEventsEmitter = this.getEventsEmitter.bind(this);
             this.getFieldAttributes = this.getFieldAttributes.bind(this);
         }
 
         shouldComponentUpdate(nextProps) {
-            const newProps = Object.assign({}, nextProps, { children: '' });
-            const oldProps = Object.assign({}, this.props, { children: '' });
+            const newProps = Object.assign({}, nextProps);
+            const oldProps = Object.assign({}, this.props);
             const { name } = this.props;
-            const { getModel, getErrors } = this.context;
+            const { getModel, getValidationErrors } = this.context;
             return (
                 isNotEqualValue(getModel(name), this.fieldValue) ||
-                isNotEqualValue(getErrors(name), this.fieldErrors) ||
+                isNotEqualValue(getValidationErrors(name), this.fieldValidationErrors) ||
                 isNotEqualObject(newProps, oldProps)
             );
         }
@@ -51,52 +52,46 @@ export const FieldConnect = (Component) => {
         }
 
         registerListeners() {
-            const { onChangeModel, onEmitEvents } = this.props;
-            const { eventsListener } = this.context;
-            if (eventsListener) {
-                if (typeof onChangeModel === 'function') {
-                    this.onChangeModelMethod = data => {
-                        return onChangeModel(data, this);
-                    };
-                    eventsListener.registerEventListener('changeModel', this.onChangeModelMethod);
+            const { onModelChange, onEmitEvents } = this.props;
+            const { eventsEmitter } = this.context;
+            if (eventsEmitter) {
+                if (typeof onModelChange === 'function') {
+                    this.onModelChangeMethod = data => onModelChange(data, this);
+                    eventsEmitter.listen('modelChange', this.onModelChangeMethod);
                 }
                 if (onEmitEvents) {
-                    if(Array.isArray(onEmitEvents)){
-                        onEmitEvents.forEach(({name, method}) => {
+                    if (Array.isArray(onEmitEvents)) {
+                        onEmitEvents.forEach(({ name, method }) => {
                             const listener = {
                                 name,
-                                method: data => {
-                                    return method(data, this);
-                                }
+                                method: data => method(data, this),
                             };
                             this.listeners.push(listener);
-                            eventsListener.registerEventListener(name, listener.method)
+                            eventsEmitter.listen(name, listener.method);
                         });
                         return;
                     }
                     const { name, method } = onEmitEvents;
                     const listener = {
                         name,
-                        method: data => {
-                            return method(data, this);
-                        }
+                        method: data => method(data, this),
                     };
                     this.listeners.push(listener);
-                    eventsListener.registerEventListener(name, listener.method);
+                    eventsEmitter.listen(name, listener.method);
                 }
             }
         }
 
         unregisterListeners() {
             const { onEmitEvents } = this.props;
-            const { eventsListener } = this.context;
-            if (eventsListener) {
-                if (typeof this.onChangeModelMethod === 'function') {
-                    eventsListener.unregisterEventListener('changeModel', this.onChangeModelMethod);
+            const { eventsEmitter } = this.context;
+            if (eventsEmitter) {
+                if (typeof this.onModelChangeMethod === 'function') {
+                    eventsEmitter.unlisten('modelChange', this.onModelChangeMethod);
                 }
                 if (onEmitEvents && this.listeners.length > 0) {
-                    this.listeners.forEach(({name, method}) => {
-                        eventsListener.unregisterEventListener(name, method);
+                    this.listeners.forEach(({ name, method }) => {
+                        eventsEmitter.unlisten(name, method);
                     });
                 }
             }
@@ -114,19 +109,21 @@ export const FieldConnect = (Component) => {
         getChildContext() {
             return {
                 getSchema: this.context.getSchema,
-                getPath: this.getPath
-            }
+                getPath: this.getPath,
+            };
         }
 
         onChangeData(value) {
             const { name, callbacks: { onChange } } = this.props;
-            const { setModel, eventsListener, getPath } = this.context;
+            const { setModel, eventsEmitter, getPath } = this.context;
             if (typeof setModel === 'function') {
                 setModel(name, value, () => {
-                    if (eventsListener) eventsListener.callEvent('changeModel', {
-                        name:`${getPath()}.${name}`,
-                        value
-                    });
+                    if (eventsEmitter) {
+                        eventsEmitter.emit('modelChange', {
+                            name: `${getPath()}.${name}`,
+                            value,
+                        });
+                    }
                     if (typeof onChange === 'function') onChange(value);
                 });
             }
@@ -165,8 +162,8 @@ export const FieldConnect = (Component) => {
             return getSchema(name);
         }
 
-        getEventsListener() {
-            return this.context.eventsListener;
+        getEventsEmitter() {
+            return this.context.eventsEmitter;
         }
 
         submit(event) {
@@ -175,12 +172,12 @@ export const FieldConnect = (Component) => {
             submitForm(event);
         }
 
-        getErrors() {
+        getValidationErrors() {
             const { name, callbacks: { onError } } = this.props;
-            const { getErrors } = this.context;
+            const { getValidationErrors } = this.context;
             let results = [];
-            if (typeof getErrors === 'function') results = getErrors(name);
-            this.fieldErrors = results;
+            if (typeof getValidationErrors === 'function') results = getValidationErrors(name);
+            this.fieldValidationErrors = results;
             if (typeof onError === 'function' && Object.keys(results).length > 0) onError(results);
             return results;
         }
@@ -197,8 +194,8 @@ export const FieldConnect = (Component) => {
             return Object.assign({}, { onFocus, onBlur }, fieldAttributes);
         }
 
-        hasError() {
-            return this.getErrors().length > 0;
+        hasValidationError() {
+            return this.getValidationErrors().length > 0;
         }
 
         render() {
@@ -207,10 +204,10 @@ export const FieldConnect = (Component) => {
                 {...this.props}
                 onChange={this.onChangeData}
                 submit={this.submit}
-                errors={this.getErrors()}
-                error={this.hasError()}
+                validationErrors={this.getValidationErrors()}
+                hasValidationError={this.hasValidationError()}
                 value={this.getValue()}
-                eventsListener={this.getEventsListener()}
+                eventsEmitter={this.getEventsEmitter()}
                 path={this.getPath()}
                 fieldAttributes={this.getFieldAttributes()}
             />);
@@ -222,51 +219,52 @@ export const FieldConnect = (Component) => {
         getModel: PropTypes.func,
         getSchema: PropTypes.func,
         submitForm: PropTypes.func,
-        getErrors: PropTypes.func,
+        getValidationErrors: PropTypes.func,
         getPath: PropTypes.func,
-        eventsListener: PropTypes.shape({
-            callEvent: PropTypes.func,
+        eventsEmitter: PropTypes.shape({
+            emit: PropTypes.func,
             registerEvent: PropTypes.func,
-            registerEventListener: PropTypes.func,
+            listen: PropTypes.func,
             unregisterEvent: PropTypes.func,
-            unregisterEventListener: PropTypes.func,
-        })
+            unlisten: PropTypes.func,
+        }),
     };
 
     FieldConnector.childContextTypes = {
         getSchema: PropTypes.func,
-        getPath: PropTypes.func
+        getPath: PropTypes.func,
     };
 
     FieldConnector.defaultProps = {
-        callbacks: {}
+        callbacks: {},
     };
 
     FieldConnector.propTypes = {
         name: PropTypes.string,
         value: PropTypes.any,
+        fieldAttributes: PropTypes.shape({}),
         options: PropTypes.arrayOf(PropTypes.oneOfType([
             PropTypes.string,
-            PropTypes.shape({})
+            PropTypes.shape({}),
         ])),
         defaultOption: PropTypes.number,
-        onChangeModel: PropTypes.func,
+        onModelChange: PropTypes.func,
         onEmitEvents: PropTypes.oneOfType([
             PropTypes.shape({
                 name: PropTypes.string,
-                method: PropTypes.func
+                method: PropTypes.func,
             }),
             PropTypes.arrayOf(PropTypes.shape({
                 name: PropTypes.string,
-                method: PropTypes.func
-            }))
+                method: PropTypes.func,
+            })),
         ]),
         callbacks: PropTypes.shape({
             onChange: PropTypes.func,
             onError: PropTypes.func,
             onFocus: PropTypes.func,
-            onBlur: PropTypes.func
-        })
+            onBlur: PropTypes.func,
+        }),
     };
 
     return FieldConnector;

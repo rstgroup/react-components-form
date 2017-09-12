@@ -1,22 +1,24 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import {CheckboxField} from '../src/components/CheckboxField';
+import {CheckboxField} from '../../src/components/CheckboxField';
 
 describe('CheckboxField', () => {
-    const onChangeData = jest.fn();
-    const testError = ['testError'];
-    const errorStyles = {
-        className: 'errorClassName'
-    };
-    const props = {
-        name: 'firstName',
-        label: 'first name',
-        onChange: onChangeData,
-        error: true,
-        errors: testError,
-        errorsStyles: errorStyles,
-        className: 'testComponent'
-    };
+    let onChangeData = jest.fn();
+    let props = {};
+    beforeEach(() => {
+        onChangeData = jest.fn();
+        props = {
+            name: 'firstName',
+            label: 'first name',
+            onChange: onChangeData,
+            hasValidationError: true,
+            validationErrors: ['testError'],
+            errorsStyles: {
+                className: 'errorClassName'
+            },
+            className: 'testComponent'
+        };
+    });
 
     it('should call onChange method on change event', () => {
         const wrapper = mount(<CheckboxField {...props} />);

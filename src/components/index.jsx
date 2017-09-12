@@ -10,6 +10,6 @@ export { default as ObjectField } from './ObjectField';
 export { default as ListField } from './ListField';
 export { default as FieldConnect } from './FieldConnect';
 export { default as fieldsRestyle } from './FieldsRestyle';
-export { default as FormEventsListener } from './FormEventsListener';
+export { default as FormEventsEmitter } from './FormEventsEmitter';
 export { default as ErrorField } from './ErrorField';
 export { default as ErrorsContainer } from './ErrorsContainer';

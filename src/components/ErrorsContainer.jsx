@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ErrorField from './ErrorField';
 
 const parseArrayOfErrors = (array) => {
@@ -46,7 +47,7 @@ class ErrorsContainer extends Component {
             />
         );
     }
-};
+}
 
 ErrorsContainer.contextTypes = {
     getAllErrors: PropTypes.func,

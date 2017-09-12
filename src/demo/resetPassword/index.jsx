@@ -31,7 +31,7 @@ const ForgotPasswordForm  = () => (
     <Form
         schema={resetPasswordSchema}
         onSubmit={data => console.log(data)}
-        onError={(errors, data) => console.log('error', errors, data)}
+        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
     >
         <h4>RESET PASSWORD FORM</h4>
         <h5>Please insert new password to your account.</h5>

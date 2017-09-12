@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 import classnames from 'classnames';
@@ -8,25 +9,25 @@ export const TextareaField = ({
     className,
     onChange,
     name,
-    errors,
-    error,
+    validationErrors,
+    hasValidationError,
     value = '',
     label,
     placeholder,
     errorStyles = {},
-    fieldAttributes = {}
+    fieldAttributes = {},
 }) => (
-    <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
+    <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label>{label}</label>}
         <textarea
             name={name}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={e => onChange(e.target.value)}
             value={value}
             placeholder={placeholder}
             className={className}
             {...fieldAttributes}
         />
-        {error && <ErrorField errors={errors} {...errorStyles} />}
+        {hasValidationError && <ErrorField errors={validationErrors} {...errorStyles} />}
     </div>
 );
 
@@ -35,21 +36,21 @@ TextareaField.propTypes = {
     className: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    errors: PropTypes.oneOfType([
+    validationErrors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.shape({}),
     ]),
-    error: PropTypes.bool,
+    hasValidationError: PropTypes.bool,
     value: PropTypes.string,
     label: PropTypes.string,
     placeholder: PropTypes.string,
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
-        itemClassName: PropTypes.string
+        itemClassName: PropTypes.string,
     }),
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
 };
 
 export default FieldConnect(TextareaField);

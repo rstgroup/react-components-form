@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 import { get, cloneArray } from '../helpers';
@@ -126,8 +127,8 @@ export class AutocompleteField extends Component {
             name,
             className,
             theme,
-            errors,
-            error,
+            validationErrors,
+            hasValidationError,
             value,
             label,
             placeholder,
@@ -145,7 +146,7 @@ export class AutocompleteField extends Component {
             alwaysRenderSuggestions
         } = this.props;
         return (
-            <div className={classnames(wrapperClassName, error && errorStyles.fieldClassName)}>
+            <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
                 {label && <label>{label}</label>}
                 <Autocomplete
                     inputProps={{
@@ -172,7 +173,7 @@ export class AutocompleteField extends Component {
                     alwaysRenderSuggestions={alwaysRenderSuggestions}
                     onSuggestionSelected={onSuggestionSelected}
                 />
-                {error && <ErrorField errors={errors} {...errorStyles} />}
+                {hasValidationError && <ErrorField errors={validationErrors} {...errorStyles} />}
             </div>
         );
     }
@@ -182,13 +183,13 @@ AutocompleteField.propTypes = {
     className: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    errors: PropTypes.oneOfType([
+    validationErrors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
         PropTypes.shape({})
     ]),
-    error: PropTypes.bool,
+    hasValidationError: PropTypes.bool,
     value: PropTypes.string,
     label: PropTypes.string,
     renderItem: PropTypes.func,

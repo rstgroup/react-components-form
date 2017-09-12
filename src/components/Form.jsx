@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Storage from './Storage';
 import { cloneObject } from '../helpers';
 
@@ -8,25 +9,28 @@ class Form extends React.Component {
         this.state = {
             schema: props.schema || {},
             model: props.model || this.getDefaultModelValue(props.schema),
-            errors: {},
+            validationErrors: {},
             validateOnChange: props.validateOnChange,
         };
 
         this.storage = new Storage(this.state.model);
-        this.eventsListener = props.eventsListener;
+        this.eventsEmitter = props.eventsEmitter;
         this.setModel = this.setModel.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
         this.getModel = this.getModel.bind(this);
         this.getSchema = this.getSchema.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.runSubmit = this.runSubmit.bind(this);
-        this.getErrors = this.getErrors.bind(this);
-        this.getAllErrors = this.getAllErrors.bind(this);
+        this.getValidationErrors = this.getValidationErrors.bind(this);
+        this.getAllValidationErrors = this.getAllValidationErrors.bind(this);
         this.getPath = this.getPath.bind(this);
         this.validateModel = this.validateModel.bind(this);
         this.submitListener = this.submitListener.bind(this);
         this.validateListener = this.validateListener.bind(this);
         this.resetListener = this.resetListener.bind(this);
+        this.handleSchemaValidation = this.handleSchemaValidation.bind(this);
+        this.handleCustomValidation = this.handleCustomValidation.bind(this);
+        this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
     }
 
     submitListener() {
@@ -44,20 +48,20 @@ class Form extends React.Component {
 
     componentWillMount() {
         this.storage.listen(this.setStateModel);
-        if (this.eventsListener) {
-            this.eventsListener.registerEventListener('submit', this.submitListener);
-            this.eventsListener.registerEventListener('validate', this.validateListener);
-            this.eventsListener.registerEventListener('reset', this.resetListener);
+        if (this.eventsEmitter) {
+            this.eventsEmitter.listen('submit', this.submitListener);
+            this.eventsEmitter.listen('validate', this.validateListener);
+            this.eventsEmitter.listen('reset', this.resetListener);
         }
     }
 
     componentWillUnmount() {
         this.storage.unlisten(this.setStateModel);
         this.storage.setModel({});
-        if (this.eventsListener) {
-            this.eventsListener.unregisterEventListener('submit', this.submitListener);
-            this.eventsListener.unregisterEventListener('validate', this.validateListener);
-            this.eventsListener.unregisterEventListener('reset', this.resetListener);
+        if (this.eventsEmitter) {
+            this.eventsEmitter.unlisten('submit', this.submitListener);
+            this.eventsEmitter.unlisten('validate', this.validateListener);
+            this.eventsEmitter.unlisten('reset', this.resetListener);
         }
     }
 
@@ -82,63 +86,80 @@ class Form extends React.Component {
     }
 
     getSchema(name) {
-        if(typeof this.state.schema.getField !== 'function') return {};
+        if (typeof this.state.schema.getField !== 'function') return {};
         return this.state.schema.getField(name);
     }
 
-    getErrors(name) {
-        return this.state.errors[name] || {};
+    getValidationErrors(name) {
+        return this.state.validationErrors[name] || {};
     }
 
-    getAllErrors() {
-        return this.state.errors;
+    getAllValidationErrors() {
+        return this.state.validationErrors;
     }
 
     getPath() {
         return this.props.id;
     }
 
+    handleSchemaValidation(schema, model) {
+        const validationResults = schema.validate(model);
+        if (validationResults instanceof Promise) {
+            return this.handlePromiseValidation(validationResults);
+        }
+        this.setState({ validationErrors: validationResults, validateOnChange: true });
+        return validationResults;
+    }
+
+    handleCustomValidation(validator, model) {
+        const validationResults = validator(model);
+        if (validationResults instanceof Promise) {
+            return this.handlePromiseValidation(validationResults);
+        }
+        this.setState({ validationErrors: validationResults, validateOnChange: true });
+        return validationResults;
+    }
+
+    handlePromiseValidation(validationResults) {
+        return validationResults.then((validationErrors) => {
+            this.setState({ validationErrors, validateOnChange: true });
+            return validationErrors;
+        });
+    }
+
     validateModel(model, schema) {
         const { customValidation } = this.props;
-        let errors = {};
-        if (typeof schema.validate === 'function') errors = schema.validate(model);
-        if (typeof customValidation === 'function') errors = customValidation(model);
-        if (errors instanceof Promise) {
-            return new Promise((resolve) => {
-                errors.then(errorsFromPromise => {
-                    this.setState({errors: errorsFromPromise});
-                    resolve(errorsFromPromise);
-                });
-            })
+        if (typeof schema.validate === 'function') {
+            return this.handleSchemaValidation(schema, model);
         }
-        this.setState({errors, validateOnChange: true});
-        return errors;
+        if (typeof customValidation === 'function') {
+            return this.handleCustomValidation(customValidation, model);
+        }
+        return {};
     }
 
     submitForm(event) {
         const model = Object.assign({}, this.state.model);
-        const errors = this.validateModel(model, this.state.schema);
-
+        const validationErrors = this.validateModel(model, this.state.schema);
         if (event) {
             event.preventDefault();
         }
-
-        if (errors instanceof Promise){
-            errors.then((errors) => {
+        if (validationErrors instanceof Promise) {
+            return validationErrors.then((errors) => {
                 this.runSubmit(errors, model);
+                return errors;
             });
-            return;
         }
-        return this.runSubmit(errors, model);
+        return this.runSubmit(validationErrors, model);
     }
 
-    runSubmit(errors, modelData) {
+    runSubmit(validationErrors, modelData) {
         const model = cloneObject(modelData);
-        if (Object.keys(errors).length > 0) {
-            if (this.props.onError) this.props.onError(errors, model);
+        if (Object.keys(validationErrors).length > 0) {
+            if (this.props.onError) this.props.onError(validationErrors, model);
             return;
         }
-        this.setState({validateOnChange: false});
+        this.setState({ validateOnChange: false });
         this.props.onSubmit(model);
         return model;
     }
@@ -149,11 +170,11 @@ class Form extends React.Component {
             getModel: this.getModel,
             getSchema: this.getSchema,
             submitForm: this.submitForm,
-            getErrors: this.getErrors,
-            getAllErrors: this.getAllErrors,
+            getValidationErrors: this.getValidationErrors,
+            getAllValidationErrors: this.getAllValidationErrors,
             getPath: this.getPath,
-            eventsListener: this.eventsListener,
-        }
+            eventsEmitter: this.eventsEmitter,
+        };
     }
 
     render() {
@@ -179,19 +200,21 @@ Form.childContextTypes = {
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
     submitForm: PropTypes.func,
-    getErrors: PropTypes.func,
-    getAllErrors: PropTypes.func,
+    getValidationErrors: PropTypes.func,
+    getAllValidationErrors: PropTypes.func,
     getPath: PropTypes.func,
-    eventsListener: PropTypes.shape({
-        callEvent: PropTypes.func,
+    eventsEmitter: PropTypes.shape({
+        emit: PropTypes.func,
         registerEvent: PropTypes.func,
-        registerEventListener: PropTypes.func,
+        listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
-        unregisterEventListener: PropTypes.func,
-    })
+        unlisten: PropTypes.func,
+    }),
 };
 
 Form.propTypes = {
+    id: PropTypes.string,
+    className: PropTypes.string,
     model: PropTypes.shape({}),
     schema: PropTypes.shape({}),
     onError: PropTypes.func,
@@ -199,17 +222,18 @@ Form.propTypes = {
     validateOnChange: PropTypes.bool,
     customValidation: PropTypes.func,
     subform: PropTypes.bool,
-    eventsListener: PropTypes.shape({
-        callEvent: PropTypes.func,
+    children: PropTypes.node,
+    eventsEmitter: PropTypes.shape({
+        emit: PropTypes.func,
         registerEvent: PropTypes.func,
-        registerEventListener: PropTypes.func,
+        listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
-        unregisterEventListener: PropTypes.func,
+        unlisten: PropTypes.func
     })
 };
 
 Form.defaultProps = {
-    id: 'form'
+    id: 'form',
 };
 
 export default Form;

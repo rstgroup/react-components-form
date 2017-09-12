@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { ErrorsContainer } from '../src/components';
-import { ErrorField } from '../src/components/separate';
+import { ErrorsContainer } from '../../src/components';
+import { ErrorField } from '../../src/components/separate';
 
 describe('ErrorsContainer', () => {
     const errors = {

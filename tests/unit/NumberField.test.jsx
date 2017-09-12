@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import {NumberField} from '../src/components/NumberField';
+import {NumberField} from '../../src/components/NumberField';
 
 describe('NumberField', () => {
     let props = {};
@@ -9,8 +9,8 @@ describe('NumberField', () => {
             name: 'firstName',
             label: 'first name',
             onChange: jest.fn(),
-            error: true,
-            errors: ['testError'],
+            hasValidationError: true,
+            validationErrors: ['testError'],
             errorsStyles: {
                 className: 'errorClassName'
             },

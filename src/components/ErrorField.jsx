@@ -1,10 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export const ErrorField = ({
     errors = [],
     className,
     itemClassName,
-    ErrorComponent
+    ErrorComponent,
 }) => {
     const errorsList = Array.isArray(errors) ? errors : [errors];
     return (
@@ -29,11 +30,11 @@ ErrorField.propTypes = {
     errors: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-        PropTypes.string
+        PropTypes.string,
     ]),
     className: PropTypes.string,
     itemClassName: PropTypes.string,
-    ErrorComponent: PropTypes.func
+    ErrorComponent: PropTypes.func,
 };
 
 export default ErrorField;

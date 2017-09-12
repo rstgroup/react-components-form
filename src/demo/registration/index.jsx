@@ -52,7 +52,7 @@ const LoginForm  = () => (
     <Form
         schema={registrationSchema}
         onSubmit={data => console.log(data)}
-        onError={(errors, data) => console.log('error', errors, data)}
+        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
     >
         <h4>REGISTRATION FORM</h4>
         <TextField name="name" label="Name" type="text" />

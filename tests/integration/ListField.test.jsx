@@ -6,8 +6,8 @@ import {
     SubmitField,
     ObjectField,
     ListField
-} from '../src/components';
-import { addressFormSchema, languagesFormSchema, listSchema } from './data/schemas';
+} from '../../src/components';
+import { addressFormSchema, languagesFormSchema, listSchema } from '../data/schemas';
 
 
 describe('ListField', () => {
