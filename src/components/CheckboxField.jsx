@@ -70,7 +70,8 @@ CheckboxField.propTypes = {
         PropTypes.string,
         PropTypes.number,
         PropTypes.bool,
-        PropTypes.shape({})
+        PropTypes.shape({}),
+        PropTypes.func,
     ]),
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,

@@ -40,7 +40,13 @@ export const NumberField = ({
 );
 
 NumberField.propTypes = {
-    type: PropTypes.string,
+    type: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.shape({}),
+        PropTypes.func,
+    ]),
     wrapperClassName: PropTypes.string,
     className: PropTypes.string,
     name: PropTypes.string,
