@@ -135,6 +135,7 @@ class Form extends React.Component {
     runSubmit(errors, modelData) {
         const model = cloneObject(modelData);
         if (Object.keys(errors).length > 0) {
+            if (this.eventsListener) this.eventsListener.callEvent('error', errors);
             if (this.props.onError) this.props.onError(errors, model);
             return;
         }

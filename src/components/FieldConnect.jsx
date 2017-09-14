@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
-import { isNotEqualObject, isNotEqualValue, cloneArray, cloneObject } from '../helpers';
+import isEqual from 'lodash/isEqual';
+
+import { cloneArray, cloneObject } from '../helpers';
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
@@ -19,14 +21,14 @@ export const FieldConnect = (Component) => {
         }
 
         shouldComponentUpdate(nextProps) {
-            const newProps = Object.assign({}, nextProps, { children: '' });
-            const oldProps = Object.assign({}, this.props, { children: '' });
+            const newProps = Object.assign({}, nextProps);
+            const oldProps = Object.assign({}, this.props);
             const { name } = this.props;
             const { getModel, getErrors } = this.context;
             return (
-                isNotEqualValue(getModel(name), this.fieldValue) ||
-                isNotEqualValue(getErrors(name), this.fieldErrors) ||
-                isNotEqualObject(newProps, oldProps)
+                !isEqual(getModel(name), this.fieldValue) ||
+                !isEqual(getErrors(name), this.fieldErrors) ||
+                !isEqual(newProps, oldProps)
             );
         }
 

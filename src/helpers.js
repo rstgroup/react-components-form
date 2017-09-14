@@ -27,6 +27,9 @@ export const cloneArray = (array) => {
 
 export const cloneObject = (object) => {
     const results = {};
+    if (typeof object !== 'object' || object === null) {
+        return object;
+    }
     Object.keys(object).forEach((key) => {
         const data = cloneArray(object[key]);
         if (

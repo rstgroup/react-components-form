@@ -1,6 +1,6 @@
 {
   "name": "react-components-form",
-  "version": "2.10.0",
+  "version": "2.11.1",
   "description": "React form components",
   "main": "main.js",
   "jsnext:main": "src/index.js",
@@ -49,6 +49,7 @@
     "form-schema-validation": "^1.6.0",
     "jest": "^18.1.0",
     "jsdom": "^9.11.0",
+    "lodash": "^4.17.4",
     "react": "^15.4.1",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.1",
