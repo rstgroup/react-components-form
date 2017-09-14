@@ -1,3 +1,7 @@
 .idea/
 node_modules/
 coverage/
+/AutocompleteField.js
+/Bootstrap.js
+/main.js
+/Separate.js
