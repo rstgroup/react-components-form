@@ -28,6 +28,7 @@ class Form extends React.Component {
         this.submitListener = this.submitListener.bind(this);
         this.validateListener = this.validateListener.bind(this);
         this.resetListener = this.resetListener.bind(this);
+        this.setModelListener = this.setModelListener.bind(this);
         this.handleSchemaValidation = this.handleSchemaValidation.bind(this);
         this.handleCustomValidation = this.handleCustomValidation.bind(this);
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
@@ -46,12 +47,17 @@ class Form extends React.Component {
         this.storage.setModel(newModel);
     }
 
+    setModelListener(model) {
+        this.storage.setModel(model);
+    }
+
     componentWillMount() {
         this.storage.listen(this.setStateModel);
         if (this.eventsEmitter) {
             this.eventsEmitter.listen('submit', this.submitListener);
             this.eventsEmitter.listen('validate', this.validateListener);
             this.eventsEmitter.listen('reset', this.resetListener);
+            this.eventsEmitter.listen('setModel', this.setModelListener);
         }
     }
 
@@ -62,6 +68,7 @@ class Form extends React.Component {
             this.eventsEmitter.unlisten('submit', this.submitListener);
             this.eventsEmitter.unlisten('validate', this.validateListener);
             this.eventsEmitter.unlisten('reset', this.resetListener);
+            this.eventsEmitter.unlisten('setModel', this.setModelListener);
         }
     }
 
