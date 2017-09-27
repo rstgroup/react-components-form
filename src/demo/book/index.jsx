@@ -103,6 +103,26 @@ const resetModel = {
     status: true
 };
 
+const newModel = {
+    title: 'test',
+    category: 'horror',
+    authors: [
+        {
+            name: 'Tester',
+            surname: 'Testowy',
+            age: '18-21'
+        },
+        {
+            name: 'Tester',
+            surname: 'Testowy',
+            age: '18-21'
+        }
+    ],
+    published: false,
+    languages: ['test'],
+    status: true
+};
+
 const eventsEmitter = new FormEventsEmitter();
 const BookForm = () => (
     <Form
@@ -136,7 +156,10 @@ const BookForm = () => (
         </ListField>
         <CheckboxField name="status" label="Published" />
         <SubmitField value="Submit" />
-        <a onClick={() => {eventsEmitter.emit('reset', resetModel)}} >RESET</a>
+        <div>
+            <a onClick={() => {eventsEmitter.emit('reset', resetModel)}} >RESET</a>
+            <a onClick={() => {eventsEmitter.emit('setModel', newModel)}} >NEW MODEL</a>
+        </div>
     </Form>
 );
 

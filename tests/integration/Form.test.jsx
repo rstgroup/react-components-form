@@ -383,6 +383,25 @@ describe('Form', () => {
         eventEmitter.emit('submit');
         expect(mockSubmit).toBeCalledWith({title: 'new'});
     });
+
+    it('should set new form model by FormEventsEmitter setModel event',() => {
+        const mockSubmit = jest.fn();
+        const eventEmitter = new FormEventsEmitter();
+        const wrapper = mount(
+            <Form
+                onSubmit={mockSubmit}
+                eventsEmitter={eventEmitter}
+            >
+                <TextField name="title" label="Title" />
+            </Form>
+        );
+        const titleField = wrapper.find(TextField);
+        titleField.find('input').first().simulate('change', {target: {value: 'test'}});
+        eventEmitter.emit('setModel', {title: 'new'});
+        eventEmitter.emit('submit');
+        expect(mockSubmit).toBeCalledWith({title: 'new'});
+    });
+
     it('should register modelChange listener and call it on change model',() => {
         const mockListener = jest.fn();
         const eventEmitter = new FormEventsEmitter();
