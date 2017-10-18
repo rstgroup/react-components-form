@@ -30,9 +30,11 @@ export class ListField extends React.Component {
     }
 
     componentWillReceiveProps({ value }) {
+        const { value: actualValue } = this.props;
         let shouldSetState = false;
         value.forEach((item, key) => {
-            if (!this.state.model[key] || item !== this.state.model[key].value) shouldSetState = true;
+            if (!this.state.model[key] || item !== this.state.model[key].value || actualValue.length !== value.length)
+                shouldSetState = true;
         });
         if (shouldSetState) this.storage.setModel(this.getModelFromProps({ value }));
     }
