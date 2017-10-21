@@ -1,3 +1,4 @@
+import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import {
@@ -13,55 +14,47 @@ import { addressFormSchema, languagesFormSchema, listSchema } from '../data/sche
 describe('ListField', () => {
     it('should add and remove field',() => {
         const submitMethod = (data) => { expect(data.languages.length).toBe(3); };
-        const addButton = { className: 'addButtonClass' };
-        const removeButton = { className: 'removeButtonClass'};
+        const addButtonProp = { className: 'addButtonClass' };
+        const removeButtonProp = { className: 'removeButtonClass'};
 
         const wrapper = mount(
             <Form
                 onSubmit={submitMethod}
                 schema={languagesFormSchema}
             >
-                <ListField name="languages" label="Languages" addButton={addButton} removeButton={removeButton}>
+                <ListField name="languages" label="Languages" addButton={addButtonProp} removeButton={removeButtonProp}>
                     <TextField />
                 </ListField>
                 <SubmitField value="Submit"/>
             </Form>
         );
         const list = wrapper.find(ListField);
-        list.find('.addButtonClass').simulate('click');
-        list.find('.addButtonClass').simulate('click');
-        expect(list.find(TextField).length).toBe(3);
-        list.find('.removeButtonClass').first().simulate('click');
-        expect(list.find(TextField).length).toBe(2);
+        const addButton = wrapper.find('.addButtonClass').first();
+        const removeButton = wrapper.find('.removeButtonClass').first();
+        addButton.simulate('click');
+        addButton.simulate('click');
+        expect(wrapper.find(TextField).length).toBe(3);
+        removeButton.simulate('click');
+        expect(wrapper.find(TextField).length).toBe(2);
         wrapper.unmount();
     });
 
     it('should add 3 object Fields and remove second field',() => {
-        const submitMethod = (data) => {
-            expect(data.address[0].city).toBe('testCity');
-            expect(data.address[0].street).toBe('testStreet');
-            expect(data.address[0].postCode).toBe('testPostCode');
-
-            expect(data.address[1].city).toBe('testCity3');
-            expect(data.address[1].street).toBe('testStreet3');
-            expect(data.address[1].postCode).toBe('testPostCode3');
-        };
-
+        const submitMock = jest.fn();
         const model={};
-        const addButton = { className: 'addButtonClass' };
-        const removeButton = { className: 'removeButtonClass' };
-
+        const addButtonProp = { className: 'addButtonClass' };
+        const removeButtonProp = { className: 'removeButtonClass' };
         const wrapper = mount(
             <Form
-                onSubmit={submitMethod}
+                onSubmit={submitMock}
                 schema={addressFormSchema}
                 model={model}
             >
                 <ListField
                     name="address" 
                     label="Address"
-                    addButton={addButton}
-                    removeButton={removeButton}
+                    addButton={addButtonProp}
+                    removeButton={removeButtonProp}
                 >
                     <ObjectField>
                         <TextField name="city" />
@@ -72,35 +65,44 @@ describe('ListField', () => {
                 <SubmitField value="Submit"/>
             </Form>
         );
-        const list = wrapper.find(ListField);
-
-
+        const addButton = wrapper.find('.addButtonClass').first();
         const submit = wrapper.find(SubmitField);
-
         const setDataToObjectField = (fields, number = '') => {
-            fields.find('[name="city"]').simulate('change', {target: {value: `testCity${number}`}});
-            fields.find('[name="street"]').simulate('change', {target: {value: `testStreet${number}`}});
-            fields.find('[name="postCode"]').simulate('change', {target: {value: `testPostCode${number}`}});
+            fields.find('input[name="city"]').simulate('change', {target: {value: `testCity${number}`}});
+            fields.find('input[name="street"]').simulate('change', {target: {value: `testStreet${number}`}});
+            fields.find('input[name="postCode"]').simulate('change', {target: {value: `testPostCode${number}`}});
         };
+        addButton.simulate('click');
+        addButton.simulate('click');
+        addButton.simulate('click');
 
-        list.find('.addButtonClass').first().simulate('click');
-        list.find('.addButtonClass').first().simulate('click');
-        list.find('.addButtonClass').first().simulate('click');
-        expect(list.find(ObjectField).length).toBe(3);
+        expect(wrapper.find(ObjectField).length).toBe(3);
 
-        const object = list.find(ObjectField).first();
-        const fields = object.find(TextField);
-        setDataToObjectField(fields);
-        const object2 = list.find(ObjectField).at(1);
-        const fields2 = object2.find(TextField);
-        setDataToObjectField(fields2, 2);
-        const object3 = list.find(ObjectField).at(2);
-        const fields3 = object3.find(TextField);
-        setDataToObjectField(fields3, 3);
+        const fieldsFromObject1 = wrapper.find(ObjectField).first().find(TextField);
+        setDataToObjectField(fieldsFromObject1);
+        const fieldsFromObject2 = wrapper.find(ObjectField).at(1).find(TextField);
+        setDataToObjectField(fieldsFromObject2, 2);
+        const fieldsFromObject3 = wrapper.find(ObjectField).at(2).find(TextField);
+        setDataToObjectField(fieldsFromObject3, 3);
 
-        list.find('.removeButtonClass').at(1).simulate('click');
-        expect(list.find(ObjectField).length).toBe(2);
+        const removeButtons = wrapper.find('.removeButtonClass');
+        removeButtons.at(1).simulate('click');
+        expect(wrapper.find(ObjectField).length).toBe(2);
         submit.find('button').simulate('click');
+        expect(submitMock).toBeCalledWith({
+            address: [
+                {
+                    city: 'testCity',
+                    street: 'testStreet',
+                    postCode: 'testPostCode',
+                },
+                {
+                    city: 'testCity3',
+                    street: 'testStreet3',
+                    postCode: 'testPostCode3',
+                }
+            ]
+        });
     });
 
     it('should hide new element button after two elements add', () => {

@@ -8,11 +8,11 @@ class FormEventsEmitter {
             this.listeners[name] = [];
         }
         if (typeof listener !== 'function') {
-            console.warn('FormEventsEmitter->listen - listener is not a function');
+            console.warn(`FormEventsEmitter->listen - "${name}" listener is not a function`);
             return;
         }
         if (this.listeners[name].indexOf(listener) > -1) {
-            console.warn('FormEventsEmitter->listen - events listener is allready registered');
+            console.warn(`FormEventsEmitter->listen - "${name}" events listener is allready registered`);
             return;
         }
         this.listeners[name].push(listener);

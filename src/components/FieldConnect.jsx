@@ -1,6 +1,8 @@
 import React from 'react';
+import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
-import { isNotEqualObject, isNotEqualValue, cloneArray, cloneObject } from '../helpers';
+
+import { cloneArray, cloneObject } from '../helpers';
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
@@ -25,9 +27,9 @@ export const FieldConnect = (Component) => {
             const { name } = this.props;
             const { getModel, getValidationErrors } = this.context;
             return (
-                isNotEqualValue(getModel(name), this.fieldValue) ||
-                isNotEqualValue(getValidationErrors(name), this.fieldValidationErrors) ||
-                isNotEqualObject(newProps, oldProps)
+                !isEqual(getModel(name), this.fieldValue) ||
+                !isEqual(getValidationErrors(name), this.fieldValidationErrors) ||
+                !isEqual(newProps, oldProps)
             );
         }
 
@@ -245,6 +247,7 @@ export const FieldConnect = (Component) => {
         fieldAttributes: PropTypes.shape({}),
         options: PropTypes.arrayOf(PropTypes.oneOfType([
             PropTypes.string,
+            PropTypes.number,
             PropTypes.shape({}),
         ])),
         defaultOption: PropTypes.number,
