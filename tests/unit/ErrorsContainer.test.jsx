@@ -1,3 +1,4 @@
+import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import { ErrorsContainer } from '../../src/components';
@@ -6,11 +7,11 @@ import { ErrorField } from '../../src/components/separate';
 describe('ErrorsContainer', () => {
     const errors = {
         name: [
-            'Field required',
+            'Name field is required',
             'Max length > 10',
         ],
         pass: [
-            'Field required',
+            'Pass field is required',
         ],
     };
 

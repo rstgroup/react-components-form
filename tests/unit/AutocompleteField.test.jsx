@@ -1,3 +1,4 @@
+import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import {AutocompleteField} from '../../src/components/AutocompleteField';

@@ -1,3 +1,4 @@
+import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import {SubmitField} from '../../src/components/SubmitField';

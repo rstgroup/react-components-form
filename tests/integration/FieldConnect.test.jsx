@@ -1,3 +1,4 @@
+import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import {
@@ -8,7 +9,6 @@ import {
 import TextFieldWithFormConnect from '../../src/components/TextField';
 import SelectFieldWithFormConnect from '../../src/components/SelectField';
 import SubmitFieldWithFormConnect from '../../src/components/SubmitField';
-
 
 describe('FieldConnect', () => {
     it('should recive context from form and give props to TextField',() => {
@@ -55,7 +55,7 @@ describe('FieldConnect', () => {
         expect(field.props().name).toBe(props.name);
         expect(field.props().label).toBe(props.label);
         expect(field.props().options).toBe(props.options);
-        expect(wrapper.component.getInstance().getPath()).toBe(props.name);
+        expect(wrapper.instance().getPath()).toBe(props.name);
     });
 
     it('without context from form should give props to SelectField when options are objects', () => {
@@ -83,7 +83,7 @@ describe('FieldConnect', () => {
         expect(field.props().name).toBe(props.name);
         expect(field.props().label).toBe(props.label);
         expect(field.props().options).toBe(props.options);
-        expect(wrapper.component.getInstance().getPath()).toBe(props.name);
+        expect(wrapper.instance().getPath()).toBe(props.name);
     });
 
     it('should give SubmitField submit method from form', () => {
