@@ -2,6 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: ['babel-polyfill', "./src/demo/index.jsx"],
+    externals: ['react', 'react-dom'],
     output: {
         path: '/dist/',
         filename: "demo.js"

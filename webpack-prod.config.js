@@ -8,6 +8,7 @@ module.exports = {
         Separate: "./src/components/separate/index.js",
         AutocompleteField: "./src/components/AutocompleteField.js"
     },
+    externals: ['react', 'react-dom'],
     output: {
         path: path.join(__dirname, ''),
         filename: "[name].js",
