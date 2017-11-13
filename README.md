@@ -4,4 +4,8 @@
 [![npm](https://img.shields.io/npm/l/react-components-form.svg)](https://npmjs.org/package/react-components-form)
 [![npm](https://img.shields.io/npm/v/react-components-form.svg)](https://npmjs.org/package/react-components-form)
 
-[NEW DOCUMENTATION](https://mprzodala.gitbooks.io/react-components-form/content/)
+DOCUMENTATION
+
+- [version ^3.0.0](https://rstgroup.gitbooks.io/react-components-form/content/)
+
+- [version ^2.0.0](https://github.com/rstgroup/react-components-form/blob/master/README-v2.md)
