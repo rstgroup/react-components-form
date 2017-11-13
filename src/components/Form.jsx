@@ -4,11 +4,16 @@ import Storage from './Storage';
 import { cloneObject } from '../helpers';
 
 class Form extends React.Component {
+    static getDefaultModelValue(schema) {
+        if (schema && typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
+        return {};
+    }
+
     constructor(props) {
         super(props);
         this.state = {
-            schema: props.schema || {},
-            model: props.model || this.getDefaultModelValue(props.schema),
+            schema: props.schema,
+            model: props.model || Form.getDefaultModelValue(props.schema),
             validationErrors: {},
             validateOnChange: props.validateOnChange,
         };
@@ -33,17 +38,17 @@ class Form extends React.Component {
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
     }
 
-    submitListener() {
-        return this.submitForm();
-    }
-
-    validateListener(schema) {
-        return this.validateModel(this.storage.getModel(), schema || this.state.schema);
-    }
-
-    resetListener(model) {
-        const newModel = model || this.getDefaultModelValue(this.state.schema);
-        this.storage.setModel(newModel);
+    getChildContext() {
+        return {
+            setModel: this.setModel,
+            getModel: this.getModel,
+            getSchema: this.getSchema,
+            submitForm: this.submitForm,
+            getValidationErrors: this.getValidationErrors,
+            getAllValidationErrors: this.getAllValidationErrors,
+            getPath: this.getPath,
+            eventsEmitter: this.eventsEmitter,
+        };
     }
 
     componentWillMount() {
@@ -63,11 +68,6 @@ class Form extends React.Component {
             this.eventsEmitter.unlisten('validate', this.validateListener);
             this.eventsEmitter.unlisten('reset', this.resetListener);
         }
-    }
-
-    getDefaultModelValue(schema) {
-        if (schema && typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
-        return {};
     }
 
     setStateModel(model, callback) {
@@ -100,6 +100,19 @@ class Form extends React.Component {
 
     getPath() {
         return this.props.id;
+    }
+
+    submitListener() {
+        return this.submitForm();
+    }
+
+    validateListener(schema) {
+        return this.validateModel(this.storage.getModel(), schema || this.state.schema);
+    }
+
+    resetListener(model) {
+        const newModel = model || Form.getDefaultModelValue(this.state.schema);
+        this.storage.setModel(newModel);
     }
 
     handleSchemaValidation(schema, model) {
@@ -157,24 +170,11 @@ class Form extends React.Component {
         const model = cloneObject(modelData);
         if (Object.keys(validationErrors).length > 0) {
             if (this.props.onError) this.props.onError(validationErrors, model);
-            return;
+            return false;
         }
         this.setState({ validateOnChange: false });
         this.props.onSubmit(model);
         return model;
-    }
-
-    getChildContext() {
-        return {
-            setModel: this.setModel,
-            getModel: this.getModel,
-            getSchema: this.getSchema,
-            submitForm: this.submitForm,
-            getValidationErrors: this.getValidationErrors,
-            getAllValidationErrors: this.getAllValidationErrors,
-            getPath: this.getPath,
-            eventsEmitter: this.eventsEmitter,
-        };
     }
 
     render() {
@@ -228,12 +228,21 @@ Form.propTypes = {
         registerEvent: PropTypes.func,
         listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
-        unlisten: PropTypes.func
-    })
+        unlisten: PropTypes.func,
+    }),
 };
 
 Form.defaultProps = {
     id: 'form',
+    className: '',
+    model: undefined,
+    schema: {},
+    onError: undefined,
+    validateOnChange: false,
+    customValidation: undefined,
+    subform: false,
+    children: '',
+    eventsEmitter: undefined,
 };
 
 export default Form;

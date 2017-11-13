@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
-import classnames from 'classnames';
+import { fieldDefaultPropTypes } from '../constants/propTypes';
+import { fieldDefaultProps } from '../constants/defaultProps';
 
 export const SelectField = ({
     wrapperClassName,
@@ -19,7 +21,7 @@ export const SelectField = ({
     fieldAttributes = {},
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label htmlFor={name}>{label}</label>}
         <select
             name={name}
             onChange={e => onChange(e.target.value)}
@@ -43,33 +45,16 @@ export const SelectField = ({
 );
 
 SelectField.propTypes = {
-    wrapperClassName: PropTypes.string,
-    className: PropTypes.string,
-    name: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    validationErrors: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.string),
-        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-        PropTypes.string,
-        PropTypes.shape({}),
-    ]),
-    hasValidationError: PropTypes.bool,
-    value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-        PropTypes.shape({}),
-    ]),
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
+    ...fieldDefaultPropTypes,
     options: PropTypes.arrayOf(PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.shape({}),
     ])),
-    errorStyles: PropTypes.shape({
-        className: PropTypes.string,
-        itemClassName: PropTypes.string,
-    }),
-    fieldAttributes: PropTypes.shape({}),
+};
+
+SelectField.defaultProps = {
+    ...fieldDefaultProps,
+    options: [],
 };
 
 export default FieldConnect(SelectField);

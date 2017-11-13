@@ -1,8 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
-import classnames from 'classnames';
+import { fieldDefaultPropTypes } from '../constants/propTypes';
 
 export const TextareaField = ({
     wrapperClassName,
@@ -18,7 +18,7 @@ export const TextareaField = ({
     fieldAttributes = {},
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label htmlFor={name}>{label}</label>}
         <textarea
             name={name}
             onChange={e => onChange(e.target.value)}
@@ -31,26 +31,19 @@ export const TextareaField = ({
     </div>
 );
 
-TextareaField.propTypes = {
-    wrapperClassName: PropTypes.string,
-    className: PropTypes.string,
-    name: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    validationErrors: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.string),
-        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-        PropTypes.string,
-        PropTypes.shape({}),
-    ]),
-    hasValidationError: PropTypes.bool,
-    value: PropTypes.string,
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
-    errorStyles: PropTypes.shape({
-        className: PropTypes.string,
-        itemClassName: PropTypes.string,
-    }),
-    fieldAttributes: PropTypes.shape({}),
+TextareaField.propTypes = fieldDefaultPropTypes;
+
+TextareaField.defaultProps = {
+    wrapperClassName: '',
+    className: '',
+    name: '',
+    validationErrors: [],
+    hasValidationError: false,
+    value: '',
+    label: '',
+    placeholder: '',
+    errorStyles: {},
+    fieldAttributes: {},
 };
 
 export default FieldConnect(TextareaField);

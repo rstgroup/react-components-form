@@ -28,4 +28,11 @@ SubmitField.propTypes = {
     fieldAttributes: PropTypes.shape({}),
 };
 
+SubmitField.defaultProps = {
+    wrapperClassName: '',
+    className: '',
+    value: 'Submit',
+    fieldAttributes: {},
+};
+
 export default FieldConnect(SubmitField);

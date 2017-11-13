@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import escapeRegExp from 'lodash/escapeRegExp';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 import { get, cloneArray } from '../helpers';
@@ -49,9 +50,10 @@ export class AutocompleteField extends Component {
         return true;
     }
 
-    suggestionsFilter(escapedValue, searchKey) {
-        if (searchKey) {
-            return option => !!get(option, searchKey ,'').match(new RegExp(escapedValue, "i"))
+    suggestionsFilter(value, searchKey) {
+        const escapedValue = escapeRegExp(value);
+        if(searchKey) {
+            return option => !!get(option, searchKey, '').match(new RegExp(escapedValue, 'i'));
         }
 
         return option => option.match(escapedValue);

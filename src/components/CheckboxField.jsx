@@ -11,6 +11,7 @@ export class CheckboxField extends React.Component {
             checked: props.value || false,
             value: props.checkboxValue || true
         };
+        this.toggleValue = this.toggleValue.bind(this);
     }
 
     componentWillReceiveProps({ value, checkboxValue }) {
@@ -52,7 +53,7 @@ export class CheckboxField extends React.Component {
                         type="checkbox"
                         checked={this.state.checked}
                         name={name}
-                        onChange={::this.toggleValue}
+                        onChange={this.toggleValue}
                         placeholder={placeholder}
                         className={className}
                         {...fieldAttributes}

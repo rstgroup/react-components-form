@@ -4,19 +4,24 @@ import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
 export class ListField extends React.Component {
-    static defaultProps = {
-        value: [],
-    };
-
     static generateItemId() {
         return Math.random().toString(36).substring(7);
+    }
+    static getModelFromProps(props) {
+        if (props.value.length > 0) {
+            return props.value.map(item => ({
+                id: ListField.generateItemId(),
+                value: item,
+            }));
+        }
+        return [];
     }
     constructor(props, { getSchema }) {
         super(props);
         this.state = {
             schema: getSchema(props.name),
-            model: this.getModelFromProps(props),
-            validationErrors: {}
+            model: ListField.getModelFromProps(props),
+            validationErrors: {},
         };
 
         this.storage = new Storage(this.state.model);
@@ -30,16 +35,25 @@ export class ListField extends React.Component {
         this.setStateModel = this.setStateModel.bind(this);
     }
 
+    getChildContext() {
+        return {
+            setModel: this.setModel,
+            getModel: this.getModel,
+            getSchema: this.getSchema,
+            getValidationErrors: this.getValidationErrors,
+        };
+    }
+
+    componentWillMount() {
+        this.storage.listen(this.setStateModel);
+    }
+
     componentWillReceiveProps({ value }) {
         let shouldSetState = false;
         value.forEach((item, key) => {
             if (item !== this.state.model[key].value) shouldSetState = true;
         });
-        if (shouldSetState) this.storage.setModel(this.getModelFromProps({ value }));
-    }
-
-    componentWillMount() {
-        this.storage.listen(this.setStateModel);
+        if (shouldSetState) this.storage.setModel(ListField.getModelFromProps({ value }));
     }
 
     componentWillUnmount() {
@@ -51,20 +65,10 @@ export class ListField extends React.Component {
         this.props.onChange(model.map(item => item.value));
     }
 
-    getModelFromProps(props) {
-        if (props.value.length > 0) {
-            return props.value.map(item => ({
-                id: ListField.generateItemId(),
-                value: item
-            }));
-        }
-        return [];
-    }
-
     setModel(name, value, callback) {
         const key = name.split('-')[1];
         const model = Array.from(this.state.model);
-        model[parseInt(key)].value = value;
+        model[parseInt(key, 10)].value = value;
         this.storage.setModel(model, callback);
     }
 
@@ -81,7 +85,7 @@ export class ListField extends React.Component {
         const [fieldName, key] = name.split('-');
         const { getValidationErrors } = this.context;
         const validationErrors = getValidationErrors(fieldName);
-        return validationErrors[parseInt(key)] || [];
+        return validationErrors[parseInt(key, 10)] || [];
     }
 
     getDefaultValueForListItem() {
@@ -97,20 +101,42 @@ export class ListField extends React.Component {
         return undefined;
     }
 
-    addListElement() {
-        const model = Array.from(this.state.model);
-        model.push({
-            id: ListField.generateItemId(),
-            value: this.getDefaultValueForListItem()
-        });
-        this.setState({ model });
-    }
+    getList(children) {
+        const {
+            name,
+            removeButton: {
+                wrapperClassName,
+                className,
+                value,
+            },
+            hideRemoveButton,
+            itemWrapperClassName,
+        } = this.props;
 
-    removeListElement(key) {
-        const model = Array.from(this.state.model);
-        model.splice(key, 1);
-        this.setState({ model });
-        this.props.onChange(model.map(item => item.value));
+        const isRemoveAllowed = this.isRemoveAllowed();
+
+        return this.state.model.map((item, key) => {
+            const child = React.cloneElement(children, {
+                name: `${name}-${key}`,
+                index: key,
+                value: item.value,
+                key: item.id,
+            });
+
+            return (
+                <div key={item.id} className={itemWrapperClassName}>
+                    {child}
+                    {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
+                        <button
+                            onClick={() => this.removeListElement(key)}
+                            className={className}
+                        >
+                            {value || 'Remove'}
+                        </button>
+                    </div>}
+                </div>
+            );
+        });
     }
 
     isAddAllowed() {
@@ -127,50 +153,20 @@ export class ListField extends React.Component {
         return true;
     }
 
-    getChildContext() {
-        return {
-            setModel: this.setModel,
-            getModel: this.getModel,
-            getSchema: this.getSchema,
-            getValidationErrors: this.getValidationErrors
-        };
+    addListElement() {
+        const model = Array.from(this.state.model);
+        model.push({
+            id: ListField.generateItemId(),
+            value: this.getDefaultValueForListItem(),
+        });
+        this.setState({ model });
     }
 
-    getList(children) {
-        const {
-            name,
-            removeButton: {
-                wrapperClassName,
-                className,
-                value
-            } = {},
-            hideRemoveButton,
-            itemWrapperClassName,
-        } = this.props;
-
-        const isRemoveAllowed = this.isRemoveAllowed();
-
-        return this.state.model.map((item, key) => {
-            const child = React.cloneElement(children, {
-                name: `${name}-${key}`,
-                value: item.value,
-                key: item.id
-            });
-
-            return (
-                <div key={item.id} className={itemWrapperClassName}>
-                    {child}
-                    {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
-                        <span
-                            onClick={() => this.removeListElement(key)}
-                            className={className}
-                        >
-                            {value || 'Remove'}
-                        </span>
-                    </div>}
-                </div>
-            );
-        });
+    removeListElement(key) {
+        const model = Array.from(this.state.model);
+        model.splice(key, 1);
+        this.setState({ model });
+        this.props.onChange(model.map(item => item.value));
     }
 
     render() {
@@ -179,23 +175,24 @@ export class ListField extends React.Component {
             className,
             wrapperClassName,
             label,
-            addButton = {},
+            addButton,
             hideAddButton,
-            fieldAttributes
+            fieldAttributes,
+            name,
         } = this.props;
 
         const isAddAllowed = this.isAddAllowed();
 
         return (
             <div className={wrapperClassName}>
-                {label && <label>{label}</label>}
+                {label && <label htmlFor={name}>{label}</label>}
                 <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
-                {!hideAddButton && isAddAllowed && <span
+                {!hideAddButton && isAddAllowed && <button
                     onClick={this.addListElement}
                     className={addButton.className}
                 >
                     {addButton.value || 'Add'}
-                </span>}
+                </button>}
             </div>
         );
     }
@@ -203,14 +200,14 @@ export class ListField extends React.Component {
 
 ListField.contextTypes = {
     getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func
+    getValidationErrors: PropTypes.func,
 };
 
 ListField.childContextTypes = {
     setModel: PropTypes.func,
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func
+    getValidationErrors: PropTypes.func,
 };
 
 ListField.propTypes = {
@@ -221,21 +218,50 @@ ListField.propTypes = {
     label: PropTypes.string,
     addButton: PropTypes.shape({
         className: PropTypes.string,
-        value: PropTypes.node
+        value: PropTypes.node,
     }),
     removeButton: PropTypes.shape({
         wrapperClassName: PropTypes.string,
         className: PropTypes.string,
-        value: PropTypes.node
+        value: PropTypes.node,
     }),
     hideAddButton: PropTypes.bool,
     hideRemoveButton: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     name: PropTypes.string,
-    value: PropTypes.any,
+    value: PropTypes.arrayOf(
+        PropTypes.oneOfType([
+            PropTypes.shape({}),
+            PropTypes.string,
+            PropTypes.number,
+        ]),
+    ),
     fieldAttributes: PropTypes.shape({}),
-    minLength: PropTypes.number,
-    maxLength: PropTypes.number,
+    minLength: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.bool,
+    ]),
+    maxLength: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.bool,
+    ]),
+};
+
+ListField.defaultProps = {
+    children: '',
+    className: '',
+    wrapperClassName: '',
+    itemWrapperClassName: '',
+    label: '',
+    addButton: {},
+    removeButton: {},
+    hideAddButton: false,
+    hideRemoveButton: false,
+    name: '',
+    value: [],
+    fieldAttributes: {},
+    minLength: false,
+    maxLength: false,
 };
 
 export default FieldConnect(ListField);
