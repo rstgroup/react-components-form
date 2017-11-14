@@ -12,7 +12,8 @@
             "functions": false,
             "classes": false,
             "variables": false
-        }]
+        }],
+        "import/no-named-as-default": 0
     },
     "globals": {
         "document": true

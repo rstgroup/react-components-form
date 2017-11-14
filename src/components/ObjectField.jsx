@@ -106,7 +106,7 @@ ObjectField.propTypes = {
 
 ObjectField.defaultProps = {
     value: {},
-    name: '',
+    name: undefined,
     children: '',
     wrapperClassName: '',
     fieldAttributes: {},

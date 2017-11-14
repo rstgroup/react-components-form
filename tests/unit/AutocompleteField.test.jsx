@@ -178,8 +178,7 @@ describe('AutocompleteField', () => {
     it('onKeyDown when enter pressed', () => {
         const preventDefaultSpy = jest.fn();
         const stopPropagationSpy = jest.fn();
-        const wrapper = mount(<AutocompleteField {...props} />);
-        wrapper.instance().onKeyDown({
+        AutocompleteField.onKeyDown({
             keyCode: 13,
             preventDefault: preventDefaultSpy,
             stopPropagation: stopPropagationSpy,
@@ -191,8 +190,7 @@ describe('AutocompleteField', () => {
     it('onKeyDown when different key than enter pressed', () => {
         const preventDefaultSpy = jest.fn();
         const stopPropagationSpy = jest.fn();
-        const wrapper = mount(<AutocompleteField {...props} />);
-        wrapper.instance().onKeyDown({
+        AutocompleteField.onKeyDown({
             keyCode: 12,
             preventDefault: preventDefaultSpy,
             stopPropagation: stopPropagationSpy,

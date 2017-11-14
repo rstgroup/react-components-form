@@ -89,12 +89,10 @@ describe('ObjectField', () => {
 
     it('should recive context and schema from form and give props to all fields using listField',() => {
         const submitMock = jest.fn();
-        const model={};
         const wrapper = mount(
             <Form
                 onSubmit={submitMock}
                 schema={addressFormSchema}
-                model={model}
             >
                 <ListField name="address" label="Address">
                     <ObjectField>
@@ -106,7 +104,7 @@ describe('ObjectField', () => {
                 <SubmitField value="Submit"/>
             </Form>
         );
-        wrapper.find('span').last().simulate('click');
+        wrapper.find('button').last().simulate('click');
 
         const object = wrapper.find(ObjectField);
         const submit = wrapper.find(SubmitField);

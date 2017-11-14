@@ -13,12 +13,12 @@ export const SelectField = ({
     name,
     validationErrors,
     hasValidationError,
-    options = [],
-    value = '',
+    options,
+    value,
     label,
     placeholder,
-    errorStyles = {},
-    fieldAttributes = {},
+    errorStyles,
+    fieldAttributes,
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label htmlFor={name}>{label}</label>}

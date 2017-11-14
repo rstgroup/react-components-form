@@ -237,14 +237,8 @@ ListField.propTypes = {
         ]),
     ),
     fieldAttributes: PropTypes.shape({}),
-    minLength: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.bool,
-    ]),
-    maxLength: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.bool,
-    ]),
+    minLength: PropTypes.number,
+    maxLength: PropTypes.number,
 };
 
 ListField.defaultProps = {
@@ -260,8 +254,8 @@ ListField.defaultProps = {
     name: '',
     value: [],
     fieldAttributes: {},
-    minLength: false,
-    maxLength: false,
+    minLength: undefined,
+    maxLength: undefined,
 };
 
 export default FieldConnect(ListField);

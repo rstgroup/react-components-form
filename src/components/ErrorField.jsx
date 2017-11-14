@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export const ErrorField = ({
-    errors = [],
+    errors,
     className,
     itemClassName,
     ErrorComponent,

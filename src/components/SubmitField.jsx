@@ -7,7 +7,7 @@ export const SubmitField = ({
     className,
     submit,
     value,
-    fieldAttributes = {},
+    fieldAttributes,
 }) => (
     <div className={wrapperClassName}>
         <button

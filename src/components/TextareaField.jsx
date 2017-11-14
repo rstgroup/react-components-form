@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
 import { fieldDefaultPropTypes } from '../constants/propTypes';
+import { fieldDefaultProps } from '../constants/defaultProps';
 
 export const TextareaField = ({
     wrapperClassName,
@@ -11,11 +12,11 @@ export const TextareaField = ({
     name,
     validationErrors,
     hasValidationError,
-    value = '',
+    value,
     label,
     placeholder,
-    errorStyles = {},
-    fieldAttributes = {},
+    errorStyles,
+    fieldAttributes,
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label htmlFor={name}>{label}</label>}
@@ -33,17 +34,6 @@ export const TextareaField = ({
 
 TextareaField.propTypes = fieldDefaultPropTypes;
 
-TextareaField.defaultProps = {
-    wrapperClassName: '',
-    className: '',
-    name: '',
-    validationErrors: [],
-    hasValidationError: false,
-    value: '',
-    label: '',
-    placeholder: '',
-    errorStyles: {},
-    fieldAttributes: {},
-};
+TextareaField.defaultProps = fieldDefaultProps;
 
 export default FieldConnect(TextareaField);

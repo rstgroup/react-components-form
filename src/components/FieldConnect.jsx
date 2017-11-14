@@ -94,7 +94,7 @@ export const FieldConnect = (Component) => {
         getPropsFromSchema() {
             const { name } = this.props;
             const { getSchema } = this.context;
-            if (typeof getSchema !== 'function') return false;
+            if (typeof getSchema !== 'function') return undefined;
             return getSchema(name);
         }
 
@@ -270,7 +270,7 @@ export const FieldConnect = (Component) => {
     };
 
     FieldConnector.defaultProps = {
-        name: '',
+        name: undefined,
         value: undefined,
         fieldAttributes: {},
         options: [],

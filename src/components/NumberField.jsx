@@ -19,11 +19,11 @@ export const NumberField = ({
     type,
     validationErrors,
     hasValidationError,
-    value = '',
+    value,
     label,
     placeholder,
-    errorStyles = {},
-    fieldAttributes = {},
+    errorStyles,
+    fieldAttributes,
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label htmlFor={name}>{label}</label>}
@@ -50,11 +50,25 @@ NumberField.propTypes = {
         PropTypes.shape({}),
         PropTypes.func,
     ]),
+    value: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+        PropTypes.oneOf([NaN]),
+    ]),
+    // value: function (props, propName, componentName) {
+    //     const value = props[propName];
+    //     if (typeof value !== 'number' && value !== NaN && value !== '') {
+    //         return new Error(
+    //             `Invalid prop '${propName}' supplied to '${componentName}'. Validation failed.`
+    //         );
+    //     }
+    // },
 };
 
 NumberField.defaultProps = {
     ...fieldDefaultProps,
     type: 'number',
+    value: '',
 };
 
 export default FieldConnect(NumberField);

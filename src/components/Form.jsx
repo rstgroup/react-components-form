@@ -170,7 +170,7 @@ class Form extends React.Component {
         const model = cloneObject(modelData);
         if (Object.keys(validationErrors).length > 0) {
             if (this.props.onError) this.props.onError(validationErrors, model);
-            return false;
+            return undefined;
         }
         this.setState({ validateOnChange: false });
         this.props.onSubmit(model);

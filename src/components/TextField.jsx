@@ -13,7 +13,7 @@ export class TextField extends Component {
     }
 
     handleChange({ target: { value } }) {
-        const { trim = false, onChange } = this.props;
+        const { trim, onChange } = this.props;
 
         onChange(trim && value ? value.trim() : value);
     }
@@ -26,11 +26,11 @@ export class TextField extends Component {
             type,
             validationErrors,
             hasValidationError,
-            value = '',
+            value,
             label,
             placeholder,
-            errorStyles = {},
-            fieldAttributes = {},
+            errorStyles,
+            fieldAttributes,
         } = this.props;
 
         const fieldWrapperClassName = classnames(
@@ -62,6 +62,7 @@ TextField.propTypes = {
         PropTypes.number,
         PropTypes.func,
         PropTypes.object,
+        PropTypes.array,
     ]),
     trim: PropTypes.bool,
 };

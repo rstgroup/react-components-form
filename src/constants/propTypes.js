@@ -10,7 +10,7 @@ export const fieldDefaultPropTypes = {
     className: PropTypes.string,
     errorStyles: PropTypes.shape({
         className: PropTypes.string,
-        itemClassName: PropTypes.string
+        itemClassName: PropTypes.string,
     }),
     fieldAttributes: PropTypes.shape({}),
     hasValidationError: PropTypes.bool,
@@ -22,7 +22,7 @@ export const fieldDefaultPropTypes = {
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.shape({}),
     ]),
     value: PropTypes.string,
     wrapperClassName: PropTypes.string,
