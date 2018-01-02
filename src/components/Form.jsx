@@ -99,7 +99,7 @@ class Form extends React.Component {
     }
 
     validateModel(model, schema) {
-        const { customValidation } = this.props;
+        const { customValidation, validateOnChange = true } = this.props;
         let errors = {};
         if (typeof schema.validate === 'function') errors = schema.validate(model);
         if (typeof customValidation === 'function') errors = customValidation(model);
@@ -111,7 +111,7 @@ class Form extends React.Component {
                 });
             })
         }
-        this.setState({errors, validateOnChange: true});
+        this.setState({errors, validateOnChange});
         return errors;
     }
 
