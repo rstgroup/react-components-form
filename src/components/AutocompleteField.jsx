@@ -20,7 +20,6 @@ export class AutocompleteField extends Component {
     }
 
     static getSuggestion(value) {
-        console.log(value);
         return value;
     }
 
@@ -105,7 +104,7 @@ export class AutocompleteField extends Component {
     }
 
     applySectionFilter(sections, escapedValue, searchKey) {
-        const { sectionSuggestionsIndex = defaultSectionSuggestionsIndex } = this.props;
+        const { sectionSuggestionsIndex } = this.props;
         const copiedSections = cloneArray(sections);
         const newSections = [];
         copiedSections.forEach((section) => {

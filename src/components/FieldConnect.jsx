@@ -236,6 +236,7 @@ export const FieldConnect = (Component) => {
     };
 
     FieldConnector.propTypes = {
+        /* eslint-disable */
         name: PropTypes.string,
         value: PropTypes.oneOfType([
             PropTypes.string,
@@ -243,7 +244,9 @@ export const FieldConnect = (Component) => {
             PropTypes.array,
             PropTypes.object,
         ]),
+        /* eslint-enable */
         fieldAttributes: PropTypes.shape({}),
+        /* eslint-disable */
         options: PropTypes.arrayOf(PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.number,
@@ -261,6 +264,7 @@ export const FieldConnect = (Component) => {
                 method: PropTypes.func,
             })),
         ]),
+        /* eslint-enable */
         callbacks: PropTypes.shape({
             onChange: PropTypes.func,
             onError: PropTypes.func,
@@ -270,13 +274,7 @@ export const FieldConnect = (Component) => {
     };
 
     FieldConnector.defaultProps = {
-        name: undefined,
-        value: undefined,
         fieldAttributes: {},
-        options: [],
-        defaultOption: 0,
-        onModelChange: undefined,
-        onEmitEvents: undefined,
         callbacks: {},
     };
 

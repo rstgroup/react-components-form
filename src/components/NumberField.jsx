@@ -55,14 +55,6 @@ NumberField.propTypes = {
         PropTypes.string,
         PropTypes.oneOf([NaN]),
     ]),
-    // value: function (props, propName, componentName) {
-    //     const value = props[propName];
-    //     if (typeof value !== 'number' && value !== NaN && value !== '') {
-    //         return new Error(
-    //             `Invalid prop '${propName}' supplied to '${componentName}'. Validation failed.`
-    //         );
-    //     }
-    // },
 };
 
 NumberField.defaultProps = {

@@ -7,14 +7,6 @@ const loginSchema = new Schema({
     login:{
         type: String,
         required: true,
-        validators: [{
-            validator(value) {
-                return new Promise((resolve) => {
-                    resolve(false);
-                });
-            },
-            errorMessage: 'async error',
-        }],
     },
     password: {
         type: String,
