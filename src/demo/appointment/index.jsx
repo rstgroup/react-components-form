@@ -36,8 +36,6 @@ const el = new FormEventsEmitter();
 class AppointmentForm extends Component{
     constructor(props) {
         super(props);
-        this.getPhoneValue = this.getPhoneValue.bind(this);
-        this.getPlaceValue = this.getPlaceValue.bind(this);
     }
     getPhoneValue(value) {
         el.emit('clientData', value);

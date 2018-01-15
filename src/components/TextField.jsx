@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
-import classnames from 'classnames';
+import { fieldDefaultPropTypes } from '../constants/propTypes';
+import { fieldDefaultProps } from '../constants/defaultProps';
 
 export class TextField extends Component {
-    handleChange({ target: { value } }) {
-        const { trim = false, onChange } = this.props;
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
 
-        onChange(
-            trim && value ? value.trim() : value
-        );
+    handleChange({ target: { value } }) {
+        const { trim, onChange } = this.props;
+
+        onChange(trim && value ? value.trim() : value);
     }
 
     render() {
@@ -18,23 +23,27 @@ export class TextField extends Component {
             wrapperClassName,
             className,
             name,
-            type = 'text',
+            type,
             validationErrors,
             hasValidationError,
-            value = '',
+            value,
             label,
             placeholder,
-            errorStyles = {},
-            fieldAttributes = {}
+            errorStyles,
+            fieldAttributes,
         } = this.props;
 
+        const fieldWrapperClassName = classnames(
+            wrapperClassName,
+            hasValidationError && errorStyles.fieldClassName,
+        );
         return (
-            <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
-                {label && <label>{label}</label>}
+            <div className={fieldWrapperClassName}>
+                {label && <label htmlFor={name}>{label}</label>}
                 <input
                     type={type === String ? 'text' : type}
                     name={name}
-                    onChange={::this.handleChange}
+                    onChange={this.handleChange}
                     value={value}
                     placeholder={placeholder}
                     className={className}
@@ -47,27 +56,21 @@ export class TextField extends Component {
 }
 
 TextField.propTypes = {
-    wrapperClassName: PropTypes.string,
-    className: PropTypes.string,
-    name: PropTypes.string,
-    type: PropTypes.any,
-    onChange: PropTypes.func.isRequired,
-    validationErrors: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.string),
-        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    ...fieldDefaultPropTypes,
+    type: PropTypes.oneOfType([
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.number,
+        PropTypes.func,
+        PropTypes.object,
+        PropTypes.array,
     ]),
-    hasValidationError: PropTypes.bool,
-    value: PropTypes.string,
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
-    errorStyles: PropTypes.shape({
-        className: PropTypes.string,
-        itemClassName: PropTypes.string
-    }),
-    fieldAttributes: PropTypes.shape({}),
-    trim: PropTypes.bool
+    trim: PropTypes.bool,
+};
+
+TextField.defaultProps = {
+    ...fieldDefaultProps,
+    type: 'text',
+    trim: false,
 };
 
 export default FieldConnect(TextField);

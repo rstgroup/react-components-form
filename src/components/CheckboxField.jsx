@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
-import classnames from 'classnames';
+import { fieldDefaultPropTypes } from '../constants/propTypes';
+import { fieldDefaultProps } from '../constants/defaultProps';
 
 export class CheckboxField extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            checked: props.value || false,
-            value: props.checkboxValue || true
+            checked: props.value,
+            value: props.checkboxValue,
         };
+        this.toggleValue = this.toggleValue.bind(this);
     }
 
     componentWillReceiveProps({ value, checkboxValue }) {
@@ -20,7 +23,7 @@ export class CheckboxField extends React.Component {
     getValue(checked) {
         const { type } = this.props;
         const { value } = this.state;
-        if (type === Boolean) return checked ? true : false;
+        if (type === Boolean) return !!checked;
         return checked ? value : undefined;
     }
 
@@ -28,9 +31,7 @@ export class CheckboxField extends React.Component {
         const { onChange } = this.props;
         const { checked } = this.state;
         onChange(this.getValue(!checked));
-        this.setState({
-            checked: !checked
-        });
+        this.setState({ checked: !checked });
     }
 
     render() {
@@ -42,17 +43,22 @@ export class CheckboxField extends React.Component {
             hasValidationError,
             label,
             placeholder,
-            errorStyles = {},
-            fieldAttributes = {}
+            errorStyles,
+            fieldAttributes,
         } = this.props;
+
+        const fieldWrapperClassName = classnames(
+            wrapperClassName,
+            hasValidationError && errorStyles.fieldClassName,
+        );
         return (
-            <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
-                <label>
+            <div className={fieldWrapperClassName}>
+                <label htmlFor={name}>
                     <input
                         type="checkbox"
                         checked={this.state.checked}
                         name={name}
-                        onChange={::this.toggleValue}
+                        onChange={this.toggleValue}
                         placeholder={placeholder}
                         className={className}
                         {...fieldAttributes}
@@ -66,6 +72,7 @@ export class CheckboxField extends React.Component {
 }
 
 CheckboxField.propTypes = {
+    ...fieldDefaultPropTypes,
     type: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
@@ -73,30 +80,20 @@ CheckboxField.propTypes = {
         PropTypes.shape({}),
         PropTypes.func,
     ]),
-    wrapperClassName: PropTypes.string,
-    className: PropTypes.string,
-    name: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    validationErrors: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.string),
-        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    value: PropTypes.bool,
+    checkboxValue: PropTypes.oneOfType([
         PropTypes.string,
-        PropTypes.shape({})
+        PropTypes.number,
+        PropTypes.bool,
+        PropTypes.shape({}),
     ]),
-    hasValidationError: PropTypes.bool,
-    value: PropTypes.any,
-    checkboxValue: PropTypes.any,
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
-    errorStyles: PropTypes.shape({
-        className: PropTypes.string,
-        itemClassName: PropTypes.string
-    }),
-    fieldAttributes: PropTypes.shape({})
 };
 
 CheckboxField.defaultProps = {
-    type: Boolean
+    ...fieldDefaultProps,
+    type: Boolean,
+    value: false,
+    checkboxValue: true,
 };
 
 export default FieldConnect(CheckboxField);

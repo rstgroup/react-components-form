@@ -7,7 +7,7 @@ export const SubmitField = ({
     className,
     submit,
     value,
-    fieldAttributes = {},
+    fieldAttributes,
 }) => (
     <div className={wrapperClassName}>
         <button
@@ -26,6 +26,13 @@ SubmitField.propTypes = {
     submit: PropTypes.func.isRequired,
     value: PropTypes.string,
     fieldAttributes: PropTypes.shape({}),
+};
+
+SubmitField.defaultProps = {
+    wrapperClassName: '',
+    className: '',
+    value: 'Submit',
+    fieldAttributes: {},
 };
 
 export default FieldConnect(SubmitField);

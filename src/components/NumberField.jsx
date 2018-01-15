@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
-import classnames from 'classnames';
+import { fieldDefaultPropTypes } from '../constants/propTypes';
+import { fieldDefaultProps } from '../constants/defaultProps';
 
 const parseByType = (value, type) => {
     if (type === 'float') return parseFloat(value);
-    return parseInt(value);
+    return parseInt(value, 10);
 };
 
 export const NumberField = ({
@@ -17,14 +19,14 @@ export const NumberField = ({
     type,
     validationErrors,
     hasValidationError,
-    value = '',
+    value,
     label,
     placeholder,
-    errorStyles = {},
-    fieldAttributes = {},
+    errorStyles,
+    fieldAttributes,
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label htmlFor={name}>{label}</label>}
         <input
             type="number"
             name={name}
@@ -40,6 +42,7 @@ export const NumberField = ({
 );
 
 NumberField.propTypes = {
+    ...fieldDefaultPropTypes,
     type: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
@@ -47,25 +50,17 @@ NumberField.propTypes = {
         PropTypes.shape({}),
         PropTypes.func,
     ]),
-    wrapperClassName: PropTypes.string,
-    className: PropTypes.string,
-    name: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    validationErrors: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.string),
-        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
+    value: PropTypes.oneOfType([
+        PropTypes.number,
         PropTypes.string,
-        PropTypes.shape({}),
+        PropTypes.oneOf([NaN]),
     ]),
-    hasValidationError: PropTypes.bool,
-    value: PropTypes.number,
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
-    errorStyles: PropTypes.shape({
-        className: PropTypes.string,
-        itemClassName: PropTypes.string,
-    }),
-    fieldAttributes: PropTypes.shape({}),
+};
+
+NumberField.defaultProps = {
+    ...fieldDefaultProps,
+    type: 'number',
+    value: '',
 };
 
 export default FieldConnect(NumberField);

@@ -4,16 +4,12 @@ import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
 export class ObjectField extends React.Component {
-    static defaultProps = {
-        value: {}
-    };
-
     constructor(props) {
         super(props);
         this.state = {
             schema: {},
             model: props.value,
-            validationErrors: {}
+            validationErrors: {},
         };
 
         this.storage = new Storage(this.state.model);
@@ -24,9 +20,13 @@ export class ObjectField extends React.Component {
         this.setStateModel = this.setStateModel.bind(this);
     }
 
-    componentWillReceiveProps ({ value }) {
-        this.setState({ model: value });
-        this.storage.setModel(value, null, true);
+    getChildContext() {
+        return {
+            setModel: this.setModel,
+            getModel: this.getModel,
+            getSchema: this.getSchema,
+            getValidationErrors: this.getValidationErrors,
+        };
     }
 
     componentWillMount() {
@@ -34,6 +34,11 @@ export class ObjectField extends React.Component {
         const schema = getSchema(this.props.name).type;
         this.setState({ schema });
         this.storage.listen(this.setStateModel);
+    }
+
+    componentWillReceiveProps({ value }) {
+        this.setState({ model: value });
+        this.storage.setModel(value, null, true);
     }
 
     componentWillUnmount() {
@@ -62,19 +67,10 @@ export class ObjectField extends React.Component {
     getValidationErrors(name) {
         const { getValidationErrors } = this.context;
         const validationErrors = getValidationErrors(this.props.name);
-        if(Array.isArray(validationErrors) && validationErrors.length === 1){
+        if (Array.isArray(validationErrors) && validationErrors.length === 1) {
             return validationErrors[0][name] || [];
         }
         return validationErrors[name] || [];
-    }
-
-    getChildContext() {
-        return {
-            setModel: this.setModel,
-            getModel: this.getModel,
-            getSchema: this.getSchema,
-            getValidationErrors: this.getValidationErrors
-        };
     }
 
     render() {
@@ -89,14 +85,14 @@ export class ObjectField extends React.Component {
 
 ObjectField.contextTypes = {
     getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func
+    getValidationErrors: PropTypes.func,
 };
 
 ObjectField.childContextTypes = {
     setModel: PropTypes.func,
     getModel: PropTypes.func,
     getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func
+    getValidationErrors: PropTypes.func,
 };
 
 ObjectField.propTypes = {
@@ -105,7 +101,15 @@ ObjectField.propTypes = {
     onChange: PropTypes.func.isRequired,
     children: PropTypes.node,
     wrapperClassName: PropTypes.string,
-    fieldAttributes: PropTypes.shape({})
+    fieldAttributes: PropTypes.shape({}),
+};
+
+ObjectField.defaultProps = {
+    value: {},
+    name: undefined,
+    children: '',
+    wrapperClassName: '',
+    fieldAttributes: {},
 };
 
 export default FieldConnect(ObjectField);

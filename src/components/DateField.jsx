@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import FieldConnect from './FieldConnect';
 import ErrorField from './ErrorField';
-import classnames from 'classnames';
+import { fieldDefaultPropTypes } from '../constants/propTypes';
+import { fieldDefaultProps } from '../constants/defaultProps';
 
-const getDateString = (date = new Date()) => {
-    const day = date.getDate();
-    let month = date.getMonth();
+export const getDateString = (date) => {
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
     const year = date.getFullYear();
-    if (month < 10) {
-        if (month === 0) month += 1;
-        month = `0${month}`;
-    }
+    if (month < 10) month = `0${month}`;
+    if (day < 10) day = `0${day}`;
     return `${year}-${month}-${day}`;
 };
 
@@ -25,11 +25,11 @@ export const DateField = ({
     value,
     label,
     placeholder,
-    errorStyles = {},
-    fieldAttributes = {},
+    errorStyles,
+    fieldAttributes,
 }) => (
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
-        {label && <label>{label}</label>}
+        {label && <label htmlFor={name}>{label}</label>}
         <input
             type="date"
             name={name}
@@ -44,25 +44,13 @@ export const DateField = ({
 );
 
 DateField.propTypes = {
-    wrapperClassName: PropTypes.string,
-    className: PropTypes.string,
-    name: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    validationErrors: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.string),
-        PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)),
-        PropTypes.string,
-        PropTypes.shape({}),
-    ]),
-    hasValidationError: PropTypes.bool,
+    ...fieldDefaultPropTypes,
     value: PropTypes.shape({}),
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
-    errorStyles: PropTypes.shape({
-        className: PropTypes.string,
-        itemClassName: PropTypes.string,
-    }),
-    fieldAttributes: PropTypes.shape({}),
+};
+
+DateField.defaultProps = {
+    ...fieldDefaultProps,
+    value: new Date(),
 };
 
 export default FieldConnect(DateField);

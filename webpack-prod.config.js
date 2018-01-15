@@ -6,7 +6,7 @@ module.exports = {
         main: "./src/index.js",
         Bootstrap: "./src/components/styled/Bootstrap.js",
         Separate: "./src/components/separate/index.js",
-        AutocompleteField: "./src/components/AutocompleteField.js"
+        AutocompleteField: "./src/components/AutocompleteField.jsx"
     },
     output: {
         path: path.join(__dirname, ''),

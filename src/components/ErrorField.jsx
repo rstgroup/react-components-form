@@ -2,20 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export const ErrorField = ({
-    errors = [],
+    errors,
     className,
     itemClassName,
     ErrorComponent,
 }) => {
     const errorsList = Array.isArray(errors) ? errors : [errors];
+    if (ErrorComponent) {
+        return (
+            <ErrorComponent
+                className={className}
+                itemClassName={itemClassName}
+                errors={errorsList}
+            />
+        );
+    }
     return (
-        ErrorComponent &&
-        <ErrorComponent
-            className={className}
-            itemClassName={itemClassName}
-            errors={errorsList}
-        />
-        ||
         <div className={className}>
             {errorsList.map(error => (
                 <div className={itemClassName} key={error}>
@@ -35,6 +37,13 @@ ErrorField.propTypes = {
     className: PropTypes.string,
     itemClassName: PropTypes.string,
     ErrorComponent: PropTypes.func,
+};
+
+ErrorField.defaultProps = {
+    errors: [],
+    className: '',
+    itemClassName: '',
+    ErrorComponent: undefined,
 };
 
 export default ErrorField;
