@@ -153,7 +153,10 @@ export class ListField extends React.Component {
             const child = React.cloneElement(children, {
                 name: `${name}-${key}`,
                 value: item.value,
-                key: item.id
+                key: item.id,
+                removeListFieldItem: () => {
+                    this.removeListElement(key);
+                },
             });
 
             return (
