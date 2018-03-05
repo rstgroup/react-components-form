@@ -116,11 +116,13 @@ export class ListField extends React.Component {
         const isRemoveAllowed = this.isRemoveAllowed();
 
         return this.state.model.map((item, key) => {
+            const removeItemAction = () => this.removeListElement(key);
             const child = React.cloneElement(children, {
                 name: `${name}-${key}`,
                 index: key,
                 value: item.value,
                 key: item.id,
+                removeListElement: removeItemAction,
             });
 
             return (
@@ -128,7 +130,7 @@ export class ListField extends React.Component {
                     {child}
                     {!hideRemoveButton && isRemoveAllowed && <div className={wrapperClassName}>
                         <button
-                            onClick={() => this.removeListElement(key)}
+                            onClick={removeItemAction}
                             className={className}
                         >
                             {value || 'Remove'}
