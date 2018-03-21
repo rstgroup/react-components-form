@@ -1,9 +1,6 @@
 import React from 'react';
-import BookForm from './book';
-import LoginForm from './login';
-import RegistrationForm from './registration';
-import ForgotPasswordForm from './forgotPassword';
-import ResetPasswordForm from './resetPassword';
+import SimpleForms from './SimpleForms';
+import ListFieldForms from './ListFieldForms';
 import AppointmentForm from './appointment';
 import ServiceForm from './service';
 import TimeManageForm from './timeManage';
@@ -15,32 +12,20 @@ const Demo = () => (
                 <h2>REACT COMPONENTS FORM DEMO</h2>
             </div>
         </div>
+        <hr />
         <div className="row">
-            <div className="col-xs-12 col-sm-6 col-lg-4">
-                <div className="well">
-                    <LoginForm />
-                </div>
-            </div>
-            <div className="col-xs-12 col-sm-6 col-lg-4">
-                <div className="well">
-                    <RegistrationForm />
-                </div>
-            </div>
-            <div className="col-xs-12 col-sm-6 col-lg-4">
-                <div className="well">
-                    <ForgotPasswordForm />
-                </div>
-                <div className="well">
-                    <ResetPasswordForm />
-                </div>
+            <div className="col-xs-12">
+                <h3>Simple forms</h3>
+                <SimpleForms />
             </div>
         </div>
         <div className="row">
-            <div className="col-xs-12 col-sm-6 col-lg-4">
-                <div className="well">
-                    <BookForm />
-                </div>
+            <div className="col-xs-12">
+                <h3>Forms with ListField</h3>
+                <ListFieldForms />
             </div>
+        </div>
+        <div className="row">
             <div className="col-xs-12 col-sm-6 col-lg-4">
                 <div className="well">
                     <AppointmentForm />

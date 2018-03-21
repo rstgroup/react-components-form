@@ -6,6 +6,7 @@ import NumberFieldUnstyled from '../NumberField';
 import SubmitFieldUnstyled from '../SubmitField';
 import SelectFieldUnstyled from '../SelectField';
 import CheckboxFieldUnstyled from '../CheckboxField';
+import RadioFieldUnstyled from '../RadioField';
 import ObjectFieldUnstyled from '../ObjectField';
 import ListFieldUnstyled from '../ListField';
 import AutocompleteFieldUnstyled from '../AutocompleteField';
@@ -55,6 +56,10 @@ const Fields = fieldRestyle({
         wrapperClassName: 'form-group checkbox',
         errorStyles
     },
+    RadioFieldUnstyled: {
+        wrapperClassName: 'form-group radio',
+        errorStyles
+    },
     ListFieldUnstyled: {
         className: 'form-group',
         wrapperClassName: 'form-group',
@@ -75,6 +80,7 @@ const Fields = fieldRestyle({
     SubmitFieldUnstyled,
     SelectFieldUnstyled,
     CheckboxFieldUnstyled,
+    RadioFieldUnstyled,
     ObjectFieldUnstyled,
     ListFieldUnstyled,
     AutocompleteFieldUnstyled
@@ -88,6 +94,7 @@ export const NumberField = Fields.NumberFieldUnstyled;
 export const SubmitField = Fields.SubmitFieldUnstyled;
 export const SelectField = Fields.SelectFieldUnstyled;
 export const CheckboxField = Fields.CheckboxFieldUnstyled;
+export const RadioField = Fields.RadioFieldUnstyled;
 export const ObjectField = Fields.ObjectFieldUnstyled;
 export const ListField = Fields.ListFieldUnstyled;
 export const AutocompleteField = Fields.AutocompleteFieldUnstyled;
