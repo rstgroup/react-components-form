@@ -84,19 +84,11 @@ RadioField.propTypes = {
         PropTypes.shape({}),
         PropTypes.func,
     ]),
-    checkboxValue: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-        PropTypes.bool,
-        PropTypes.shape({}),
-    ]),
 };
 
 RadioField.defaultProps = {
     ...fieldDefaultProps,
-    type: Boolean,
-    value: false,
-    checkboxValue: true,
+    value: '',
     options: [],
 };
 
