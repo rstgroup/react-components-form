@@ -38,7 +38,7 @@ export class CheckboxField extends React.Component {
         const {
             wrapperClassName,
             className,
-            name,
+            path,
             validationErrors,
             hasValidationError,
             label,
@@ -53,14 +53,15 @@ export class CheckboxField extends React.Component {
         );
         return (
             <div className={fieldWrapperClassName}>
-                <label htmlFor={name}>
+                <label htmlFor={path}>
                     <input
                         type="checkbox"
                         checked={this.state.checked}
-                        name={name}
+                        name={path}
                         onChange={this.toggleValue}
                         placeholder={placeholder}
                         className={className}
+                        id={path}
                         {...fieldAttributes}
                     />
                     {label}
