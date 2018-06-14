@@ -11,26 +11,6 @@ import { fieldDefaultProps } from '../constants/defaultProps';
 const defaultSectionSuggestionsIndex = 'suggestions';
 
 export class AutocompleteField extends Component {
-    static renderSuggestion(value) {
-        return <div>{value}</div>;
-    }
-
-    static renderSectionTitle(section) {
-        return <div>{section.title}</div>;
-    }
-
-    static getSuggestion(value) {
-        return value;
-    }
-
-    static getSectionSuggestions(section) {
-        return section[defaultSectionSuggestionsIndex];
-    }
-
-    static renderInputComponent(inputProps) {
-        return <input {...inputProps} />;
-    }
-
     static shouldRenderSuggestions() {
         return true;
     }
@@ -43,13 +23,6 @@ export class AutocompleteField extends Component {
         return option => option.match(escapedValue);
     }
 
-    static onKeyDown(e) {
-        if (e.keyCode === 13) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    }
-
     constructor(props) {
         super(props);
 
@@ -60,6 +33,13 @@ export class AutocompleteField extends Component {
         this.applySectionFilter = this.applySectionFilter.bind(this);
         this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
         this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
+    }
+
+    static onKeyDown(e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
     }
 
     onSuggestionsFetchRequested({ value }) {
@@ -84,6 +64,14 @@ export class AutocompleteField extends Component {
     onChange(e, { newValue }) {
         const { onChange } = this.props;
         onChange(newValue);
+    }
+
+    static getSectionSuggestions(section) {
+        return section[defaultSectionSuggestionsIndex];
+    }
+
+    static getSuggestion(value) {
+        return value;
     }
 
     getSuggestions(value) {
@@ -120,6 +108,18 @@ export class AutocompleteField extends Component {
             }
         });
         return newSections;
+    }
+
+    static renderInputComponent(inputProps) {
+        return <input {...inputProps} />;
+    }
+
+    static renderSectionTitle(section) {
+        return <div>{section.title}</div>;
+    }
+
+    static renderSuggestion(value) {
+        return <div>{value}</div>;
     }
 
     render() {

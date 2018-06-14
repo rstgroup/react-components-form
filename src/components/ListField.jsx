@@ -7,15 +7,7 @@ export class ListField extends React.Component {
     static generateItemId() {
         return Math.random().toString(36).substring(7);
     }
-    static getModelFromProps(props) {
-        if (props.value.length > 0) {
-            return props.value.map(item => ({
-                id: ListField.generateItemId(),
-                value: item,
-            }));
-        }
-        return [];
-    }
+
     constructor(props, { getSchema }) {
         super(props);
         this.state = {
@@ -58,6 +50,16 @@ export class ListField extends React.Component {
 
     componentWillUnmount() {
         this.storage.unlisten(this.setStateModel);
+    }
+
+    static getModelFromProps(props) {
+        if (props.value.length > 0) {
+            return props.value.map(item => ({
+                id: ListField.generateItemId(),
+                value: item,
+            }));
+        }
+        return [];
     }
 
     setStateModel(model, callback) {

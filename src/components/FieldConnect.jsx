@@ -124,6 +124,19 @@ export const FieldConnect = (Component) => {
             return Object.assign({}, { onFocus, onBlur }, fieldAttributes);
         }
 
+        setValueFromOptions() {
+            const { name, options, defaultOption } = this.props;
+            const { setModel } = this.context;
+
+            if (Array.isArray(options) && options.length && defaultOption !== undefined) {
+                const value = options[defaultOption].label ?
+                    options[defaultOption].value :
+                    options[defaultOption];
+
+                setModel(name, value);
+            }
+        }
+
         submit(event) {
             const { submitForm } = this.context;
             if (typeof submitForm !== 'function') return;
@@ -131,7 +144,7 @@ export const FieldConnect = (Component) => {
         }
 
         updateModelWithValueOrOptions() {
-            const { name, value, options, defaultOption } = this.props;
+            const { name, value } = this.props;
             const { setModel } = this.context;
 
             if (!name || typeof setModel !== 'function') {
@@ -140,11 +153,8 @@ export const FieldConnect = (Component) => {
 
             if (value) {
                 setModel(name, value);
-            } else if (Array.isArray(options) && options.length && defaultOption !== undefined) {
-                setModel(name,
-                    options[defaultOption].label ?
-                        options[defaultOption].value :
-                        options[defaultOption]);
+            } else {
+                this.setValueFromOptions();
             }
         }
 

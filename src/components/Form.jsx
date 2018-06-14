@@ -4,11 +4,6 @@ import Storage from './Storage';
 import { cloneObject } from '../helpers';
 
 class Form extends React.Component {
-    static getDefaultModelValue(schema) {
-        if (schema && typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
-        return {};
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -68,6 +63,11 @@ class Form extends React.Component {
             this.eventsEmitter.unlisten('validate', this.validateListener);
             this.eventsEmitter.unlisten('reset', this.resetListener);
         }
+    }
+
+    static getDefaultModelValue(schema) {
+        if (schema && typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
+        return {};
     }
 
     setStateModel(model, callback) {
