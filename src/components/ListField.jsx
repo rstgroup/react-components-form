@@ -2,16 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
+import FormContext from './FormContext';
 
 export class ListField extends React.Component {
     static generateItemId() {
         return Math.random().toString(36).substring(7);
     }
 
-    constructor(props, { getSchema }) {
+    constructor(props) {
         super(props);
         this.state = {
-            schema: getSchema(props.name),
+            schema: props.context.getSchema(props.name),
             model: ListField.getModelFromProps(props),
             validationErrors: {},
         };
@@ -25,15 +26,6 @@ export class ListField extends React.Component {
         this.getSchema = this.getSchema.bind(this);
         this.getValidationErrors = this.getValidationErrors.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
-    }
-
-    getChildContext() {
-        return {
-            setModel: this.setModel,
-            getModel: this.getModel,
-            getSchema: this.getSchema,
-            getValidationErrors: this.getValidationErrors,
-        };
     }
 
     componentWillMount() {
@@ -50,6 +42,19 @@ export class ListField extends React.Component {
 
     componentWillUnmount() {
         this.storage.unlisten(this.setStateModel);
+    }
+
+    getContext() {
+        return this.props.context;
+    }
+
+    getProviderContext() {
+        return {
+            setModel: this.setModel,
+            getModel: this.getModel,
+            getSchema: this.getSchema,
+            getValidationErrors: this.getValidationErrors,
+        };
     }
 
     static getModelFromProps(props) {
@@ -85,7 +90,7 @@ export class ListField extends React.Component {
 
     getValidationErrors(name) {
         const [fieldName, key] = name.split('-');
-        const { getValidationErrors } = this.context;
+        const { getValidationErrors } = this.getContext();
         const validationErrors = getValidationErrors(fieldName);
         return validationErrors[parseInt(key, 10)] || [];
     }
@@ -175,6 +180,7 @@ export class ListField extends React.Component {
 
     render() {
         const {
+            context,
             children,
             className,
             wrapperClassName,
@@ -188,31 +194,21 @@ export class ListField extends React.Component {
         const isAddAllowed = this.isAddAllowed();
 
         return (
-            <div className={wrapperClassName}>
-                {label && <label htmlFor={name}>{label}</label>}
-                <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
-                {!hideAddButton && isAddAllowed && <button
-                    onClick={this.addListElement}
-                    className={addButton.className}
-                >
-                    {addButton.value || 'Add'}
-                </button>}
-            </div>
+            <FormContext.Provider value={{ ...context, ...this.getProviderContext() }}>
+                <div className={wrapperClassName}>
+                    {label && <label htmlFor={name}>{label}</label>}
+                    <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
+                    {!hideAddButton && isAddAllowed && <button
+                        onClick={this.addListElement}
+                        className={addButton.className}
+                    >
+                        {addButton.value || 'Add'}
+                    </button>}
+                </div>
+            </FormContext.Provider>
         );
     }
 }
-
-ListField.contextTypes = {
-    getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func,
-};
-
-ListField.childContextTypes = {
-    setModel: PropTypes.func,
-    getModel: PropTypes.func,
-    getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func,
-};
 
 ListField.propTypes = {
     children: PropTypes.node,
@@ -243,6 +239,9 @@ ListField.propTypes = {
     fieldAttributes: PropTypes.shape({}),
     minLength: PropTypes.number,
     maxLength: PropTypes.number,
+    context: PropTypes.shape({
+        getSchema: PropTypes.func,
+    }),
 };
 
 ListField.defaultProps = {
@@ -260,6 +259,9 @@ ListField.defaultProps = {
     fieldAttributes: {},
     minLength: undefined,
     maxLength: undefined,
+    context: {
+        getSchema: () => {},
+    },
 };
 
 export default FieldConnect(ListField);

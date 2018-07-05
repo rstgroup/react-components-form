@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Storage from './Storage';
 import { cloneObject } from '../helpers';
+import FormContext from './FormContext';
 
 class Form extends React.Component {
     constructor(props) {
@@ -33,19 +34,6 @@ class Form extends React.Component {
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
     }
 
-    getChildContext() {
-        return {
-            setModel: this.setModel,
-            getModel: this.getModel,
-            getSchema: this.getSchema,
-            submitForm: this.submitForm,
-            getValidationErrors: this.getValidationErrors,
-            getAllValidationErrors: this.getAllValidationErrors,
-            getPath: this.getPath,
-            eventsEmitter: this.eventsEmitter,
-        };
-    }
-
     componentWillMount() {
         this.storage.listen(this.setStateModel);
         if (this.eventsEmitter) {
@@ -63,6 +51,19 @@ class Form extends React.Component {
             this.eventsEmitter.unlisten('validate', this.validateListener);
             this.eventsEmitter.unlisten('reset', this.resetListener);
         }
+    }
+
+    getProviderContext() {
+        return {
+            setModel: this.setModel,
+            getModel: this.getModel,
+            getSchema: this.getSchema,
+            submitForm: this.submitForm,
+            getValidationErrors: this.getValidationErrors,
+            getAllValidationErrors: this.getAllValidationErrors,
+            getPath: this.getPath,
+            eventsEmitter: this.eventsEmitter,
+        };
     }
 
     static getDefaultModelValue(schema) {
@@ -188,29 +189,14 @@ class Form extends React.Component {
             );
         }
         return (
-            <form onSubmit={this.submitForm} id={id} className={className}>
-                {children}
-            </form>
+            <FormContext.Provider value={this.getProviderContext()}>
+                <form onSubmit={this.submitForm} id={id} className={className}>
+                    {children}
+                </form>
+            </FormContext.Provider>
         );
     }
 }
-
-Form.childContextTypes = {
-    setModel: PropTypes.func,
-    getModel: PropTypes.func,
-    getSchema: PropTypes.func,
-    submitForm: PropTypes.func,
-    getValidationErrors: PropTypes.func,
-    getAllValidationErrors: PropTypes.func,
-    getPath: PropTypes.func,
-    eventsEmitter: PropTypes.shape({
-        emit: PropTypes.func,
-        registerEvent: PropTypes.func,
-        listen: PropTypes.func,
-        unregisterEvent: PropTypes.func,
-        unlisten: PropTypes.func,
-    }),
-};
 
 Form.propTypes = {
     id: PropTypes.string,

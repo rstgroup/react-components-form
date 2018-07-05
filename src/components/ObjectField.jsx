@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
+import FormContext from './FormContext';
 
 export class ObjectField extends React.Component {
     constructor(props) {
@@ -20,17 +21,8 @@ export class ObjectField extends React.Component {
         this.setStateModel = this.setStateModel.bind(this);
     }
 
-    getChildContext() {
-        return {
-            setModel: this.setModel,
-            getModel: this.getModel,
-            getSchema: this.getSchema,
-            getValidationErrors: this.getValidationErrors,
-        };
-    }
-
     componentWillMount() {
-        const { getSchema } = this.context;
+        const { getSchema } = this.getContext();
         const schema = getSchema(this.props.name).type;
         this.setState({ schema });
         this.storage.listen(this.setStateModel);
@@ -43,6 +35,19 @@ export class ObjectField extends React.Component {
 
     componentWillUnmount() {
         this.storage.unlisten(this.setStateModel);
+    }
+
+    getProviderContext() {
+        return {
+            setModel: this.setModel,
+            getModel: this.getModel,
+            getSchema: this.getSchema,
+            getValidationErrors: this.getValidationErrors,
+        };
+    }
+
+    getContext() {
+        return this.props.context;
     }
 
     setStateModel(model, callback) {
@@ -65,7 +70,7 @@ export class ObjectField extends React.Component {
     }
 
     getValidationErrors(name) {
-        const { getValidationErrors } = this.context;
+        const { getValidationErrors } = this.getContext();
         const validationErrors = getValidationErrors(this.props.name);
         if (Array.isArray(validationErrors) && validationErrors.length === 1) {
             return validationErrors[0][name] || [];
@@ -74,26 +79,16 @@ export class ObjectField extends React.Component {
     }
 
     render() {
-        const { children, wrapperClassName, fieldAttributes } = this.props;
+        const { context, children, wrapperClassName, fieldAttributes } = this.props;
         return (
-            <div className={wrapperClassName} {...fieldAttributes}>
-                {children}
-            </div>
+            <FormContext.Provider value={{ ...context, ...this.getProviderContext() }}>
+                <div className={wrapperClassName} {...fieldAttributes}>
+                    {children}
+                </div>
+            </FormContext.Provider>
         );
     }
 }
-
-ObjectField.contextTypes = {
-    getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func,
-};
-
-ObjectField.childContextTypes = {
-    setModel: PropTypes.func,
-    getModel: PropTypes.func,
-    getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func,
-};
 
 ObjectField.propTypes = {
     value: PropTypes.shape({}),
@@ -102,6 +97,7 @@ ObjectField.propTypes = {
     children: PropTypes.node,
     wrapperClassName: PropTypes.string,
     fieldAttributes: PropTypes.shape({}),
+    context: PropTypes.shape({}),
 };
 
 ObjectField.defaultProps = {
@@ -110,6 +106,7 @@ ObjectField.defaultProps = {
     children: '',
     wrapperClassName: '',
     fieldAttributes: {},
+    context: {},
 };
 
 export default FieldConnect(ObjectField);
