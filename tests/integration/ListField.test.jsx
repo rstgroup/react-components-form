@@ -10,7 +10,6 @@ import {
 } from '../../src/components';
 import { addressFormSchema, languagesFormSchema, listSchema } from '../data/schemas';
 
-
 describe('ListField', () => {
     it('should add and remove field',() => {
         const submitMethod = (data) => { expect(data.languages.length).toBe(3); };

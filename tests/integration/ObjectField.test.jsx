@@ -12,7 +12,6 @@ import {
 import { ObjectField as ObjectFieldSeperated } from '../../src/components/ObjectField';
 import { addressFormSchema } from '../data/schemas';
 
-
 describe('ObjectField', () => {
     it('should recive context from form and give props to all fields',() => {
         const submitMock = jest.fn();
@@ -173,7 +172,7 @@ describe('ObjectField', () => {
     it('should run callback only if callback is function', () => {
         const onChangeMethod = jest.fn();
         const callback = 'test';
-        const field = mount(<ObjectFieldSeperated onChange={onChangeMethod} />,{context: {getSchema: () => ({})}});
+        const field = mount(<ObjectFieldSeperated onChange={onChangeMethod} context={{getSchema: () => ({})}} />);
         field.instance().setStateModel({test: 'test'}, callback);
         expect(onChangeMethod).toBeCalled();
     });

@@ -12,7 +12,6 @@ import {
 } from '../../src/components';
 import { titleSchema, titleSchema2 } from '../data/schemas';
 
-
 describe('Form', () => {
     jest.useFakeTimers();
 

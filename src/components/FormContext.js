@@ -5,9 +5,9 @@ const FormContext = React.createContext({
     getModel: () => {},
     getSchema: () => {},
     submitForm: () => {},
-    getValidationErrors: () => {},
-    getAllValidationErrors: () => {},
-    getPath: () => {},
+    getValidationErrors: () => [],
+    getAllValidationErrors: () => [],
+    getPath: () => '',
     eventsEmitter: {},
 });
 
