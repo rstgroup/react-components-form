@@ -13,6 +13,7 @@ class Form extends React.Component {
             validateOnChange: props.validateOnChange,
         };
 
+        this.controller = props.controller;
         this.storage = new Storage(this.state.model);
         this.eventsEmitter = props.eventsEmitter;
         this.setModel = this.setModel.bind(this);
@@ -31,6 +32,8 @@ class Form extends React.Component {
         this.handleSchemaValidation = this.handleSchemaValidation.bind(this);
         this.handleCustomValidation = this.handleCustomValidation.bind(this);
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
+
+        if (this.controller) this.controller.init(this);
     }
 
     getChildContext() {
@@ -66,7 +69,7 @@ class Form extends React.Component {
     }
 
     static getDefaultModelValue(schema) {
-        if (schema && typeof schema.getDefaultValues === 'function') return schema.getDefaultValues();
+        if (schema && typeof schema.getDefaultValues === 'function') { return schema.getDefaultValues(); }
         return {};
     }
 
@@ -78,7 +81,8 @@ class Form extends React.Component {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
         this.storage.set(name, value, callback);
-        if (this.state.validateOnChange) this.validateModel(model, this.state.schema);
+        if (this.controller) { this.controller.model$.next(JSON.parse(JSON.stringify(model))); }
+        if (this.state.validateOnChange) { this.validateModel(model, this.state.schema); }
     }
 
     getModel(name) {
@@ -107,7 +111,10 @@ class Form extends React.Component {
     }
 
     validateListener(schema) {
-        return this.validateModel(this.storage.getModel(), schema || this.state.schema);
+        return this.validateModel(
+            this.storage.getModel(),
+            schema || this.state.schema,
+        );
     }
 
     resetListener(model) {
@@ -120,7 +127,10 @@ class Form extends React.Component {
         if (validationResults instanceof Promise) {
             return this.handlePromiseValidation(validationResults);
         }
-        this.setState({ validationErrors: validationResults, validateOnChange: true });
+        this.setState({
+            validationErrors: validationResults,
+            validateOnChange: true,
+        });
         return validationResults;
     }
 
@@ -129,7 +139,10 @@ class Form extends React.Component {
         if (validationResults instanceof Promise) {
             return this.handlePromiseValidation(validationResults);
         }
-        this.setState({ validationErrors: validationResults, validateOnChange: true });
+        this.setState({
+            validationErrors: validationResults,
+            validateOnChange: true,
+        });
         return validationResults;
     }
 
@@ -181,11 +194,7 @@ class Form extends React.Component {
         const { children, className, subform, id } = this.props;
 
         if (subform) {
-            return (
-                <div className={className}>
-                    {children}
-                </div>
-            );
+            return <div className={className}>{children}</div>;
         }
         return (
             <form onSubmit={this.submitForm} id={id} className={className}>
@@ -230,6 +239,7 @@ Form.propTypes = {
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
     }),
+    controller: PropTypes.shape({}),
 };
 
 Form.defaultProps = {
@@ -243,6 +253,7 @@ Form.defaultProps = {
     subform: false,
     children: '',
     eventsEmitter: undefined,
+    controller: undefined,
 };
 
 export default Form;
