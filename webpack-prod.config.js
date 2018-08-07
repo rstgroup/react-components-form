@@ -7,7 +7,7 @@ module.exports = {
         Bootstrap: "./src/components/styled/Bootstrap.js",
         Separate: "./src/components/separate/index.js",
         AutocompleteField: "./src/components/AutocompleteField.jsx",
-        FormController: "./src/components/FormController.jsx"
+        FormController: "./src/components/FormController.js"
     },
     output: {
         path: path.join(__dirname, ''),
