@@ -12,7 +12,9 @@ class Form extends React.Component {
             validationErrors: {},
             validateOnChange: props.validateOnChange,
         };
-
+        if (props.controller) {
+            props.controller.setForm(this);
+        }
         this.storage = new Storage(this.state.model);
         this.eventsEmitter = props.eventsEmitter;
         this.setModel = this.setModel.bind(this);
@@ -230,6 +232,15 @@ Form.propTypes = {
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
     }),
+    controller: PropTypes.shape({
+        setForm: PropTypes.func,
+        getFrom: PropTypes.func,
+        getErrors: PropTypes.func,
+        setSchema: PropTypes.func,
+        getSchema: PropTypes.func,
+        setFieldValue: PropTypes.func,
+        getFieldValue: PropTypes.func,
+    }),
 };
 
 Form.defaultProps = {
@@ -243,6 +254,7 @@ Form.defaultProps = {
     subform: false,
     children: '',
     eventsEmitter: undefined,
+    controller: undefined,
 };
 
 export default Form;
