@@ -10,6 +10,7 @@ import {
     ObjectField,
     FormEventsEmitter
 } from '../../src/components';
+import FormController from '../../src/components/FormController';
 import { titleSchema, titleSchema2 } from '../data/schemas';
 
 
@@ -538,5 +539,29 @@ describe('Form', () => {
         const textFields = wrapper.find(TextField);
         textFields.first().find('input').first().simulate('change', {target: { value: 'test' } });
         expect(onChange).toBeCalledWith('test');
+    });
+
+    it('should set form to controller',() => {
+        const onChange = jest.fn();
+        const controller = new FormController();
+        const formInstance = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={titleSchema}
+                controller={controller}
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                    callbacks={{onChange}}
+                />
+                <TextField
+                    name="title2"
+                    label="Title"
+                />
+                <SubmitField value="Submit" />
+            </Form>
+        ).instance();
+        expect(controller.getForm()).toEqual(formInstance);
     });
 });

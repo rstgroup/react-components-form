@@ -52,6 +52,7 @@ const LoginForm  = () => (
     <Form
         schema={registrationSchema}
         onSubmit={data => console.log(data)}
+        validateOnChange
         onError={(validationErrors, data) => console.log('error', validationErrors, data)}
     >
         <h4>REGISTRATION FORM</h4>
