@@ -9,7 +9,7 @@ import FormController from "../../components/FormController";
 
 const loginSchema = new Schema({
   login: {
-    type: Schema.oneOfType(String, Number),
+    type: Number,
     required: false
   },
   password: {

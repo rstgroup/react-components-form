@@ -35,8 +35,6 @@ class Form extends React.Component {
 
         if (this.controller) {
             this.controller.init(this);
-            this.controller.model$.next(this.state.model);
-            this.controller.errors$.next(this.state.validationErrors);
         }
     }
 
@@ -261,7 +259,16 @@ Form.propTypes = {
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
     }),
-    controller: PropTypes.shape({}),
+    controller: PropTypes.shape({
+        init: PropTypes.func,
+        setForm: PropTypes.func,
+        getFrom: PropTypes.func,
+        getErrors: PropTypes.func,
+        setSchema: PropTypes.func,
+        getSchema: PropTypes.func,
+        setFieldValue: PropTypes.func,
+        getFieldValue: PropTypes.func,
+    }),
 };
 
 Form.defaultProps = {
