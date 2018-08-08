@@ -3,5 +3,6 @@ node_modules/
 coverage/
 /Bootstrap.js
 /AutocompleteField.js
+/FormController.js
 Separate.js
 main.js
