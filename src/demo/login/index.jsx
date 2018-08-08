@@ -5,12 +5,12 @@ import {
   TextField,
   SubmitField
 } from "../../components/styled/Bootstrap";
-import { FormController } from "../../components";
+import FormController from "../../components/FormController";
 
 const loginSchema = new Schema({
   login: {
-    type: String,
-    required: true
+    type: Schema.oneOfType(String, Number),
+    required: false
   },
   password: {
     type: String,
@@ -23,17 +23,20 @@ class LoginForm extends Component {
     super(props);
 
     this.controller = new FormController();
-    this.state = { model: {} };
+    this.state = { model: {}, errors: {} };
   }
 
   componentDidMount() {
     this.controller.model$.subscribe(model => {
       this.setState({ model });
     });
+    this.controller.errors$.subscribe(errors => {
+      this.setState({ errors });
+    });
   }
 
   render() {
-    const { model } = this.state;
+    const { model, errors } = this.state;
     return (
       <div>
         <Form
@@ -51,7 +54,11 @@ class LoginForm extends Component {
         </Form>
         <div>
           <strong>model:</strong>
-          {JSON.stringify(model)}
+          <pre>{JSON.stringify(model)}</pre>
+          <strong>errors:</strong>
+          <pre>{JSON.stringify(errors)}</pre>
+          <strong>hasError:</strong>{" "}
+          {JSON.stringify(this.controller.hasError())}
         </div>
       </div>
     );

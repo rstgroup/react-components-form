@@ -33,7 +33,11 @@ class Form extends React.Component {
         this.handleCustomValidation = this.handleCustomValidation.bind(this);
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
 
-        if (this.controller) this.controller.init(this);
+        if (this.controller) {
+            this.controller.init(this);
+            this.controller.model$.next(this.state.model);
+            this.controller.errors$.next(this.state.validationErrors);
+        }
     }
 
     getChildContext() {
@@ -69,7 +73,9 @@ class Form extends React.Component {
     }
 
     static getDefaultModelValue(schema) {
-        if (schema && typeof schema.getDefaultValues === 'function') { return schema.getDefaultValues(); }
+        if (schema && typeof schema.getDefaultValues === 'function') {
+            return schema.getDefaultValues();
+        }
         return {};
     }
 
@@ -81,8 +87,12 @@ class Form extends React.Component {
         const model = Object.assign({}, this.state.model);
         model[name] = value;
         this.storage.set(name, value, callback);
-        if (this.controller) { this.controller.model$.next(JSON.parse(JSON.stringify(model))); }
-        if (this.state.validateOnChange) { this.validateModel(model, this.state.schema); }
+        if (this.controller) {
+            this.controller.model$.next(JSON.parse(JSON.stringify(model)));
+        }
+        if (this.state.validateOnChange) {
+            this.validateModel(model, this.state.schema);
+        }
     }
 
     getModel(name) {
@@ -131,6 +141,10 @@ class Form extends React.Component {
             validationErrors: validationResults,
             validateOnChange: true,
         });
+
+        if (this.controller) {
+            this.controller.errors$.next(validationResults);
+        }
         return validationResults;
     }
 
@@ -143,12 +157,20 @@ class Form extends React.Component {
             validationErrors: validationResults,
             validateOnChange: true,
         });
+
+        if (this.controller) {
+            this.controller.errors$.next(validationResults);
+        }
         return validationResults;
     }
 
     handlePromiseValidation(validationResults) {
         return validationResults.then((validationErrors) => {
             this.setState({ validationErrors, validateOnChange: true });
+
+            if (this.controller) {
+                this.controller.errors$.next(validationResults);
+            }
             return validationErrors;
         });
     }
