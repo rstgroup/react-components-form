@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
     Form,
     TextField,
@@ -13,30 +14,40 @@ import appointmentSchema from './schema';
 import { clients, places } from './data';
 import style from '../demo.css';
 
-const renderPhoneItem = ({phone, name}) => (
+const renderPhoneItem = ({ phone = '', name = '' }) => (
     <div className={style.autocompleteListItem}>
         <div className={style.autocompleteListItemPhone}>{phone}</div>
         <div className={style.autocompleteListItemName}>{name}</div>
     </div>
 );
 
-const renderPlaceItem = ({name}) => (
+renderPhoneItem.propTypes = {
+    phone: PropTypes.string,
+    name: PropTypes.string,
+};
+
+const renderPlaceItem = ({ name = '' }) => (
     <div className={style.autocompleteListItem}>
         <div className={style.autocompleteListItemName}>{name}</div>
     </div>
 );
 
-const renderPlaceSectionTitle = ({title}) => (
+renderPlaceItem.propTypes = {
+    name: PropTypes.string,
+};
+
+const renderPlaceSectionTitle = ({ title = '' }) => (
     <div className={style.autocompleteListSectionHeader}>
         {title}
     </div>
 );
 
+renderPlaceSectionTitle.propTypes = {
+    title: PropTypes.string,
+};
+
 const el = new FormEventsEmitter();
-class AppointmentForm extends Component{
-    constructor(props) {
-        super(props);
-    }
+class AppointmentForm extends Component {
     getPhoneValue(value) {
         el.emit('clientData', value);
         return value.phone;
@@ -55,10 +66,10 @@ class AppointmentForm extends Component{
                 <h4>APPOINTMENT FORM</h4>
                 <div className="row">
                     <div className="col-xs-6">
-                        <DateField name="date"/>
+                        <DateField name="date" />
                     </div>
                     <div className="col-xs-6">
-                        <TextField name="time" type="time"/>
+                        <TextField name="time" type="time" />
                     </div>
                 </div>
                 <ObjectField name="client">
@@ -71,23 +82,23 @@ class AppointmentForm extends Component{
                         getValue={this.getPhoneValue}
                         wrapperClassName={style.autocompleteListItemWrapper}
                         theme={{
-                            suggestionsContainer: style.suggestionsContainer
+                            suggestionsContainer: style.suggestionsContainer,
                         }}
                         alwaysRenderSuggestions
                     />
                     <TextField
                         name="name"
                         placeholder="Name & Surname"
-                        onEmitEvents={{name:'clientData', method: ({ name }, self) => self.onChangeData(name)}}
+                        onEmitEvents={{ name: 'clientData', method: ({ name }, self) => self.onChangeData(name) }}
                     />
                     <TextField
                         name="email"
                         placeholder="Email"
-                        onEmitEvents={{name:'clientData', method: ({ email }, self) => self.onChangeData(email)}}
+                        onEmitEvents={{ name: 'clientData', method: ({ email }, self) => self.onChangeData(email) }}
                     />
                 </ObjectField>
-                <SelectField name="userId" label="Responsible person"/>
-                <SelectField name="serviceId" label="Service"/>
+                <SelectField name="userId" label="Responsible person" />
+                <SelectField name="serviceId" label="Service" />
                 <AutocompleteField
                     name="place"
                     placeholder="Place"
@@ -104,10 +115,10 @@ class AppointmentForm extends Component{
                     }}
                     wrapperClassName={style.autocompleteListItemWrapper}
                     theme={{
-                        suggestionsContainer: style.suggestionsContainer
+                        suggestionsContainer: style.suggestionsContainer,
                     }}
                 />
-                <SubmitField value="Submit"/>
+                <SubmitField value="Submit" />
             </Form>
         );
     }

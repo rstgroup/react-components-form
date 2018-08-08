@@ -37,8 +37,8 @@ const timeSchema = new Schema({
             '20',
             '21',
             '22',
-            '23'
-        ]
+            '23',
+        ],
     },
     minutes: {
         type: String,
@@ -48,9 +48,9 @@ const timeSchema = new Schema({
             '15',
             '30',
             '45',
-            '60'
-        ]
-    }
+            '60',
+        ],
+    },
 });
 
 const workDaySchema = new Schema({
@@ -58,46 +58,46 @@ const workDaySchema = new Schema({
         type: timeSchema,
         defaultValue: {
             hours: '08',
-            minutes: '00'
-        }
+            minutes: '00',
+        },
     },
     to: {
         type: timeSchema,
         defaultValue: {
             hours: '16',
-            minutes: '00'
-        }
+            minutes: '00',
+        },
     },
     workDay: {
         type: Boolean,
         label: 'Work day',
         defaultValue: true,
-        required: true
-    }
+        required: true,
+    },
 });
 
 const timeManageSchema = new Schema({
-    monday:{
-        type: workDaySchema
+    monday: {
+        type: workDaySchema,
     },
-    tuesday:{
-        type: workDaySchema
+    tuesday: {
+        type: workDaySchema,
     },
-    wednesday:{
-        type: workDaySchema
+    wednesday: {
+        type: workDaySchema,
     },
-    thursday:{
-        type: workDaySchema
+    thursday: {
+        type: workDaySchema,
     },
-    friday:{
-        type: workDaySchema
+    friday: {
+        type: workDaySchema,
     },
-    saturday:{
-        type: workDaySchema
+    saturday: {
+        type: workDaySchema,
     },
-    sunday:{
-        type: workDaySchema
-    }
+    sunday: {
+        type: workDaySchema,
+    },
 });
 
 const TimeManageForm = () => (
@@ -113,15 +113,15 @@ const TimeManageForm = () => (
                 <ObjectField name="monday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-2 text-center">-</div>
                     <ObjectField name="to" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-12">
@@ -132,15 +132,15 @@ const TimeManageForm = () => (
                 <ObjectField name="tuesday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-2 text-center">-</div>
                     <ObjectField name="to" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-12">
@@ -151,15 +151,15 @@ const TimeManageForm = () => (
                 <ObjectField name="wednesday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-2 text-center">-</div>
                     <ObjectField name="to" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-12">
@@ -170,15 +170,15 @@ const TimeManageForm = () => (
                 <ObjectField name="thursday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-2 text-center">-</div>
                     <ObjectField name="to" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-12">
@@ -189,15 +189,15 @@ const TimeManageForm = () => (
                 <ObjectField name="friday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-2 text-center">-</div>
                     <ObjectField name="to" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-12">
@@ -208,15 +208,15 @@ const TimeManageForm = () => (
                 <ObjectField name="saturday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-2 text-center">-</div>
                     <ObjectField name="to" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-12">
@@ -227,15 +227,15 @@ const TimeManageForm = () => (
                 <ObjectField name="sunday" wrapperClassName="row">
                     <ObjectField name="from" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-2 text-center">-</div>
                     <ObjectField name="to" wrapperClassName="col-xs-5">
                         <div className="row">
-                            <SelectField name="hours" wrapperClassName="col-xs-6"/>
-                            <SelectField name="minutes" wrapperClassName="col-xs-6"/>
+                            <SelectField name="hours" wrapperClassName="col-xs-6" />
+                            <SelectField name="minutes" wrapperClassName="col-xs-6" />
                         </div>
                     </ObjectField>
                     <div className="col-xs-12">

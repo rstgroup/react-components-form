@@ -8,46 +8,46 @@ import {
     SelectField,
     SubmitField,
     CheckboxField,
-    ObjectField
+    ObjectField,
 } from '../../components';
 import Schema from 'form-schema-validation';
 
 const personSchema = new Schema({
-    name:{
+    name: {
         type: String,
-        required: true
+        required: true,
     },
     surname: {
-        type: String
-    }
+        type: String,
+    },
 });
 
 const exampleSchema = new Schema({
-    textField:{
+    textField: {
         type: String,
-        label: 'Text'
+        label: 'Text',
     },
-    textareaField:{
+    textareaField: {
         type: String,
-        label: 'Textarea'
+        label: 'Textarea',
     },
-    numberField:{
+    numberField: {
         type: Number,
-        label: 'Number'
+        label: 'Number',
     },
-    hiddenField:{
+    hiddenField: {
         type: String,
-        label: 'Hidden'
+        label: 'Hidden',
     },
-    dateField:{
+    dateField: {
         type: Date,
-        label: 'Date'
+        label: 'Date',
     },
-    person:{
+    person: {
         type: personSchema,
-        label: 'Person'
+        label: 'Person',
     },
-    selectField:{
+    selectField: {
         type: String,
         label: 'Select',
         options: [
@@ -55,14 +55,14 @@ const exampleSchema = new Schema({
             'test2',
             'test3',
             'test4',
-            'test5'
-        ]
+            'test5',
+        ],
     },
-    checkboxField:{
+    checkboxField: {
         type: Boolean,
         label: 'Checkbox',
-        required: true
-    }
+        required: true,
+    },
 });
 
 
@@ -70,7 +70,7 @@ class Example2 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {}
+            data: {},
         };
     }
 
@@ -78,7 +78,7 @@ class Example2 extends React.Component {
         return (
             <Form
                 schema={exampleSchema}
-                onSubmit={data => this.setState({data})}
+                onSubmit={data => this.setState({ data })}
                 onError={(validationErrors, data) => console.log('error', validationErrors, data)}
             >
                 <h4>ALL FIELDS FORM</h4>
@@ -90,8 +90,8 @@ class Example2 extends React.Component {
                 <SelectField name="selectField" />
                 <CheckboxField name="checkboxField" />
                 <ObjectField name="person">
-                    <TextField name="name" placeholder="name"/>
-                    <TextField name="surname" placeholder="surname"/>
+                    <TextField name="name" placeholder="name" />
+                    <TextField name="surname" placeholder="surname" />
                 </ObjectField>
                 <SubmitField value="Submit" />
                 <div>

@@ -1,4 +1,3 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import { DateField, getDateString } from '../../src/components/DateField';
@@ -15,9 +14,9 @@ describe('DateField', () => {
             hasValidationError: true,
             validationErrors: ['testError'],
             errorsStyles: {
-                className: 'errorClassName'
+                className: 'errorClassName',
             },
-            className: 'testComponent'
+            className: 'testComponent',
         };
         const wrapper = mount(<DateField {...props} />);
         wrapper.setProps({ value: date });

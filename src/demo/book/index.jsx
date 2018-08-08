@@ -15,78 +15,78 @@ import { FormEventsEmitter } from '../../components';
 const options = [
     {
         label: 'Sci fi',
-        value: 'scifi'
+        value: 'scifi',
     },
     {
         label: 'Horror',
-        value: 'horror'
+        value: 'horror',
     },
     {
         label: 'Romans',
-        value: 'romans'
-    }
+        value: 'romans',
+    },
 ];
 
 const personSchema = new Schema({
-    name:{
+    name: {
         type: String,
-        required: true
+        required: true,
     },
     surname: {
-        type: String
+        type: String,
     },
     age: {
         type: String,
         options: [
             {
                 label: 'Select age range',
-                value: ''
+                value: '',
             },
             {
                 label: '18-21',
-                value: '18-21'
+                value: '18-21',
             },
             {
                 label: '22-28',
-                value: '22-28'
+                value: '22-28',
             },
             {
                 label: '29-40',
-                value: '29-40'
-            }
-        ]
-    }
+                value: '29-40',
+            },
+        ],
+    },
 });
 
 const postSchema = new Schema({
-    title:{
+    title: {
         type: String,
         label: 'Title',
-        required: true
+        required: true,
     },
-    category:{
+    category: {
         type: String,
         label: 'Category',
-        options: options
+        options,
     },
-    authors:{
+    authors: {
         type: [personSchema],
-        label: 'Authors'
+        label: 'Authors',
     },
-    published:{
+    published: {
         type: Boolean,
-        label: 'Published'
+        label: 'Published',
     },
-    createdAt:{
+    createdAt: {
         type: Date,
-        defaultValue: new Date()
+        defaultValue: new Date(),
     },
-    languages:{
-        type: [String]
+    languages: {
+        type: [String],
     },
-    status:{
-        type: Boolean
-    }
+    status: {
+        type: Boolean,
+    },
 });
 const resetModel = {
     title: 'test',
@@ -95,12 +95,12 @@ const resetModel = {
         {
             name: 'Tester',
             surname: 'Testowy',
-            age: '18-21'
-        }
+            age: '18-21',
+        },
     ],
     published: false,
     languages: ['test'],
-    status: true
+    status: true,
 };
 
 const eventsEmitter = new FormEventsEmitter();
@@ -121,10 +121,10 @@ const BookForm = () => (
         >
             <ObjectField wrapperClassName={objectFieldClassName}>
                 <div className={objectFormField}>
-                    <TextField name="name" placeholder="name"/>
+                    <TextField name="name" placeholder="name" />
                 </div>
                 <div className={objectFormField}>
-                    <TextField name="surname" placeholder="surname"/>
+                    <TextField name="surname" placeholder="surname" />
                 </div>
                 <div>
                     <SelectField name="age" />
@@ -136,7 +136,7 @@ const BookForm = () => (
         </ListField>
         <CheckboxField name="status" label="Published" />
         <SubmitField value="Submit" />
-        <a onClick={() => {eventsEmitter.emit('reset', resetModel)}} >RESET</a>
+        <a onClick={() => { eventsEmitter.emit('reset', resetModel); }} >RESET</a>
     </Form>
 );
 

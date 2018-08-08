@@ -15,8 +15,8 @@
     "prepublish": "npm run lint && npm run test && npm run build",
     "coverage": "jest --coverage",
     "coverage:report": "cat ./coverage/lcov.info | coveralls",
-    "lint": "eslint -c .eslintrc.json src/**/*.js?",
-    "lint:fix": "eslint --fix -c .eslintrc.json src/**/*.js?"
+    "lint": "eslint -c .eslintrc.json **/*.js? --ignore-path .gitignore",
+    "lint:fix": "eslint --fix -c .eslintrc.json **/*.js? --ignore-path .gitignore"
   },
   "pre-commit": [
     "lint",
@@ -78,7 +78,8 @@
   },
   "jest": {
     "setupFiles": [
-      "raf/polyfill"
+      "raf/polyfill",
+      "./tests/enzymeConfig.js"
     ],
     "verbose": true,
     "coverageThreshold": {

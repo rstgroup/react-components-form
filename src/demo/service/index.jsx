@@ -9,22 +9,22 @@ import {
 import Schema from 'form-schema-validation';
 
 const serviceSchema = new Schema({
-    title:{
+    title: {
         type: String,
-        required: true
+        required: true,
     },
-    description:{
+    description: {
         type: String,
-        required: true
+        required: true,
     },
-    price:{
+    price: {
         type: Number,
-        required: true
+        required: true,
     },
-    time:{
+    time: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 });
 
 const ServiceForm = () => (

@@ -1,4 +1,3 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import { ErrorsContainer } from '../../src/components';
@@ -117,7 +116,7 @@ describe('ErrorsContainer', () => {
             }
         }
         const props = {
-            ErrorComponent
+            ErrorComponent,
         };
         const wrapper = mount(<ErrorsContainer {...props} />, { context });
         expect(wrapper.find(ErrorField).props().ErrorComponent).toBe(ErrorComponent);

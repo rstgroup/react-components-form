@@ -1,15 +1,12 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
-import {AutocompleteField} from '../../src/components/AutocompleteField';
+import { AutocompleteField } from '../../src/components/AutocompleteField';
 
-const promiseMock = (data) => {
-    return () => ({
-        then(method){
-            return method(data);
-        }
-    });
-};
+const promiseMock = data => () => ({
+    then(method) {
+        return method(data);
+    },
+});
 
 const MockItem = () => (
     <div>test item</div>
@@ -25,7 +22,7 @@ describe('AutocompleteField', () => {
         onChangeData = jest.fn();
         testError = ['testError'];
         errorStyles = {
-            className: 'errorClassName'
+            className: 'errorClassName',
         };
 
         props = {
@@ -36,7 +33,7 @@ describe('AutocompleteField', () => {
             validationErrors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent',
-            options: ['test', 'test2', 'test3']
+            options: ['test', 'test2', 'test3'],
         };
     });
 
@@ -64,9 +61,9 @@ describe('AutocompleteField', () => {
 
     it('should search options by key', () => {
         props.options = [
-            {name: 'test', value: 1},
-            {name: 'test2', value: 2},
-            {name: 'test3', value: 3}
+            { name: 'test', value: 1 },
+            { name: 'test2', value: 2 },
+            { name: 'test3', value: 3 },
         ];
         props.searchKey = 'name';
         const wrapper = mount(<AutocompleteField {...props} />);
@@ -76,9 +73,9 @@ describe('AutocompleteField', () => {
 
     it('should display all options if alwaysRenderSuggestions flag is active', () => {
         props.options = [
-            {name: 'test', value: 1},
-            {name: 'test2', value: 2},
-            {name: 'test3', value: 3}
+            { name: 'test', value: 1 },
+            { name: 'test2', value: 2 },
+            { name: 'test3', value: 3 },
         ];
         props.searchKey = 'name';
         props.renderItem = () => <MockItem />;
@@ -102,9 +99,9 @@ describe('AutocompleteField', () => {
 
     it('onSuggestionsClearRequested clears suggestions list', () => {
         props.options = [
-            {name: 'test', value: 1},
-            {name: 'test2', value: 2},
-            {name: 'test3', value: 3}
+            { name: 'test', value: 1 },
+            { name: 'test2', value: 2 },
+            { name: 'test3', value: 3 },
         ];
         props.searchKey = 'name';
         const wrapper = mount(<AutocompleteField {...props} />);
@@ -112,19 +109,18 @@ describe('AutocompleteField', () => {
         expect(wrapper.state().suggestions.length).toBe(3);
         wrapper.instance().onSuggestionsClearRequested();
         expect(wrapper.state().suggestions.length).toBe(0);
-
     });
 
     it('static getSectionSuggestions', () => {
         const suggestions = [
             {
-                name: 'name1'
+                name: 'name1',
             },
             {
-                name: 'name2'
-            }
+                name: 'name2',
+            },
         ];
-        expect(AutocompleteField.getSectionSuggestions({ suggestions: suggestions })).toEqual(suggestions);
+        expect(AutocompleteField.getSectionSuggestions({ suggestions })).toEqual(suggestions);
     });
 
     it('applySectionFilter filters suggestions list properly', () => {
@@ -133,42 +129,42 @@ describe('AutocompleteField', () => {
                 title: 'Favourite',
                 suggestions: [
                     {
-                        name: 'Office'
+                        name: 'Office',
                     },
                     {
-                        name: 'Restaurant'
-                    }
-                ]
+                        name: 'Restaurant',
+                    },
+                ],
             },
             {
                 title: 'Other',
                 suggestions: [
                     {
-                        name: 'Bar'
+                        name: 'Bar',
                     },
                     {
-                        name: 'Online'
-                    }
-                ]
-            }
+                        name: 'Online',
+                    },
+                ],
+            },
         ];
         const filteredPlaces = [
             {
                 title: 'Favourite',
                 suggestions: [
                     {
-                        name: 'Office'
-                    }
-                ]
+                        name: 'Office',
+                    },
+                ],
             },
             {
                 title: 'Other',
                 suggestions: [
                     {
-                        name: 'Online'
-                    }
-                ]
-            }
+                        name: 'Online',
+                    },
+                ],
+            },
         ];
         const wrapper = mount(<AutocompleteField {...props} />);
         expect(wrapper.instance().applySectionFilter(places, 'o', 'name')).toEqual(filteredPlaces);
@@ -201,9 +197,9 @@ describe('AutocompleteField', () => {
 
     it('getSuggestions returns empty array when filter is empty and proper flag state passed', () => {
         props.options = [
-            {name: 'test', value: 1},
-            {name: 'test2', value: 2},
-            {name: 'test3', value: 3}
+            { name: 'test', value: 1 },
+            { name: 'test2', value: 2 },
+            { name: 'test3', value: 3 },
         ];
         props.searchKey = 'name';
         props.suggestionsShownIfFieldEmpty = false;
@@ -214,9 +210,9 @@ describe('AutocompleteField', () => {
 
     it('getSuggestions returns whole options array when filter is empty and proper flag state passed', () => {
         const options = [
-            {name: 'test', value: 1},
-            {name: 'test2', value: 2},
-            {name: 'test3', value: 3}
+            { name: 'test', value: 1 },
+            { name: 'test2', value: 2 },
+            { name: 'test3', value: 3 },
         ];
         props.options = options;
         props.searchKey = 'name';
@@ -231,10 +227,10 @@ describe('AutocompleteField', () => {
             {
                 title: 'test',
                 suggestions: [
-                    {name: 'test', value: 1},
-                    {name: 'test2', value: 2},
-                    {name: 'test3', value: 3}
-                ]
+                    { name: 'test', value: 1 },
+                    { name: 'test2', value: 2 },
+                    { name: 'test3', value: 3 },
+                ],
             },
         ];
         props.options = options;

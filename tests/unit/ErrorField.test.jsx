@@ -1,4 +1,3 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import { ErrorField } from '../../src/components/ErrorField';
@@ -13,7 +12,7 @@ describe('ErrorField', () => {
             }
         }
         const props = {
-            ErrorComponent
+            ErrorComponent,
         };
         const wrapper = mount(<ErrorField {...props} />);
         expect(wrapper.props().ErrorComponent).toBe(ErrorComponent);
@@ -21,7 +20,7 @@ describe('ErrorField', () => {
 
     it('should convert "props.erros" to array if not array', () => {
         const props = {
-            errors: 'string error'
+            errors: 'string error',
         };
         const wrapper = mount(<ErrorField {...props} />);
         expect(wrapper.props().errors).toBe(props.errors);

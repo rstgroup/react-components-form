@@ -1,4 +1,4 @@
-import '../enzymeConfig';
+
 import React from 'react';
 import { mount } from 'enzyme';
 import Schema from 'form-schema-validation';
@@ -7,14 +7,14 @@ import {
     TextField,
     SubmitField,
     ObjectField,
-    ListField
+    ListField,
 } from '../../src/components';
 import { ObjectField as ObjectFieldSeperated } from '../../src/components/ObjectField';
 import { addressFormSchema } from '../data/schemas';
 
 
 describe('ObjectField', () => {
-    it('should recive context from form and give props to all fields',() => {
+    it('should recive context from form and give props to all fields', () => {
         const submitMock = jest.fn();
         const wrapper = mount(
             <Form onSubmit={submitMock}>
@@ -23,42 +23,42 @@ describe('ObjectField', () => {
                     <TextField name="street" />
                     <TextField name="postCode" />
                 </ObjectField>
-                <SubmitField value="Submit"/>
-            </Form>
+                <SubmitField value="Submit" />
+            </Form>,
         );
 
-        wrapper.find('input[name="city"]').simulate('change', {target: {value: 'testCity'}});
-        wrapper.find('input[name="street"]').simulate('change', {target: {value: 'testStreet'}});
-        wrapper.find('input[name="postCode"]').simulate('change', {target: {value: 'testPostCode'}});
+        wrapper.find('input[name="city"]').simulate('change', { target: { value: 'testCity' } });
+        wrapper.find('input[name="street"]').simulate('change', { target: { value: 'testStreet' } });
+        wrapper.find('input[name="postCode"]').simulate('change', { target: { value: 'testPostCode' } });
         wrapper.find('button').simulate('click');
 
         expect(submitMock).toBeCalledWith({
             address: {
                 city: 'testCity',
                 street: 'testStreet',
-                postCode: 'testPostCode'
-            }
+                postCode: 'testPostCode',
+            },
         });
     });
 
-    it('should recive context and schema from form and give props to all fields',() => {
+    it('should recive context and schema from form and give props to all fields', () => {
         const submitMock = jest.fn();
         const addressSchema = new Schema({
             city: {
-                type: String
+                type: String,
             },
             street: {
-                type: String
+                type: String,
             },
             postCode: {
-                type: String
-            }
+                type: String,
+            },
         });
 
         const formSchema = new Schema({
             address: {
-                type: addressSchema
-            }
+                type: addressSchema,
+            },
         });
 
         const wrapper = mount(
@@ -71,12 +71,12 @@ describe('ObjectField', () => {
                     <TextField name="street" />
                     <TextField name="postCode" />
                 </ObjectField>
-                <SubmitField value="Submit"/>
-            </Form>
+                <SubmitField value="Submit" />
+            </Form>,
         );
-        wrapper.find('input[name="city"]').simulate('change', {target: {value: 'testCity'}});
-        wrapper.find('input[name="street"]').simulate('change', {target: {value: 'testStreet'}});
-        wrapper.find('input[name="postCode"]').simulate('change', {target: {value: 'testPostCode'}});
+        wrapper.find('input[name="city"]').simulate('change', { target: { value: 'testCity' } });
+        wrapper.find('input[name="street"]').simulate('change', { target: { value: 'testStreet' } });
+        wrapper.find('input[name="postCode"]').simulate('change', { target: { value: 'testPostCode' } });
         wrapper.find('button').simulate('click');
         expect(submitMock).toBeCalledWith({
             address: {
@@ -87,7 +87,7 @@ describe('ObjectField', () => {
         });
     });
 
-    it('should recive context and schema from form and give props to all fields using listField',() => {
+    it('should recive context and schema from form and give props to all fields using listField', () => {
         const submitMock = jest.fn();
         const wrapper = mount(
             <Form
@@ -101,17 +101,17 @@ describe('ObjectField', () => {
                         <TextField name="postCode" />
                     </ObjectField>
                 </ListField>
-                <SubmitField value="Submit"/>
-            </Form>
+                <SubmitField value="Submit" />
+            </Form>,
         );
         wrapper.find('button').last().simulate('click');
 
         const object = wrapper.find(ObjectField);
         const submit = wrapper.find(SubmitField);
 
-        object.find('input[name="city"]').simulate('change', {target: {value: 'testCity'}});
-        object.find('input[name="street"]').simulate('change', {target: {value: 'testStreet'}});
-        object.find('input[name="postCode"]').simulate('change', {target: {value: 'testPostCode'}});
+        object.find('input[name="city"]').simulate('change', { target: { value: 'testCity' } });
+        object.find('input[name="street"]').simulate('change', { target: { value: 'testStreet' } });
+        object.find('input[name="postCode"]').simulate('change', { target: { value: 'testPostCode' } });
         submit.find('button').simulate('click');
 
         expect(submitMock).toBeCalledWith({
@@ -120,32 +120,32 @@ describe('ObjectField', () => {
                     city: 'testCity',
                     street: 'testStreet',
                     postCode: 'testPostCode',
-                }
+                },
             ],
         });
     });
 
-    it('should recive validationErrors',() => {
+    it('should recive validationErrors', () => {
         const ErrorMockMethod = jest.fn();
         const submitMock = jest.fn();
 
         const addressSchema = new Schema({
             city: {
                 type: String,
-                required: true
+                required: true,
             },
             street: {
-                type: String
+                type: String,
             },
             postCode: {
-                type: String
-            }
+                type: String,
+            },
         });
 
         const formSchema = new Schema({
             address: {
-                type: addressSchema
-            }
+                type: addressSchema,
+            },
         });
 
         const wrapper = mount(
@@ -159,12 +159,12 @@ describe('ObjectField', () => {
                     <TextField name="street" />
                     <TextField name="postCode" />
                 </ObjectField>
-                <SubmitField value="Submit"/>
-            </Form>
+                <SubmitField value="Submit" />
+            </Form>,
         );
         const submit = wrapper.find(SubmitField);
-        wrapper.find('input[name="street"]').simulate('change', {target: {value: 'testStreet'}});
-        wrapper.find('input[name="postCode"]').simulate('change', {target: {value: 'testPostCode'}});
+        wrapper.find('input[name="street"]').simulate('change', { target: { value: 'testStreet' } });
+        wrapper.find('input[name="postCode"]').simulate('change', { target: { value: 'testPostCode' } });
         submit.find('button').simulate('click');
         expect(ErrorMockMethod.mock.calls.length).toBe(1);
         expect(submitMock).not.toBeCalled();
@@ -173,8 +173,8 @@ describe('ObjectField', () => {
     it('should run callback only if callback is function', () => {
         const onChangeMethod = jest.fn();
         const callback = 'test';
-        const field = mount(<ObjectFieldSeperated onChange={onChangeMethod} />,{context: {getSchema: () => ({})}});
-        field.instance().setStateModel({test: 'test'}, callback);
+        const field = mount(<ObjectFieldSeperated onChange={onChangeMethod} />, { context: { getSchema: () => ({}) } });
+        field.instance().setStateModel({ test: 'test' }, callback);
         expect(onChangeMethod).toBeCalled();
     });
 });

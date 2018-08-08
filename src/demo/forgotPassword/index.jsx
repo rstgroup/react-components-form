@@ -3,25 +3,25 @@ import Schema from 'form-schema-validation';
 import { Form, TextField, SubmitField } from '../../components/styled/Bootstrap';
 
 const emailValidator = () => ({
-    validator(value){
+    validator(value) {
         const regex = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9]+(\-)?[a-zA-Z0-9]+(\.)?[a-zA-Z0-9]{0,6}?\.[a-zA-Z]{2,6}$/;
         if (!value.match(regex)) {
             return false;
         }
         return true;
     },
-    errorMessage: 'Inserted value is not a email adress'
+    errorMessage: 'Inserted value is not a email adress',
 });
 
 const forgotPasswordSchema = new Schema({
     email: {
         type: String,
         required: true,
-        validators: [emailValidator()]
-    }
+        validators: [emailValidator()],
+    },
 });
 
-const ForgotPasswordForm  = () => (
+const ForgotPasswordForm = () => (
     <Form
         schema={forgotPasswordSchema}
         onSubmit={data => console.log(data)}

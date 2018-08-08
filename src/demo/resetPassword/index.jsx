@@ -2,32 +2,32 @@ import React from 'react';
 import Schema from 'form-schema-validation';
 import { Form, TextField, SubmitField } from '../../components/styled/Bootstrap';
 
-const sameValueAs = (fieldName) => ({
-    validator(value, type, model){
+const sameValueAs = fieldName => ({
+    validator(value, type, model) {
         return value === model[fieldName];
     },
-    errorMessage: 'Reapeted password is incorrect'
+    errorMessage: 'Reapeted password is incorrect',
 });
 
 const resetPasswordSchema = new Schema({
     password: {
         type: String,
-        required: true
+        required: true,
     },
     password2: {
         type: String,
         required: true,
-        validators: [sameValueAs('password')]
-    }
+        validators: [sameValueAs('password')],
+    },
 });
 
 const items = [
     'test1',
     'test2',
-    'test3'
+    'test3',
 ];
 
-const ForgotPasswordForm  = () => (
+const ForgotPasswordForm = () => (
     <Form
         schema={resetPasswordSchema}
         onSubmit={data => console.log(data)}
