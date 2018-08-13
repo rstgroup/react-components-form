@@ -242,7 +242,6 @@ Form.childContextTypes = {
         unlisten: PropTypes.func,
     }),
     markFieldAsTouched: PropTypes.func,
-    markFieldAsUntouched: PropTypes.func,
     hasBeenTouched: PropTypes.func,
     validateOnChange: PropTypes.bool,
     isFormSubmitted: PropTypes.bool,
