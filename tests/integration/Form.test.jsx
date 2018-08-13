@@ -12,7 +12,7 @@ import {
     ErrorField,
 } from '../../src/components';
 import FormController from '../../src/components/FormController';
-import { titleSchema, titleSchema2 } from '../data/schemas';
+import { titleSchema, bookSchema } from '../data/schemas';
 
 
 describe('Form', () => {
@@ -566,7 +566,7 @@ describe('Form', () => {
         expect(controller.getForm()).toEqual(formInstance);
     });
 
-    it('should validate form field on blur',() => {
+    it('should validate only title field on blur',() => {
         const wrapper = mount(
             <Form
                 onSubmit={() => {}}
@@ -582,6 +582,32 @@ describe('Form', () => {
                     label="Title"
                 />
                 <SubmitField value="Submit" />
+            </Form>
+        );
+        const titleField = wrapper.find(TextField).first();
+        expect(wrapper.find(ErrorField).length).toEqual(0);
+        titleField.find('input').first().simulate('blur');
+        expect(wrapper.find(ErrorField).length).toEqual(1);
+    });
+
+    it('should validate only title field in object structure on blur',() => {
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={bookSchema}
+                validateOnChange
+            >
+                <ObjectField name="book">
+                    <TextField
+                        name="title"
+                        label="Title"
+                    />
+                    <TextField
+                        name="title2"
+                        label="Title"
+                    />
+                    <SubmitField value="Submit" />
+                </ObjectField>
             </Form>
         );
         const titleField = wrapper.find(TextField).first();
