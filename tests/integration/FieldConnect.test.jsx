@@ -157,4 +157,20 @@ describe('FieldConnect', () => {
         const wrapper = mount(<TextFieldWithFormConnect {...props} />, {context});
         expect(context.setModel).not.toHaveBeenCalled();
     });
+
+    it('should call onBlur callback when onBlur callback is type of function', () => {
+        const context = {
+            setModel: jest.fn()
+        };
+        const props = {
+            name: 'name',
+            options: [],
+            callbacks: {
+                onBlur: jest.fn(),
+            }
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        wrapper.find('input').first().simulate('blur');
+        expect(props.callbacks.onBlur).toHaveBeenCalled();
+    });
 });

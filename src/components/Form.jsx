@@ -36,7 +36,6 @@ class Form extends React.Component {
         this.handleCustomValidation = this.handleCustomValidation.bind(this);
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
         this.markFieldAsTouched = this.markFieldAsTouched.bind(this);
-        this.markFieldAsUntouched = this.markFieldAsUntouched.bind(this);
         this.hasBeenTouched = this.hasBeenTouched.bind(this);
     }
 
@@ -51,7 +50,6 @@ class Form extends React.Component {
             getPath: this.getPath,
             eventsEmitter: this.eventsEmitter,
             markFieldAsTouched: this.markFieldAsTouched,
-            markFieldAsUntouched: this.markFieldAsUntouched,
             hasBeenTouched: this.hasBeenTouched,
             validateOnChange: this.state.validateOnChange,
             isFormSubmitted: this.state.isFormSubmitted,
@@ -196,17 +194,6 @@ class Form extends React.Component {
                 {},
                 this.state.touchedFields,
                 { [fieldPath]: true },
-            );
-            this.setState({ touchedFields });
-        }
-    }
-
-    markFieldAsUntouched(fieldPath) {
-        if (this.state.touchedFields[fieldPath]) {
-            const touchedFields = Object.assign(
-                {},
-                this.state.touchedFields,
-                { [fieldPath]: false },
             );
             this.setState({ touchedFields });
         }

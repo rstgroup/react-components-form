@@ -8,7 +8,8 @@ import {
     NumberField,
     SubmitField,
     ObjectField,
-    FormEventsEmitter
+    FormEventsEmitter,
+    ErrorField,
 } from '../../src/components';
 import FormController from '../../src/components/FormController';
 import { titleSchema, titleSchema2 } from '../data/schemas';
@@ -563,5 +564,56 @@ describe('Form', () => {
             </Form>
         ).instance();
         expect(controller.getForm()).toEqual(formInstance);
+    });
+
+    it('should validate form field on blur',() => {
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={titleSchema}
+                validateOnChange
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                />
+                <TextField
+                    name="title2"
+                    label="Title"
+                />
+                <SubmitField value="Submit" />
+            </Form>
+        );
+        const titleField = wrapper.find(TextField).first();
+        expect(wrapper.find(ErrorField).length).toEqual(0);
+        titleField.find('input').first().simulate('blur');
+        expect(wrapper.find(ErrorField).length).toEqual(1);
+    });
+
+    it('should mark field as touched only one time',() => {
+        const mockedSetState = jest.fn();
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={titleSchema}
+                validateOnChange
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                />
+                <TextField
+                    name="title2"
+                    label="Title"
+                />
+                <SubmitField value="Submit" />
+            </Form>
+        );
+        const formInstance = wrapper.instance();
+        formInstance.setState = mockedSetState;
+        formInstance.markFieldAsTouched('form.title');
+        formInstance.state.touchedFields = { 'form.title': true };
+        formInstance.markFieldAsTouched('form.title');
+        expect(mockedSetState).toHaveBeenCalledTimes(1);
     });
 });
