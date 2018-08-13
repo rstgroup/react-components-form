@@ -60,3 +60,9 @@ export const titleSchema = new Schema({
         type: String,
     }
 });
+
+export const bookSchema = new Schema({
+    book: {
+        type: titleSchema,
+    }
+});

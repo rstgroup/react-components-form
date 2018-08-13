@@ -11,6 +11,8 @@ class Form extends React.Component {
             model: props.model || Form.getDefaultModelValue(props.schema),
             validationErrors: {},
             validateOnChange: props.validateOnChange,
+            touchedFields: {},
+            isFormSubmitted: false,
         };
         if (props.controller) {
             props.controller.setForm(this);
@@ -33,6 +35,8 @@ class Form extends React.Component {
         this.handleSchemaValidation = this.handleSchemaValidation.bind(this);
         this.handleCustomValidation = this.handleCustomValidation.bind(this);
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
+        this.markFieldAsTouched = this.markFieldAsTouched.bind(this);
+        this.hasBeenTouched = this.hasBeenTouched.bind(this);
     }
 
     getChildContext() {
@@ -45,6 +49,10 @@ class Form extends React.Component {
             getAllValidationErrors: this.getAllValidationErrors,
             getPath: this.getPath,
             eventsEmitter: this.eventsEmitter,
+            markFieldAsTouched: this.markFieldAsTouched,
+            hasBeenTouched: this.hasBeenTouched,
+            validateOnChange: this.state.validateOnChange,
+            isFormSubmitted: this.state.isFormSubmitted,
         };
     }
 
@@ -154,6 +162,7 @@ class Form extends React.Component {
     }
 
     submitForm(event) {
+        this.setState({ isFormSubmitted: true });
         const model = Object.assign({}, this.state.model);
         const validationErrors = this.validateModel(model, this.state.schema);
         if (event) {
@@ -177,6 +186,26 @@ class Form extends React.Component {
         this.setState({ validateOnChange: false });
         this.props.onSubmit(model);
         return model;
+    }
+
+    markFieldAsTouched(fieldPath) {
+        if (!this.state.touchedFields[fieldPath]) {
+            const touchedFields = Object.assign(
+                {},
+                this.state.touchedFields,
+                { [fieldPath]: true },
+            );
+            this.setState({ touchedFields });
+        }
+    }
+
+    hasBeenTouched(fieldPath) {
+        if (!this.state.touchedFields[fieldPath]) {
+            const keys = Object.keys(this.state.touchedFields);
+            const matchedKey = keys.find(key => key.indexOf(fieldPath) > -1);
+            return this.state.touchedFields[matchedKey];
+        }
+        return true;
     }
 
     render() {
@@ -212,6 +241,10 @@ Form.childContextTypes = {
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
     }),
+    markFieldAsTouched: PropTypes.func,
+    hasBeenTouched: PropTypes.func,
+    validateOnChange: PropTypes.bool,
+    isFormSubmitted: PropTypes.bool,
 };
 
 Form.propTypes = {

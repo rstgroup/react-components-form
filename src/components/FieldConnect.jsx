@@ -51,21 +51,29 @@ export const FieldConnect = (Component) => {
 
         onChangeData(value) {
             const { name, callbacks: { onChange } } = this.props;
-            const { setModel, eventsEmitter, getPath } = this.context;
+            const {
+                setModel,
+                eventsEmitter,
+                markFieldAsTouched,
+                validateOnChange,
+                isFormSubmitted,
+            } = this.context;
             if (typeof setModel === 'function') {
                 setModel(name, value, () => {
+                    const fieldPath = this.getPath();
                     if (eventsEmitter) {
                         eventsEmitter.emit('modelChange', {
-                            name: `${getPath()}.${name}`,
+                            name: fieldPath,
                             value,
                         });
                     }
+                    if (validateOnChange && !isFormSubmitted) markFieldAsTouched(fieldPath);
                     if (typeof onChange === 'function') onChange(value);
                 });
             }
         }
 
-        setCurrentFielValue(value) {
+        setCurrentFieldValue(value) {
             if (Array.isArray(value)) {
                 this.fieldValue = cloneArray(value);
                 return;
@@ -87,7 +95,7 @@ export const FieldConnect = (Component) => {
             const fieldValue = valueFromModel !== undefined
                 ? valueFromModel
                 : value;
-            this.setCurrentFielValue(fieldValue);
+            this.setCurrentFieldValue(fieldValue);
             return fieldValue;
         }
 
@@ -106,6 +114,7 @@ export const FieldConnect = (Component) => {
             const { name, callbacks: { onError } } = this.props;
             const { getValidationErrors } = this.context;
             let results = [];
+            if (!this.shouldShowErrors()) return results;
             if (typeof getValidationErrors === 'function') results = getValidationErrors(name);
             this.fieldValidationErrors = results;
             if (typeof onError === 'function' && Object.keys(results).length > 0) onError(results);
@@ -120,8 +129,21 @@ export const FieldConnect = (Component) => {
         }
 
         getFieldAttributes() {
+            const { validateOnChange, isFormSubmitted } = this.context;
             const { fieldAttributes, callbacks: { onFocus, onBlur } } = this.props;
-            return Object.assign({}, { onFocus, onBlur }, fieldAttributes);
+            return Object.assign(
+                {},
+                {
+                    onFocus,
+                    onBlur: (element) => {
+                        if (typeof onBlur === 'function') onBlur(element);
+                        if (validateOnChange && !isFormSubmitted) {
+                            this.onChangeData(this.getValue());
+                        }
+                    },
+                },
+                fieldAttributes,
+            );
         }
 
         setValueFromOptions() {
@@ -135,6 +157,14 @@ export const FieldConnect = (Component) => {
 
                 setModel(name, value);
             }
+        }
+
+        shouldShowErrors() {
+            const { hasBeenTouched, validateOnChange, isFormSubmitted } = this.context;
+            if (!validateOnChange || isFormSubmitted) {
+                return true;
+            }
+            return hasBeenTouched(this.getPath());
         }
 
         submit(event) {
@@ -238,6 +268,10 @@ export const FieldConnect = (Component) => {
             unregisterEvent: PropTypes.func,
             unlisten: PropTypes.func,
         }),
+        markFieldAsTouched: PropTypes.func,
+        hasBeenTouched: PropTypes.func,
+        validateOnChange: PropTypes.bool,
+        isFormSubmitted: PropTypes.bool,
     };
 
     FieldConnector.childContextTypes = {
