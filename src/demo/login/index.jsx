@@ -16,6 +16,7 @@ const loginSchema = new Schema({
 
 const LoginForm = () => (
     <Form
+        id="LoginForm"
         schema={loginSchema}
         onSubmit={data => consoleData(data)}
         onError={(validationErrors, data) => consoleData('error', validationErrors, data)}

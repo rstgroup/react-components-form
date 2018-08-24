@@ -59,6 +59,7 @@ class AppointmentForm extends Component {
     render() {
         return (
             <Form
+                id="AppointmentForm"
                 eventsEmitter={el}
                 schema={appointmentSchema}
                 onSubmit={data => consoleData(data)}

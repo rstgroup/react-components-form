@@ -22,8 +22,9 @@ const resetPasswordSchema = new Schema({
     },
 });
 
-const ForgotPasswordForm = () => (
+const ResetPasswordForm = () => (
     <Form
+        id="ResetPasswordForm"
         schema={resetPasswordSchema}
         onSubmit={data => consoleData(data)}
         onError={
@@ -39,4 +40,4 @@ const ForgotPasswordForm = () => (
     </Form>
 );
 
-export default ForgotPasswordForm;
+export default ResetPasswordForm;

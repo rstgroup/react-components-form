@@ -30,6 +30,7 @@ const serviceSchema = new Schema({
 
 const ServiceForm = () => (
     <Form
+        id="ServiceForm"
         schema={serviceSchema}
         onSubmit={data => consoleData(data)}
         onError={(validationErrors, data) => consoleData('error', validationErrors, data)}

@@ -24,6 +24,7 @@ const forgotPasswordSchema = new Schema({
 
 const ForgotPasswordForm = () => (
     <Form
+        id="ForgotPasswordForm"
         schema={forgotPasswordSchema}
         onSubmit={data => consoleData(data)}
         onError={

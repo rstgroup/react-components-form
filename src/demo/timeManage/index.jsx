@@ -103,6 +103,7 @@ const timeManageSchema = new Schema({
 
 const TimeManageForm = () => (
     <Form
+        id="TimeManageForm"
         schema={timeManageSchema}
         onSubmit={data => consoleData(data)}
         onError={(validationErrors, data) => consoleData('error', validationErrors, data)}

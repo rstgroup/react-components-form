@@ -107,6 +107,7 @@ const resetModel = {
 const eventsEmitter = new FormEventsEmitter();
 const BookForm = () => (
     <Form
+        id="BookForm"
         schema={postSchema}
         onSubmit={data => consoleData(data)}
         onError={(validationErrors, data) => consoleData('error', validationErrors, data)}

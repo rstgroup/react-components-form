@@ -49,8 +49,9 @@ const registrationSchema = new Schema({
     },
 });
 
-const LoginForm = () => (
+const RegistrationForm = () => (
     <Form
+        id="RegistrationForm"
         schema={registrationSchema}
         onSubmit={data => consoleData(data)}
         validateOnChange
@@ -67,4 +68,4 @@ const LoginForm = () => (
     </Form>
 );
 
-export default LoginForm;
+export default RegistrationForm;

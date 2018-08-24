@@ -78,6 +78,7 @@ class Example2 extends React.Component {
     render() {
         return (
             <Form
+                id="Example2"
                 schema={exampleSchema}
                 onSubmit={data => this.setState({ data })}
                 onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
