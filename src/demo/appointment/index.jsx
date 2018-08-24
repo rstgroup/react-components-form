@@ -13,6 +13,7 @@ import { FormEventsEmitter } from '../../components';
 import appointmentSchema from './schema';
 import { clients, places } from './data';
 import style from '../demo.css';
+import { consoleData } from '../demoHelpers';
 
 const renderPhoneItem = ({ phone = '', name = '' }) => (
     <div className={style.autocompleteListItem}>
@@ -22,8 +23,8 @@ const renderPhoneItem = ({ phone = '', name = '' }) => (
 );
 
 renderPhoneItem.propTypes = {
-    phone: PropTypes.string,
-    name: PropTypes.string,
+    phone: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
 };
 
 const renderPlaceItem = ({ name = '' }) => (
@@ -33,7 +34,7 @@ const renderPlaceItem = ({ name = '' }) => (
 );
 
 renderPlaceItem.propTypes = {
-    name: PropTypes.string,
+    name: PropTypes.string.isRequired,
 };
 
 const renderPlaceSectionTitle = ({ title = '' }) => (
@@ -43,16 +44,16 @@ const renderPlaceSectionTitle = ({ title = '' }) => (
 );
 
 renderPlaceSectionTitle.propTypes = {
-    title: PropTypes.string,
+    title: PropTypes.string.isRequired,
 };
 
 const el = new FormEventsEmitter();
 class AppointmentForm extends Component {
-    getPhoneValue(value) {
+    static getPhoneValue(value) {
         el.emit('clientData', value);
         return value.phone;
     }
-    getPlaceValue(value) {
+    static getPlaceValue(value) {
         return value.name;
     }
     render() {
@@ -60,8 +61,8 @@ class AppointmentForm extends Component {
             <Form
                 eventsEmitter={el}
                 schema={appointmentSchema}
-                onSubmit={data => console.log(data)}
-                onError={(validationErrors, data) => console.log('error', validationErrors, data)}
+                onSubmit={data => consoleData(data)}
+                onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
             >
                 <h4>APPOINTMENT FORM</h4>
                 <div className="row">
@@ -79,7 +80,7 @@ class AppointmentForm extends Component {
                         options={clients}
                         searchKey="phone"
                         renderItem={renderPhoneItem}
-                        getValue={this.getPhoneValue}
+                        getValue={AppointmentForm.getPhoneValue}
                         wrapperClassName={style.autocompleteListItemWrapper}
                         theme={{
                             suggestionsContainer: style.suggestionsContainer,
@@ -106,12 +107,12 @@ class AppointmentForm extends Component {
                     searchKey="name"
                     renderItem={renderPlaceItem}
                     renderSectionTitle={renderPlaceSectionTitle}
-                    getValue={this.getPlaceValue}
+                    getValue={AppointmentForm.getPlaceValue}
                     multiSection
                     suggestionsShownIfFieldEmpty
                     sectionSuggestionsIndex="suggestions"
                     onSuggestionSelected={(event, { suggestion }) => {
-                        console.log('suggestionSelected', event, suggestion);
+                        consoleData('suggestionSelected', event, suggestion);
                     }}
                     wrapperClassName={style.autocompleteListItemWrapper}
                     theme={{

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { get, cloneObject, cloneArray, isNotEqualObject, isReactComponentOrElement } from '../../src/helpers';
 

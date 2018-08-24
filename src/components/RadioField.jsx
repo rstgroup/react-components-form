@@ -30,7 +30,7 @@ export class RadioField extends React.Component {
                         name={path}
                         placeholder={placeholder}
                         className={className}
-                        checked={value === option.value}
+                        checked={value === optionValue}
                         value={optionValue}
                         htmlFor={uniqueName}
                         id={uniqueName}

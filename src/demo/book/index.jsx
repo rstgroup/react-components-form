@@ -1,4 +1,5 @@
 import React from 'react';
+import Schema from 'form-schema-validation';
 import {
     Form,
     TextField,
@@ -8,9 +9,9 @@ import {
     ListField,
     SubmitField,
 } from '../../components/styled/Bootstrap';
-import Schema from 'form-schema-validation';
 import { listWrapper, objectFormField, objectFieldClassName } from '../demo.css';
 import { FormEventsEmitter } from '../../components';
+import { consoleData } from '../demoHelpers';
 
 const options = [
     {
@@ -107,8 +108,8 @@ const eventsEmitter = new FormEventsEmitter();
 const BookForm = () => (
     <Form
         schema={postSchema}
-        onSubmit={data => console.log(data)}
-        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
+        onSubmit={data => consoleData(data)}
+        onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
         eventsEmitter={eventsEmitter}
     >
         <h4>BOOK FORM</h4>
@@ -136,7 +137,7 @@ const BookForm = () => (
         </ListField>
         <CheckboxField name="status" label="Published" />
         <SubmitField value="Submit" />
-        <a onClick={() => { eventsEmitter.emit('reset', resetModel); }} >RESET</a>
+        <button onClick={() => { eventsEmitter.emit('reset', resetModel); }} >RESET</button>
     </Form>
 );
 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { mount } from 'enzyme';
 import Schema from 'form-schema-validation';
@@ -9,9 +8,10 @@ import {
     SubmitField,
     ObjectField,
     FormEventsEmitter,
+    ErrorField,
 } from '../../src/components';
 import FormController from '../../src/components/FormController';
-import { titleSchema, titleSchema2 } from '../data/schemas';
+import { titleSchema, bookSchema } from '../data/schemas';
 
 
 describe('Form', () => {
@@ -556,5 +556,82 @@ describe('Form', () => {
             </Form>,
         ).instance();
         expect(controller.getForm()).toEqual(formInstance);
+    });
+
+    it('should validate only title field on blur', () => {
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={titleSchema}
+                validateOnChange
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                />
+                <TextField
+                    name="title2"
+                    label="Title"
+                />
+                <SubmitField value="Submit" />
+            </Form>,
+        );
+        const titleField = wrapper.find(TextField).first();
+        expect(wrapper.find(ErrorField).length).toEqual(0);
+        titleField.find('input').first().simulate('blur');
+        expect(wrapper.find(ErrorField).length).toEqual(1);
+    });
+
+    it('should validate only title field in object structure on blur', () => {
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={bookSchema}
+                validateOnChange
+            >
+                <ObjectField name="book">
+                    <TextField
+                        name="title"
+                        label="Title"
+                    />
+                    <TextField
+                        name="title2"
+                        label="Title"
+                    />
+                    <SubmitField value="Submit" />
+                </ObjectField>
+            </Form>,
+        );
+        const titleField = wrapper.find(TextField).first();
+        expect(wrapper.find(ErrorField).length).toEqual(0);
+        titleField.find('input').first().simulate('blur');
+        expect(wrapper.find(ErrorField).length).toEqual(1);
+    });
+
+    it('should mark field as touched only one time', () => {
+        const mockedSetState = jest.fn();
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                schema={titleSchema}
+                validateOnChange
+            >
+                <TextField
+                    name="title"
+                    label="Title"
+                />
+                <TextField
+                    name="title2"
+                    label="Title"
+                />
+                <SubmitField value="Submit" />
+            </Form>,
+        );
+        const formInstance = wrapper.instance();
+        formInstance.setState = mockedSetState;
+        formInstance.markFieldAsTouched('form.title');
+        formInstance.state.touchedFields = { 'form.title': true };
+        formInstance.markFieldAsTouched('form.title');
+        expect(mockedSetState).toHaveBeenCalledTimes(1);
     });
 });

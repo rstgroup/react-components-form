@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { mount } from 'enzyme';
 import {
@@ -118,7 +117,7 @@ describe('FieldConnect', () => {
             name: 'name',
             value: 'value',
         };
-        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        mount(<TextFieldWithFormConnect {...props} />, { context });
         expect(context.setModel).toHaveBeenCalledWith(props.name, props.value);
     });
 
@@ -129,7 +128,7 @@ describe('FieldConnect', () => {
         const props = {
             name: 'name',
         };
-        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        mount(<TextFieldWithFormConnect {...props} />, { context });
         expect(context.setModel).not.toHaveBeenCalled();
     });
 
@@ -142,7 +141,7 @@ describe('FieldConnect', () => {
             options: [0, 1, 2],
             defaultOption: 0,
         };
-        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        mount(<TextFieldWithFormConnect {...props} />, { context });
         expect(context.setModel).toHaveBeenCalledWith(props.name, props.options[0]);
     });
 
@@ -154,7 +153,23 @@ describe('FieldConnect', () => {
             name: 'name',
             options: [],
         };
-        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        mount(<TextFieldWithFormConnect {...props} />, { context });
         expect(context.setModel).not.toHaveBeenCalled();
+    });
+
+    it('should call onBlur callback when onBlur callback is type of function', () => {
+        const context = {
+            setModel: jest.fn(),
+        };
+        const props = {
+            name: 'name',
+            options: [],
+            callbacks: {
+                onBlur: jest.fn(),
+            },
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        wrapper.find('input').first().simulate('blur');
+        expect(props.callbacks.onBlur).toHaveBeenCalled();
     });
 });

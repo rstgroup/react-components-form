@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { mount } from 'enzyme';
 import Schema from 'form-schema-validation';
@@ -173,7 +172,12 @@ describe('ObjectField', () => {
     it('should run callback only if callback is function', () => {
         const onChangeMethod = jest.fn();
         const callback = 'test';
-        const field = mount(<ObjectFieldSeperated onChange={onChangeMethod} />, { context: { getSchema: () => ({}) } });
+        const field = mount(
+            <ObjectFieldSeperated
+                onChange={onChangeMethod}
+            />,
+            { context: { getSchema: () => ({}) } },
+        );
         field.instance().setStateModel({ test: 'test' }, callback);
         expect(onChangeMethod).toBeCalled();
     });

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { mount } from 'enzyme';
 import {
@@ -28,7 +27,7 @@ describe('ListField', () => {
                 <SubmitField value="Submit" />
             </Form>,
         );
-        const list = wrapper.find(ListField);
+        wrapper.find(ListField);
         const addButton = wrapper.find('.addButtonClass').first();
         const removeButton = wrapper.find('.removeButtonClass').first();
         addButton.simulate('click');

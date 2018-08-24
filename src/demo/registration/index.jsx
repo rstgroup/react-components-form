@@ -1,10 +1,11 @@
 import React from 'react';
 import Schema from 'form-schema-validation';
 import { Form, TextField, CheckboxField, SubmitField } from '../../components/styled/Bootstrap';
+import { consoleData } from '../demoHelpers';
 
+const regex = /^[a-zA-Z0-9.]+@[a-zA-Z0-9]+(-)?[a-zA-Z0-9]+(\.)?[a-zA-Z0-9]{0,6}?\.[a-zA-Z]{2,6}$/;
 const emailValidator = () => ({
     validator(value) {
-        const regex = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9]+(\-)?[a-zA-Z0-9]+(\.)?[a-zA-Z0-9]{0,6}?\.[a-zA-Z]{2,6}$/;
         if (!value.match(regex)) {
             return false;
         }
@@ -51,9 +52,9 @@ const registrationSchema = new Schema({
 const LoginForm = () => (
     <Form
         schema={registrationSchema}
-        onSubmit={data => console.log(data)}
+        onSubmit={data => consoleData(data)}
         validateOnChange
-        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
+        onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
     >
         <h4>REGISTRATION FORM</h4>
         <TextField name="name" label="Name" type="text" />

@@ -1,4 +1,5 @@
 import React from 'react';
+import Schema from 'form-schema-validation';
 import {
     Form,
     ObjectField,
@@ -6,7 +7,7 @@ import {
     CheckboxField,
     SubmitField,
 } from '../../components/styled/Bootstrap';
-import Schema from 'form-schema-validation';
+import { consoleData } from '../demoHelpers';
 
 const timeSchema = new Schema({
     hours: {
@@ -103,8 +104,8 @@ const timeManageSchema = new Schema({
 const TimeManageForm = () => (
     <Form
         schema={timeManageSchema}
-        onSubmit={data => console.log(data)}
-        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
+        onSubmit={data => consoleData(data)}
+        onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
     >
         <h4>WORK MANAGE FORM</h4>
         <div className="row">

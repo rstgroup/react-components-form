@@ -1,4 +1,5 @@
 import React from 'react';
+import Schema from 'form-schema-validation';
 import {
     Form,
     TextField,
@@ -10,7 +11,7 @@ import {
     CheckboxField,
     ObjectField,
 } from '../../components';
-import Schema from 'form-schema-validation';
+import { consoleData } from '../demoHelpers';
 
 const personSchema = new Schema({
     name: {
@@ -79,7 +80,7 @@ class Example2 extends React.Component {
             <Form
                 schema={exampleSchema}
                 onSubmit={data => this.setState({ data })}
-                onError={(validationErrors, data) => console.log('error', validationErrors, data)}
+                onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
             >
                 <h4>ALL FIELDS FORM</h4>
                 <TextField name="textField" type="text" />

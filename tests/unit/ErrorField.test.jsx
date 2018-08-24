@@ -4,13 +4,9 @@ import { ErrorField } from '../../src/components/ErrorField';
 
 describe('ErrorField', () => {
     it('should receive props and display errors in custom ErrorComponent', () => {
-        class ErrorComponent extends React.Component {
-            render() {
-                return (
-                    <div>error</div>
-                );
-            }
-        }
+        const ErrorComponent = () => (
+            <div>error</div>
+        );
         const props = {
             ErrorComponent,
         };

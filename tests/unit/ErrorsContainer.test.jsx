@@ -108,13 +108,9 @@ describe('ErrorsContainer', () => {
         const context = {
             getAllErrors: () => errors,
         };
-        class ErrorComponent extends React.Component {
-            render() {
-                return (
-                    <div>error</div>
-                );
-            }
-        }
+        const ErrorComponent = () => (
+            <div>error</div>
+        );
         const props = {
             ErrorComponent,
         };

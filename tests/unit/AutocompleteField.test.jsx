@@ -13,10 +13,10 @@ const MockItem = () => (
 );
 
 describe('AutocompleteField', () => {
-    let onChangeData,
-        testError,
-        errorStyles,
-        props;
+    let onChangeData;
+    let testError;
+    let errorStyles;
+    let props;
 
     beforeEach(() => {
         onChangeData = jest.fn();

@@ -1,10 +1,11 @@
 import React from 'react';
 import Schema from 'form-schema-validation';
 import { Form, TextField, SubmitField } from '../../components/styled/Bootstrap';
+import { consoleData } from '../demoHelpers';
 
+const regex = /^[a-zA-Z0-9.]+@[a-zA-Z0-9]+(-)?[a-zA-Z0-9]+(\.)?[a-zA-Z0-9]{0,6}?\.[a-zA-Z]{2,6}$/;
 const emailValidator = () => ({
     validator(value) {
-        const regex = /^[a-zA-Z0-9\.]+@[a-zA-Z0-9]+(\-)?[a-zA-Z0-9]+(\.)?[a-zA-Z0-9]{0,6}?\.[a-zA-Z]{2,6}$/;
         if (!value.match(regex)) {
             return false;
         }
@@ -24,11 +25,17 @@ const forgotPasswordSchema = new Schema({
 const ForgotPasswordForm = () => (
     <Form
         schema={forgotPasswordSchema}
-        onSubmit={data => console.log(data)}
-        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
+        onSubmit={data => consoleData(data)}
+        onError={
+            (validationErrors, data) =>
+                consoleData('error', validationErrors, data)
+        }
     >
         <h4>FORGOT PASSWORD FORM</h4>
-        <h5>Please insert your email address and press send to reset password. We will send You reset password link with details.</h5>
+        <h5>
+            Please insert your email address and press send to reset password.
+            We will send You reset password link with details.
+        </h5>
         <TextField name="email" label="Email address" type="text" />
         <SubmitField value="Login" />
     </Form>
