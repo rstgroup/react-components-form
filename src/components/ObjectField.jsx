@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cloneDeep from 'lodash/cloneDeep';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
@@ -46,7 +47,7 @@ export class ObjectField extends React.Component {
     }
 
     setStateModel(model, callback) {
-        this.props.onChange(model);
+        this.props.onChange(cloneDeep(model));
         if (typeof callback === 'function') callback();
     }
 
