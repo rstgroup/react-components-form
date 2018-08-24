@@ -1,4 +1,3 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import { ErrorsContainer } from '../../src/components';
@@ -109,15 +108,11 @@ describe('ErrorsContainer', () => {
         const context = {
             getAllErrors: () => errors,
         };
-        class ErrorComponent extends React.Component {
-            render() {
-                return (
-                    <div>error</div>
-                );
-            }
-        }
+        const ErrorComponent = () => (
+            <div>error</div>
+        );
         const props = {
-            ErrorComponent
+            ErrorComponent,
         };
         const wrapper = mount(<ErrorsContainer {...props} />, { context });
         expect(wrapper.find(ErrorField).props().ErrorComponent).toBe(ErrorComponent);

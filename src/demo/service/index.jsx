@@ -1,4 +1,5 @@
 import React from 'react';
+import Schema from 'form-schema-validation';
 import {
     Form,
     TextField,
@@ -6,32 +7,33 @@ import {
     NumberField,
     SubmitField,
 } from '../../components/styled/Bootstrap';
-import Schema from 'form-schema-validation';
+import { consoleData } from '../demoHelpers';
 
 const serviceSchema = new Schema({
-    title:{
+    title: {
         type: String,
-        required: true
+        required: true,
     },
-    description:{
+    description: {
         type: String,
-        required: true
+        required: true,
     },
-    price:{
+    price: {
         type: Number,
-        required: true
+        required: true,
     },
-    time:{
+    time: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 });
 
 const ServiceForm = () => (
     <Form
+        id="ServiceForm"
         schema={serviceSchema}
-        onSubmit={data => console.log(data)}
-        onError={(validationErrors, data) => console.log('error', validationErrors, data)}
+        onSubmit={data => consoleData(data)}
+        onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
     >
         <h4>SERVICE FORM</h4>
         <TextField name="title" label="Title" />

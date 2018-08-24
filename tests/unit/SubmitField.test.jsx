@@ -1,14 +1,13 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
-import {SubmitField} from '../../src/components/SubmitField';
+import { SubmitField } from '../../src/components/SubmitField';
 
 describe('SubmitField', () => {
     it('should receive props and call onChange method on change value', () => {
         const mockFunction = jest.fn();
         const props = {
             submit: mockFunction,
-            value: 'Submit'
+            value: 'Submit',
         };
         const wrapper = mount(<SubmitField {...props} />);
         expect(wrapper.props().value).toBe(props.value);

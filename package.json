@@ -15,8 +15,8 @@
     "prepublish": "npm run lint && npm run test && npm run build",
     "coverage": "jest --coverage",
     "coverage:report": "cat ./coverage/lcov.info | coveralls",
-    "lint": "eslint -c .eslintrc.json src/**/*.js?",
-    "lint:fix": "eslint --fix -c .eslintrc.json src/**/*.js?"
+    "lint": "eslint -c .eslintrc.json **/*.js? --ignore-path .gitignore",
+    "lint:fix": "eslint --fix -c .eslintrc.json **/*.js? --ignore-path .gitignore"
   },
   "pre-commit": [
     "lint",
@@ -36,10 +36,11 @@
   "license": "MIT",
   "dependencies": {
     "classnames": "^2.2.5",
+    "form-schema-validation": "^1.15.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.6.0",
     "react": "^15.6.0 || ^16.0.0",
-    "react-autosuggest": "^9.3.2",
+    "react-autosuggest": "^9.4.0",
     "react-dom": "^15.5.4 || ^16.0.0"
   },
   "devDependencies": {
@@ -55,16 +56,15 @@
     "babel-traverse": "^6.26.0",
     "coveralls": "^2.13.1",
     "css-loader": "^0.26.1",
-    "enzyme": "^3.1.0",
-    "enzyme-adapter-react-16": "^1.0.2",
+    "enzyme": "^3.4.4",
+    "enzyme-adapter-react-16": "^1.2.0",
     "eslint": "^4.4.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-babel": "^4.1.2",
-    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-react": "^7.11.1",
     "extract-text-webpack-plugin": "^1.0.1",
-    "form-schema-validation": "^1.11.1",
     "jest": "^21.2.1",
     "jsdom": "^9.11.0",
     "pre-commit": "^1.2.2",
@@ -74,11 +74,12 @@
     "react-test-renderer": "^15.4.1",
     "style-loader": "^0.13.1",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.2.0"
+    "webpack-dev-server": "^2.11.3"
   },
   "jest": {
     "setupFiles": [
-      "raf/polyfill"
+      "raf/polyfill",
+      "./tests/enzymeConfig.js"
     ],
     "verbose": true,
     "coverageThreshold": {

@@ -1,7 +1,6 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
-import {SelectField} from '../../src/components/SelectField';
+import { SelectField } from '../../src/components/SelectField';
 
 describe('SelectField', () => {
     it('should call onChange method on change value with string options', () => {
@@ -14,13 +13,13 @@ describe('SelectField', () => {
             hasValidationError: true,
             validationErrors: ['testError'],
             errorsStyles: {
-                className: 'errorClassName'
+                className: 'errorClassName',
             },
-            className: 'testComponent'
+            className: 'testComponent',
         };
         const wrapper = mount(<SelectField {...props} />);
-        wrapper.setProps({options});
-        wrapper.find('select').simulate('change', {target:{value:'option3'}});
+        wrapper.setProps({ options });
+        wrapper.find('select').simulate('change', { target: { value: 'option3' } });
         expect(onChangeData).toBeCalledWith('option3');
     });
 
@@ -28,21 +27,21 @@ describe('SelectField', () => {
         const onChangeData = jest.fn();
         const testError = ['testError'];
         const errorStyles = {
-            className: 'errorClassName'
+            className: 'errorClassName',
         };
         const options = [
             {
                 label: 'Select',
-                value: ''
+                value: '',
             },
             {
                 label: 'option 1',
-                value: 'opt1'
+                value: 'opt1',
             },
             {
                 label: 'option 2',
-                value: 'opt2'
-            }
+                value: 'opt2',
+            },
         ];
         const props = {
             name: 'options',
@@ -52,32 +51,32 @@ describe('SelectField', () => {
             validationErrors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent',
-            options
+            options,
         };
         const wrapper = mount(<SelectField {...props} />);
-        wrapper.find('select').simulate('change', {target:{value:'opt2'}});
+        wrapper.find('select').simulate('change', { target: { value: 'opt2' } });
         expect(onChangeData).toBeCalledWith('opt2');
     });
 
     it('should add disabled attribute to select option', () => {
         const testError = ['testError'];
         const errorStyles = {
-            className: 'errorClassName'
+            className: 'errorClassName',
         };
         const options = [
             {
                 label: 'Select',
-                value: ''
+                value: '',
             },
             {
                 label: 'option 1',
                 value: 'opt1',
-                disabled: true
+                disabled: true,
             },
             {
                 label: 'option 2',
-                value: 'opt2'
-            }
+                value: 'opt2',
+            },
         ];
         const props = {
             name: 'firstName',
@@ -87,7 +86,7 @@ describe('SelectField', () => {
             validationErrors: testError,
             errorsStyles: errorStyles,
             className: 'testComponent',
-            options
+            options,
         };
         const wrapper = mount(<SelectField {...props} />);
         expect(wrapper.find('option[value="opt1"]').html().includes('disabled=""')).toBe(true);

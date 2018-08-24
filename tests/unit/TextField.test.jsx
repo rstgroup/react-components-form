@@ -1,7 +1,6 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
-import {TextField} from '../../src/components/TextField';
+import { TextField } from '../../src/components/TextField';
 
 describe('TextField', () => {
     it('should call onChange method on change value', () => {
@@ -13,13 +12,13 @@ describe('TextField', () => {
             hasValidationError: true,
             validationErrors: ['testError'],
             errorsStyles: {
-                className: 'errorClassName'
+                className: 'errorClassName',
             },
-            className: 'testComponent'
+            className: 'testComponent',
         };
         const wrapper = mount(<TextField {...props} />);
-        wrapper.setProps({type: 'number'});
-        wrapper.find('input').simulate('change', {target:{value:'testValue'}});
+        wrapper.setProps({ type: 'number' });
+        wrapper.find('input').simulate('change', { target: { value: 'testValue' } });
         expect(onChangeData).toBeCalledWith('testValue');
     });
 
@@ -29,5 +28,5 @@ describe('TextField', () => {
         const wrapper = mount(<TextField onChange={fakeOnChange} trim />);
         wrapper.find('input').simulate('change', fakeEvent);
         expect(fakeOnChange).toHaveBeenCalledWith('test value');
-    })
+    });
 });

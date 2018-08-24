@@ -1,4 +1,3 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
 import { RadioField } from '../../src/components/RadioField';
@@ -15,13 +14,13 @@ describe('RadioField', () => {
             hasValidationError: true,
             validationErrors: ['testError'],
             errorsStyles: {
-                className: 'errorClassName'
+                className: 'errorClassName',
             },
             className: 'testComponent',
             options: [
                 'test1',
                 'test2',
-            ]
+            ],
         };
     });
 
@@ -37,9 +36,9 @@ describe('RadioField', () => {
         const firstLabel = 'test 1';
         const lastLabel = 'test 2';
         const fieldProps = Object.assign({}, props, { options: [
-            { label: firstLabel, value: 'test1'},
-            { label: lastLabel, value: 'test2'},
-        ]});
+            { label: firstLabel, value: 'test1' },
+            { label: lastLabel, value: 'test2' },
+        ] });
         const wrapper = mount(<RadioField {...fieldProps} />);
         expect(wrapper.contains(firstLabel)).toEqual(true);
         expect(wrapper.contains(lastLabel)).toEqual(true);

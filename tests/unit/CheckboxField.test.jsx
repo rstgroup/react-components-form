@@ -1,7 +1,6 @@
-import '../enzymeConfig';
 import React from 'react';
 import { mount } from 'enzyme';
-import {CheckboxField} from '../../src/components/CheckboxField';
+import { CheckboxField } from '../../src/components/CheckboxField';
 
 describe('CheckboxField', () => {
     let onChangeData = jest.fn();
@@ -15,9 +14,9 @@ describe('CheckboxField', () => {
             hasValidationError: true,
             validationErrors: ['testError'],
             errorsStyles: {
-                className: 'errorClassName'
+                className: 'errorClassName',
             },
-            className: 'testComponent'
+            className: 'testComponent',
         };
     });
 
@@ -37,7 +36,7 @@ describe('CheckboxField', () => {
 
     it('should checked field if component will receive new props with value true', () => {
         const wrapper = mount(<CheckboxField {...props} />);
-        wrapper.setProps({value: true});
+        wrapper.setProps({ value: true });
         wrapper.find('input').simulate('change');
         expect(onChangeData).toBeCalledWith(false);
     });
