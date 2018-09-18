@@ -134,6 +134,7 @@ export class ListField extends React.Component {
                         <button
                             onClick={removeItemAction}
                             className={className}
+                            type="button"
                         >
                             {value || 'Remove'}
                         </button>
@@ -194,6 +195,7 @@ export class ListField extends React.Component {
                 {!hideAddButton && isAddAllowed && <button
                     onClick={this.addListElement}
                     className={addButton.className}
+                    type="button"
                 >
                     {addButton.value || 'Add'}
                 </button>}
