@@ -1,5 +1,8 @@
 const path = require('path');
 const autoprefixer = require('autoprefixer');
+const { dependencies } = require('./package.json');
+
+const libraryTarget = 'umd';
 
 module.exports = {
     mode: 'production',
@@ -13,11 +16,20 @@ module.exports = {
     output: {
         path: path.join(__dirname, ''),
         filename: '[name].js',
-        libraryTarget: 'umd',
+        libraryTarget,
     },
     resolve: {
         extensions: ['.js', '.jsx'],
     },
+    externals: [
+        (context, request, callback) => {
+            if (dependencies[request]) {
+                callback(null, `${libraryTarget} ${request}`);
+                return;
+            }
+            callback();
+        },
+    ],
     module: {
         rules: [
             {
