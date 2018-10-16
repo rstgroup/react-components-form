@@ -1,32 +1,48 @@
-var webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
-    entry: ['babel-polyfill', "./src/demo/index.jsx"],
+    mode: 'development',
+    entry: [
+        '@babel/polyfill',
+        './src/demo/index.jsx',
+    ],
     output: {
         path: '/dist/',
-        filename: "demo.js"
+        filename: 'demo.js',
     },
     resolve: {
-        extensions: ['.js', '.jsx']
+        extensions: ['.js', '.jsx'],
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader?modules=true&localIdentName=[name]__[local]___[hash:base64:5]'
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            localIdentName: '[name]__[local]___[hash:base64:5]',
+                        },
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [autoprefixer()],
+                        },
+                    },
+                ],
             },
             {
                 test: /.jsx?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
-                query: {
-                    presets: ['es2015', 'stage-0', 'es2017', 'react']
-                }
-            }
-        ]
+            },
+        ],
     },
     devServer: {
         historyApiFallback: true,
-        port: 9002
-    }
+        port: 9002,
+    },
 };
