@@ -93,8 +93,13 @@ export const FieldConnect = (Component) => {
         };
 
         registerFieldValidators = () => {
+            const { getModel } = this.context;
+            const value = typeof getModel !== 'function' ? getModel(this.props.name) : '';
             if (this.props.validator) {
-                const fieldValidator = (...attr) => this.props.validator(this.getValue(), ...attr);
+                const fieldValidator = (...attr) => {
+                    console.log(this.props);
+                    return this.props.validator(value, ...attr)
+                };
                 this.setFieldValidator(fieldValidator);
             }
         };
