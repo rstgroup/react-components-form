@@ -17,6 +17,7 @@ class Form extends React.Component {
         if (props.controller) {
             props.controller.setForm(this);
         }
+        this.fieldsValidators = [];
         this.storage = new Storage(this.state.model);
         this.eventsEmitter = props.eventsEmitter;
         this.setModel = this.setModel.bind(this);
@@ -53,6 +54,8 @@ class Form extends React.Component {
             hasBeenTouched: this.hasBeenTouched,
             validateOnChange: this.state.validateOnChange,
             isFormSubmitted: this.state.isFormSubmitted,
+            setFieldValidator: this.setFieldValidator,
+            removeFieldValidator: this.removeFieldValidator,
         };
     }
 
@@ -100,6 +103,39 @@ class Form extends React.Component {
         return this.state.schema.getField(name);
     }
 
+    findFieldValidatorIndex = (validator) => {
+        return this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
+    };
+
+    setFieldValidator = (path, validator) => {
+        const index = this.findFieldValidatorIndex(validator);
+        if(index < 0) {
+            const schemaValidator = (model, schema) => {
+                console.log(path);
+                const validationResults = validator(model);
+                if (validationResults && typeof validationResults === 'boolean') {
+                    return;
+                }
+                schema.setModelError(path, validationResults);
+            };
+            this.fieldsValidators.push({ path, validator, schemaValidator });
+            if (typeof this.state.schema.validate === 'function') {
+                this.state.schema.addValidator(schemaValidator);
+            }
+        }
+    };
+
+    removeFieldValidator = (validator) => {
+        const index = this.findFieldValidatorIndex(validator);
+        if(index > -1) {
+            const validator = this.fieldsValidators[index];
+            if (typeof this.state.schema.validate === 'function') {
+                this.state.schema.removeValidator(validator.schemaValidator);
+            }
+            this.fieldsValidators.splice(index, 1);
+        }
+    };
+
     getValidationErrors(name) {
         return this.state.validationErrors[name] || {};
     }
@@ -123,6 +159,10 @@ class Form extends React.Component {
     resetListener(model) {
         const newModel = model || Form.getDefaultModelValue(this.state.schema);
         this.storage.setModel(newModel);
+    }
+
+    handleFieldsValidation(model) {
+
     }
 
     handleSchemaValidation(schema, model) {
@@ -245,6 +285,8 @@ Form.childContextTypes = {
     hasBeenTouched: PropTypes.func,
     validateOnChange: PropTypes.bool,
     isFormSubmitted: PropTypes.bool,
+    setFieldValidator: PropTypes.func,
+    removeFieldValidator: PropTypes.func,
 };
 
 Form.propTypes = {
