@@ -9,9 +9,10 @@ import {
     ObjectField,
     FormEventsEmitter,
     ErrorField,
+    FieldConnect,
 } from '../../src/components';
 import FormController from '../../src/components/FormController';
-import { titleSchema, bookSchema } from '../data/schemas';
+import { titleSchema, bookSchema, fooBarSchema } from '../data/schemas';
 
 
 describe('Form', () => {
@@ -634,4 +635,54 @@ describe('Form', () => {
         formInstance.markFieldAsTouched('form.title');
         expect(mockedSetState).toHaveBeenCalledTimes(1);
     });
+    // it('should validate field using field validator', () => {
+    //     const barValidator = (value) => value === 'test' ? true : 'barError';
+    //     class InputWithValidator extends React.Component {
+    //         constructor(props) {
+    //             super(props);
+    //             this.state = {
+    //                 value: '',
+    //             };
+    //         }
+    //         onChangeValue = (value) => {
+    //             this.setState({ value }, () => {
+    //                 const formValue = `${value}.foo`;
+    //                 this.props.onChange(formValue);
+    //             });
+    //         };
+    //         fieldValidator = () => {
+    //
+    //         }
+    //         render() {
+    //             const { name } = this.props;
+    //             const { value } = this.state;
+    //             return (
+    //                 <div>
+    //                     <input name={name} onChange={this.onChangeValue} value={value}/>
+    //                 </div>
+    //             );
+    //         }
+    //     }
+    //     const FieldWithValidator = FieldConnect(InputWithValidator);
+    //
+    //     const wrapper = mount(
+    //         <Form
+    //             onSubmit={() => {}}
+    //             schema={fooBarSchema}
+    //             validateOnChange
+    //         >
+    //             <FieldWithValidator
+    //                 name="foo"
+    //             />
+    //             <TextField
+    //                 name="bar"
+    //                 validator={barValidator}
+    //             />
+    //             <SubmitField value="Submit" />
+    //         </Form>,
+    //     );
+    //
+    //     wrapper.find('[name="foo"]').simulate('change', 'ttt');
+    //     expect(wrapper.find('[name="foo"]').exists()).toEqual(true);
+    // });
 });
