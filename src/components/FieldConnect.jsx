@@ -77,17 +77,29 @@ export const FieldConnect = (Component) => {
             }
         }
 
-        setFieldValidator = validator => {
+        getModelPath() {
             const seperatedPath = this.getPath().split('.');
-            const modelPath = seperatedPath.splice(1, seperatedPath.length).join('.');
-            this.context.setFieldValidator(modelPath, validator);
+            return seperatedPath.splice(1, seperatedPath.length)
+                .map(path => {
+                    const pathAttributes = path.split('-');
+                    if (pathAttributes.length > 1) {
+                        return pathAttributes[1];
+                    }
+                    return path;
+                })
+                .join('.');
+        }
+
+        setFieldValidator = validator => {
+            const modelPath = this.getModelPath();
+            this.context.setValidator(modelPath, validator);
             this.fieldValidators.push(validator);
         };
 
         removeFieldValidator = validator => {
             const index = this.fieldValidators.indexOf(validator);
             if (index > -1) {
-                this.context.removeFieldValidator(validator);
+                this.context.removeValidator(validator);
                 this.fieldValidators.splice(index, 1);
             }
         };
@@ -105,7 +117,7 @@ export const FieldConnect = (Component) => {
 
         unregisterFieldValidators = () => {
             this.fieldValidators.forEach(validator => {
-                this.context.removeFieldValidator(validator);
+                this.context.removeValidator(validator);
             });
         };
 
@@ -308,8 +320,8 @@ export const FieldConnect = (Component) => {
         hasBeenTouched: PropTypes.func,
         validateOnChange: PropTypes.bool,
         isFormSubmitted: PropTypes.bool,
-        setFieldValidator: PropTypes.func,
-        removeFieldValidator: PropTypes.func,
+        setValidator: PropTypes.func,
+        removeValidator: PropTypes.func,
     };
 
     FieldConnector.childContextTypes = {

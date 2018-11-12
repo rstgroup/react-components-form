@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import Schema from 'form-schema-validation';
+import PropTypes from 'prop-types';
 import {
     Form,
     TextField,
@@ -635,54 +636,60 @@ describe('Form', () => {
         formInstance.markFieldAsTouched('form.title');
         expect(mockedSetState).toHaveBeenCalledTimes(1);
     });
-    // it('should validate field using field validator', () => {
-    //     const barValidator = (value) => value === 'test' ? true : 'barError';
-    //     class InputWithValidator extends React.Component {
-    //         constructor(props) {
-    //             super(props);
-    //             this.state = {
-    //                 value: '',
-    //             };
-    //         }
-    //         onChangeValue = (value) => {
-    //             this.setState({ value }, () => {
-    //                 const formValue = `${value}.foo`;
-    //                 this.props.onChange(formValue);
-    //             });
-    //         };
-    //         fieldValidator = () => {
-    //
-    //         }
-    //         render() {
-    //             const { name } = this.props;
-    //             const { value } = this.state;
-    //             return (
-    //                 <div>
-    //                     <input name={name} onChange={this.onChangeValue} value={value}/>
-    //                 </div>
-    //             );
-    //         }
-    //     }
-    //     const FieldWithValidator = FieldConnect(InputWithValidator);
-    //
-    //     const wrapper = mount(
-    //         <Form
-    //             onSubmit={() => {}}
-    //             schema={fooBarSchema}
-    //             validateOnChange
-    //         >
-    //             <FieldWithValidator
-    //                 name="foo"
-    //             />
-    //             <TextField
-    //                 name="bar"
-    //                 validator={barValidator}
-    //             />
-    //             <SubmitField value="Submit" />
-    //         </Form>,
-    //     );
-    //
-    //     wrapper.find('[name="foo"]').simulate('change', 'ttt');
-    //     expect(wrapper.find('[name="foo"]').exists()).toEqual(true);
-    // });
+    it('should validate field using field validator - with errors', () => {
+        const barValidator = value => value === 'test' ? true : 'barError';
+        class InputWithValidator extends React.Component {
+            componentWillMount() {
+                this.context.setFieldValidator(this.fieldValidator);
+            }
+            onChangeValue = ({ target: { value }}) => {
+                this.props.onChange(value);
+            };
+            fieldValidator = () => {
+                if (this.props.value === 'test') {
+                    return true;
+                }
+                return 'fooError';
+            };
+            render() {
+                const { name, value } = this.props;
+                return (
+                    <div>
+                        <input name={name} onChange={this.onChangeValue} value={value}/>
+                    </div>
+                );
+            }
+        }
+        InputWithValidator.contextTypes = {
+            setFieldValidator: PropTypes.func,
+        };
+        const FieldWithValidator = FieldConnect(InputWithValidator);
+
+        const model = {
+            foo: 'foo',
+            bar: 'bar',
+        };
+
+        const wrapper = mount(
+            <Form
+                onSubmit={() => {}}
+                model={model}
+                schema={fooBarSchema}
+                validateOnChange
+            >
+                <FieldWithValidator
+                    name="foo"
+                />
+                <TextField
+                    name="bar"
+                    validator={barValidator}
+                />
+                <SubmitField value="Submit" />
+            </Form>
+        );
+
+        const formInstance = wrapper.instance();
+        formInstance.submitForm();
+        expect(formInstance.state.validationErrors).toEqual({ foo:['fooError'], bar: ['barError'] });
+    });
 });

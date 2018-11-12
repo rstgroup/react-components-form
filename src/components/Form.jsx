@@ -54,8 +54,8 @@ class Form extends React.Component {
             hasBeenTouched: this.hasBeenTouched,
             validateOnChange: this.state.validateOnChange,
             isFormSubmitted: this.state.isFormSubmitted,
-            setFieldValidator: this.setFieldValidator,
-            removeFieldValidator: this.removeFieldValidator,
+            setValidator: this.setValidator,
+            removeValidator: this.removeValidator,
         };
     }
 
@@ -103,15 +103,14 @@ class Form extends React.Component {
         return this.state.schema.getField(name);
     }
 
-    findFieldValidatorIndex = (validator) => {
+    findValidatorIndex = (validator) => {
         return this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
     };
 
-    setFieldValidator = (path, validator) => {
-        const index = this.findFieldValidatorIndex(validator);
+    setValidator = (path, validator) => {
+        const index = this.findValidatorIndex(validator);
         if(index < 0) {
             const schemaValidator = (model, schema) => {
-                console.log(path);
                 const validationResults = validator(model);
                 if (validationResults && typeof validationResults === 'boolean') {
                     return;
@@ -125,9 +124,9 @@ class Form extends React.Component {
         }
     };
 
-    removeFieldValidator = (validator) => {
-        const index = this.findFieldValidatorIndex(validator);
-        if(index > -1) {
+    removeValidator = (validator) => {
+        const index = this.findValidatorIndex(validator);
+        if (index > -1) {
             const validator = this.fieldsValidators[index];
             if (typeof this.state.schema.validate === 'function') {
                 this.state.schema.removeValidator(validator.schemaValidator);
@@ -285,8 +284,8 @@ Form.childContextTypes = {
     hasBeenTouched: PropTypes.func,
     validateOnChange: PropTypes.bool,
     isFormSubmitted: PropTypes.bool,
-    setFieldValidator: PropTypes.func,
-    removeFieldValidator: PropTypes.func,
+    setValidator: PropTypes.func,
+    removeValidator: PropTypes.func,
 };
 
 Form.propTypes = {
