@@ -54,8 +54,8 @@ class Form extends React.Component {
             hasBeenTouched: this.hasBeenTouched,
             validateOnChange: this.state.validateOnChange,
             isFormSubmitted: this.state.isFormSubmitted,
-            setFieldValidator: this.setFieldValidator,
-            removeFieldValidator: this.removeFieldValidator,
+            setValidator: this.setValidator,
+            removeValidator: this.removeValidator,
         };
     }
 
@@ -104,7 +104,7 @@ class Form extends React.Component {
     }
 
     setFieldValidator = (path, validator) => {
-        const index = this.findFieldValidatorIndex(validator);
+        const index = this.findValidatorIndex(validator);
         if (index < 0) {
             const schemaValidator = (model, schema) => {
                 const validationResults = validator(model);
@@ -132,8 +132,8 @@ class Form extends React.Component {
         return this.props.id;
     }
 
-    removeFieldValidator = (validator) => {
-        const index = this.findFieldValidatorIndex(validator);
+    removeValidator = (validator) => {
+        const index = this.findValidatorIndex(validator);
         if (index > -1) {
             const fieldValidator = this.fieldsValidators[index];
             if (typeof this.state.schema.validate === 'function') {
@@ -143,7 +143,7 @@ class Form extends React.Component {
         }
     };
 
-    findFieldValidatorIndex = validator =>
+    findValidatorIndex = validator =>
         this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
 
     submitListener() {
@@ -279,8 +279,8 @@ Form.childContextTypes = {
     hasBeenTouched: PropTypes.func,
     validateOnChange: PropTypes.bool,
     isFormSubmitted: PropTypes.bool,
-    setFieldValidator: PropTypes.func,
-    removeFieldValidator: PropTypes.func,
+    setValidator: PropTypes.func,
+    removeValidator: PropTypes.func,
 };
 
 Form.propTypes = {
