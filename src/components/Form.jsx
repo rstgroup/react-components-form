@@ -103,7 +103,7 @@ class Form extends React.Component {
         return this.state.schema.getField(name);
     }
 
-    setFieldValidator = (path, validator) => {
+    setValidator = (path, validator) => {
         const index = this.findValidatorIndex(validator);
         if (index < 0) {
             const schemaValidator = (model, schema) => {
