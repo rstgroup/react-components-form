@@ -103,15 +103,10 @@ class Form extends React.Component {
         return this.state.schema.getField(name);
     }
 
-    findFieldValidatorIndex = (validator) => {
-        return this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
-    };
-
     setFieldValidator = (path, validator) => {
         const index = this.findFieldValidatorIndex(validator);
-        if(index < 0) {
+        if (index < 0) {
             const schemaValidator = (model, schema) => {
-                console.log(path);
                 const validationResults = validator(model);
                 if (validationResults && typeof validationResults === 'boolean') {
                     return;
@@ -122,17 +117,6 @@ class Form extends React.Component {
             if (typeof this.state.schema.validate === 'function') {
                 this.state.schema.addValidator(schemaValidator);
             }
-        }
-    };
-
-    removeFieldValidator = (validator) => {
-        const index = this.findFieldValidatorIndex(validator);
-        if(index > -1) {
-            const validator = this.fieldsValidators[index];
-            if (typeof this.state.schema.validate === 'function') {
-                this.state.schema.removeValidator(validator.schemaValidator);
-            }
-            this.fieldsValidators.splice(index, 1);
         }
     };
 
@@ -148,6 +132,20 @@ class Form extends React.Component {
         return this.props.id;
     }
 
+    removeFieldValidator = (validator) => {
+        const index = this.findFieldValidatorIndex(validator);
+        if (index > -1) {
+            const fieldValidator = this.fieldsValidators[index];
+            if (typeof this.state.schema.validate === 'function') {
+                this.state.schema.removeValidator(fieldValidator.schemaValidator);
+            }
+            this.fieldsValidators.splice(index, 1);
+        }
+    };
+
+    findFieldValidatorIndex = validator =>
+        this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
+
     submitListener() {
         return this.submitForm();
     }
@@ -159,10 +157,6 @@ class Form extends React.Component {
     resetListener(model) {
         const newModel = model || Form.getDefaultModelValue(this.state.schema);
         this.storage.setModel(newModel);
-    }
-
-    handleFieldsValidation(model) {
-
     }
 
     handleSchemaValidation(schema, model) {

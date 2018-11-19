@@ -9,10 +9,9 @@ import {
     ObjectField,
     FormEventsEmitter,
     ErrorField,
-    FieldConnect,
 } from '../../src/components';
 import FormController from '../../src/components/FormController';
-import { titleSchema, bookSchema, fooBarSchema } from '../data/schemas';
+import { titleSchema, bookSchema } from '../data/schemas';
 
 
 describe('Form', () => {

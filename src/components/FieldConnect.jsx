@@ -12,13 +12,6 @@ export const FieldConnect = (Component) => {
             this.fieldValue = null;
             this.fieldValidationErrors = null;
             this.fieldValidators = [];
-            this.onChangeData = this.onChangeData.bind(this);
-            this.submit = this.submit.bind(this);
-            this.getValidationErrors = this.getValidationErrors.bind(this);
-            this.hasValidationError = this.hasValidationError.bind(this);
-            this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
-            this.getEventsEmitter = this.getEventsEmitter.bind(this);
-            this.getFieldAttributes = this.getFieldAttributes.bind(this);
         }
 
         getChildContext() {
@@ -53,7 +46,7 @@ export const FieldConnect = (Component) => {
             this.unregisterFieldValidators();
         }
 
-        onChangeData(value) {
+        onChangeData = (value) => {
             const { name, callbacks: { onChange } } = this.props;
             const {
                 setModel,
@@ -77,36 +70,11 @@ export const FieldConnect = (Component) => {
             }
         }
 
-        setFieldValidator = validator => {
+        setFieldValidator = (validator) => {
             const seperatedPath = this.getPath().split('.');
             const modelPath = seperatedPath.splice(1, seperatedPath.length).join('.');
             this.context.setFieldValidator(modelPath, validator);
             this.fieldValidators.push(validator);
-        };
-
-        removeFieldValidator = validator => {
-            const index = this.fieldValidators.indexOf(validator);
-            if (index > -1) {
-                this.context.removeFieldValidator(validator);
-                this.fieldValidators.splice(index, 1);
-            }
-        };
-
-        registerFieldValidators = () => {
-            if (this.props.validator) {
-                const { getModel } = this.context;
-                const fieldValidator = (...attr) => {
-                    const value = typeof getModel === 'function' ? getModel(this.props.name) : '';
-                    return this.props.validator(value, ...attr)
-                };
-                this.setFieldValidator(fieldValidator);
-            }
-        };
-
-        unregisterFieldValidators = () => {
-            this.fieldValidators.forEach(validator => {
-                this.context.removeFieldValidator(validator);
-            });
         };
 
         setCurrentFieldValue(value) {
@@ -135,18 +103,16 @@ export const FieldConnect = (Component) => {
             return fieldValue;
         }
 
-        getPropsFromSchema() {
+        getPropsFromSchema = () => {
             const { name } = this.props;
             const { getSchema } = this.context;
             if (typeof getSchema !== 'function') return undefined;
             return getSchema(name);
         }
 
-        getEventsEmitter() {
-            return this.context.eventsEmitter;
-        }
+        getEventsEmitter = () => this.context.eventsEmitter;
 
-        getValidationErrors() {
+        getValidationErrors = () => {
             const { name, callbacks: { onError } } = this.props;
             const { getValidationErrors } = this.context;
             let results = [];
@@ -164,7 +130,7 @@ export const FieldConnect = (Component) => {
             return `${getPath()}.${name}`;
         };
 
-        getFieldAttributes() {
+        getFieldAttributes = () => {
             const { validateOnChange, isFormSubmitted } = this.context;
             const { fieldAttributes, callbacks: { onFocus, onBlur } } = this.props;
             return Object.assign(
@@ -195,6 +161,29 @@ export const FieldConnect = (Component) => {
             }
         }
 
+        unregisterFieldValidators = () => this.fieldValidators.forEach(
+            validator => this.context.removeFieldValidator(validator),
+        );
+
+        registerFieldValidators = () => {
+            if (this.props.validator) {
+                const { getModel } = this.context;
+                const fieldValidator = (...attr) => {
+                    const value = typeof getModel === 'function' ? getModel(this.props.name) : '';
+                    return this.props.validator(value, ...attr);
+                };
+                this.setFieldValidator(fieldValidator);
+            }
+        };
+
+        removeFieldValidator = (validator) => {
+            const index = this.fieldValidators.indexOf(validator);
+            if (index > -1) {
+                this.context.removeFieldValidator(validator);
+                this.fieldValidators.splice(index, 1);
+            }
+        };
+
         shouldShowErrors() {
             const { hasBeenTouched, validateOnChange, isFormSubmitted } = this.context;
             if (!validateOnChange || isFormSubmitted) {
@@ -203,7 +192,7 @@ export const FieldConnect = (Component) => {
             return hasBeenTouched(this.getPath());
         }
 
-        submit(event) {
+        submit = (event) => {
             const { submitForm } = this.context;
             if (typeof submitForm !== 'function') return;
             submitForm(event);
@@ -270,9 +259,7 @@ export const FieldConnect = (Component) => {
             }
         }
 
-        hasValidationError() {
-            return this.getValidationErrors().length > 0;
-        }
+        hasValidationError = () => this.getValidationErrors().length > 0;
 
         render() {
             return (<Component

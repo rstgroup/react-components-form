@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Autocomplete from 'react-autosuggest';
-import FieldConnect from './FieldConnect';
+import { FieldConnect } from './FieldConnect';
 import ErrorField from './ErrorField';
 import { get, cloneArray } from '../helpers';
 import { fieldDefaultPropTypes } from '../constants/propTypes';

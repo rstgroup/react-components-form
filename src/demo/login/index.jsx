@@ -22,7 +22,7 @@ const LoginForm = () => (
         onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
     >
         <h4>LOGIN FORM</h4>
-        <TextField name="login" label="Login" type="text" validator={(value) => { console.log(value); if (value !== 'test') { return 'errror'; } return true; }} />
+        <TextField name="login" label="Login" type="text" />
         <TextField name="password" label="Password" type="text" />
         <SubmitField value="Login" />
     </Form>
