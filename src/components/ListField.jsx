@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
@@ -43,7 +44,7 @@ export class ListField extends React.Component {
     componentWillReceiveProps({ value }) {
         let shouldSetState = false;
         value.forEach((item, key) => {
-            if (item !== this.state.model[key].value) shouldSetState = true;
+            if (!isEqual(item, this.state.model[key].value)) shouldSetState = true;
         });
         if (shouldSetState) this.storage.setModel(ListField.getModelFromProps({ value }));
     }
