@@ -94,7 +94,7 @@ export const FieldConnect = (Component) => {
                 this.fieldValue = cloneArray(value);
                 return;
             }
-            if (typeof value === 'object') {
+            if (typeof value === 'object' && value !== null) {
                 this.fieldValue = cloneObject(value);
                 return;
             }
