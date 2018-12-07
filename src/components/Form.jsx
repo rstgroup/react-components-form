@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cloneDeep from 'lodash/cloneDeep';
 import Storage from './Storage';
-import { cloneObject } from '../helpers';
 
 class Form extends React.Component {
     constructor(props) {
@@ -212,7 +212,7 @@ class Form extends React.Component {
     }
 
     runSubmit(validationErrors, modelData) {
-        const model = cloneObject(modelData);
+        const model = cloneDeep(modelData);
         if (Object.keys(validationErrors).length > 0) {
             if (this.props.onError) this.props.onError(validationErrors, model);
             return undefined;

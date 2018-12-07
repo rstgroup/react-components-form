@@ -1,8 +1,7 @@
 import React from 'react';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
-
-import { cloneArray, cloneObject } from '../helpers';
+import cloneDeep from 'lodash/cloneDeep';
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
@@ -90,15 +89,7 @@ export const FieldConnect = (Component) => {
         };
 
         setCurrentFieldValue(value) {
-            if (Array.isArray(value)) {
-                this.fieldValue = cloneArray(value);
-                return;
-            }
-            if (typeof value === 'object' && value !== null) {
-                this.fieldValue = cloneObject(value);
-                return;
-            }
-            this.fieldValue = value;
+            this.fieldValue = cloneDeep(value);
         }
 
         getValue() {
