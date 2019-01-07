@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
+import cloneDeep from 'lodash/cloneDeep';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
@@ -43,9 +45,11 @@ export class ListField extends React.Component {
     componentWillReceiveProps({ value }) {
         let shouldSetState = false;
         value.forEach((item, key) => {
-            if (item !== this.state.model[key].value) shouldSetState = true;
+            if (!isEqual(item, this.state.model[key].value)) shouldSetState = true;
         });
-        if (shouldSetState) this.storage.setModel(ListField.getModelFromProps({ value }));
+        if (shouldSetState || value.length !== this.state.model.length) {
+            this.storage.setModel(ListField.getModelFromProps({ value }));
+        }
     }
 
     componentWillUnmount() {
@@ -168,9 +172,8 @@ export class ListField extends React.Component {
     }
 
     removeListElement(key) {
-        const model = Array.from(this.state.model);
+        const model = cloneDeep(this.state.model);
         model.splice(key, 1);
-        this.setState({ model });
         this.props.onChange(model.map(item => item.value));
     }
 

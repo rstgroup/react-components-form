@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import FieldConnect from './FieldConnect';
+import { FieldConnect } from './FieldConnect';
 import ErrorField from './ErrorField';
 import { fieldDefaultPropTypes } from '../constants/propTypes';
 import { fieldDefaultProps } from '../constants/defaultProps';

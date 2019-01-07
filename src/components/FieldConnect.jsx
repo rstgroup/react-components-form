@@ -1,8 +1,7 @@
 import React from 'react';
 import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
-
-import { cloneArray, cloneObject } from '../helpers';
+import cloneDeep from 'lodash/cloneDeep';
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
@@ -11,26 +10,22 @@ export const FieldConnect = (Component) => {
             this.listeners = [];
             this.fieldValue = null;
             this.fieldValidationErrors = null;
-            this.onChangeData = this.onChangeData.bind(this);
-            this.submit = this.submit.bind(this);
-            this.getValidationErrors = this.getValidationErrors.bind(this);
-            this.getPath = this.getPath.bind(this);
-            this.hasValidationError = this.hasValidationError.bind(this);
-            this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
-            this.getEventsEmitter = this.getEventsEmitter.bind(this);
-            this.getFieldAttributes = this.getFieldAttributes.bind(this);
+            this.fieldValidators = [];
         }
 
         getChildContext() {
             return {
                 getSchema: this.context.getSchema,
                 getPath: this.getPath,
+                setFieldValidator: this.setFieldValidator,
+                removeFieldValidator: this.removeFieldValidator,
             };
         }
 
         componentWillMount() {
             this.updateModelWithValueOrOptions();
             this.registerListeners();
+            this.registerFieldValidators();
         }
 
         shouldComponentUpdate(nextProps) {
@@ -47,9 +42,10 @@ export const FieldConnect = (Component) => {
 
         componentWillUnmount() {
             this.unregisterListeners();
+            this.unregisterFieldValidators();
         }
 
-        onChangeData(value) {
+        onChangeData = (value) => {
             const { name, callbacks: { onChange } } = this.props;
             const {
                 setModel,
@@ -73,16 +69,27 @@ export const FieldConnect = (Component) => {
             }
         }
 
+        getModelPath() {
+            const seperatedPath = this.getPath().split('.');
+            return seperatedPath.splice(1, seperatedPath.length)
+                .map((path) => {
+                    const pathAttributes = path.split('-');
+                    if (pathAttributes.length > 1) {
+                        return pathAttributes[1];
+                    }
+                    return path;
+                })
+                .join('.');
+        }
+
+        setFieldValidator = (validator) => {
+            const modelPath = this.getModelPath();
+            this.context.setValidator(modelPath, validator);
+            this.fieldValidators.push(validator);
+        };
+
         setCurrentFieldValue(value) {
-            if (Array.isArray(value)) {
-                this.fieldValue = cloneArray(value);
-                return;
-            }
-            if (typeof value === 'object') {
-                this.fieldValue = cloneObject(value);
-                return;
-            }
-            this.fieldValue = value;
+            this.fieldValue = cloneDeep(value);
         }
 
         getValue() {
@@ -99,18 +106,16 @@ export const FieldConnect = (Component) => {
             return fieldValue;
         }
 
-        getPropsFromSchema() {
+        getPropsFromSchema = () => {
             const { name } = this.props;
             const { getSchema } = this.context;
             if (typeof getSchema !== 'function') return undefined;
             return getSchema(name);
         }
 
-        getEventsEmitter() {
-            return this.context.eventsEmitter;
-        }
+        getEventsEmitter = () => this.context.eventsEmitter;
 
-        getValidationErrors() {
+        getValidationErrors = () => {
             const { name, callbacks: { onError } } = this.props;
             const { getValidationErrors } = this.context;
             let results = [];
@@ -121,14 +126,14 @@ export const FieldConnect = (Component) => {
             return results;
         }
 
-        getPath() {
+        getPath = () => {
             const { name } = this.props;
             const { getPath } = this.context;
             if (typeof getPath !== 'function') return name;
             return `${getPath()}.${name}`;
-        }
+        };
 
-        getFieldAttributes() {
+        getFieldAttributes = () => {
             const { validateOnChange, isFormSubmitted } = this.context;
             const { fieldAttributes, callbacks: { onFocus, onBlur } } = this.props;
             return Object.assign(
@@ -159,6 +164,31 @@ export const FieldConnect = (Component) => {
             }
         }
 
+        removeFieldValidator = (validator) => {
+            const index = this.fieldValidators.indexOf(validator);
+            if (index > -1) {
+                this.context.removeValidator(validator);
+                this.fieldValidators.splice(index, 1);
+            }
+        };
+
+        registerFieldValidators = () => {
+            if (this.props.validator) {
+                const { getModel } = this.context;
+                const fieldValidator = (...attr) => {
+                    const value = typeof getModel === 'function' ? getModel(this.props.name) : '';
+                    return this.props.validator(value, ...attr);
+                };
+                this.setFieldValidator(fieldValidator);
+            }
+        };
+
+        unregisterFieldValidators = () => {
+            this.fieldValidators.forEach((validator) => {
+                this.context.removeValidator(validator);
+            });
+        };
+
         shouldShowErrors() {
             const { hasBeenTouched, validateOnChange, isFormSubmitted } = this.context;
             if (!validateOnChange || isFormSubmitted) {
@@ -167,7 +197,7 @@ export const FieldConnect = (Component) => {
             return hasBeenTouched(this.getPath());
         }
 
-        submit(event) {
+        submit = (event) => {
             const { submitForm } = this.context;
             if (typeof submitForm !== 'function') return;
             submitForm(event);
@@ -234,9 +264,7 @@ export const FieldConnect = (Component) => {
             }
         }
 
-        hasValidationError() {
-            return this.getValidationErrors().length > 0;
-        }
+        hasValidationError = () => this.getValidationErrors().length > 0;
 
         render() {
             return (<Component
@@ -272,11 +300,15 @@ export const FieldConnect = (Component) => {
         hasBeenTouched: PropTypes.func,
         validateOnChange: PropTypes.bool,
         isFormSubmitted: PropTypes.bool,
+        setValidator: PropTypes.func,
+        removeValidator: PropTypes.func,
     };
 
     FieldConnector.childContextTypes = {
         getSchema: PropTypes.func,
         getPath: PropTypes.func,
+        setFieldValidator: PropTypes.func,
+        removeFieldValidator: PropTypes.func,
     };
 
     FieldConnector.propTypes = {
@@ -315,11 +347,13 @@ export const FieldConnect = (Component) => {
             onFocus: PropTypes.func,
             onBlur: PropTypes.func,
         }),
+        validator: PropTypes.func,
     };
 
     FieldConnector.defaultProps = {
         fieldAttributes: {},
         callbacks: {},
+        validator: undefined,
     };
 
     return FieldConnector;

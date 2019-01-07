@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cloneDeep from 'lodash/cloneDeep';
 import Storage from './Storage';
-import { cloneObject } from '../helpers';
 
 class Form extends React.Component {
     constructor(props) {
@@ -17,6 +17,7 @@ class Form extends React.Component {
         if (props.controller) {
             props.controller.setForm(this);
         }
+        this.fieldsValidators = [];
         this.storage = new Storage(this.state.model);
         this.eventsEmitter = props.eventsEmitter;
         this.setModel = this.setModel.bind(this);
@@ -53,6 +54,8 @@ class Form extends React.Component {
             hasBeenTouched: this.hasBeenTouched,
             validateOnChange: this.state.validateOnChange,
             isFormSubmitted: this.state.isFormSubmitted,
+            setValidator: this.setValidator,
+            removeValidator: this.removeValidator,
         };
     }
 
@@ -100,6 +103,23 @@ class Form extends React.Component {
         return this.state.schema.getField(name);
     }
 
+    setValidator = (path, validator) => {
+        const index = this.findValidatorIndex(validator);
+        if (index < 0) {
+            const schemaValidator = (model, schema) => {
+                const validationResults = validator(model);
+                if (validationResults && typeof validationResults === 'boolean') {
+                    return;
+                }
+                schema.setModelError(path, validationResults);
+            };
+            this.fieldsValidators.push({ path, validator, schemaValidator });
+            if (typeof this.state.schema.validate === 'function') {
+                this.state.schema.addValidator(schemaValidator);
+            }
+        }
+    };
+
     getValidationErrors(name) {
         return this.state.validationErrors[name] || {};
     }
@@ -111,6 +131,20 @@ class Form extends React.Component {
     getPath() {
         return this.props.id;
     }
+
+    removeValidator = (validator) => {
+        const index = this.findValidatorIndex(validator);
+        if (index > -1) {
+            const fieldValidator = this.fieldsValidators[index];
+            if (typeof this.state.schema.validate === 'function') {
+                this.state.schema.removeValidator(fieldValidator.schemaValidator);
+            }
+            this.fieldsValidators.splice(index, 1);
+        }
+    };
+
+    findValidatorIndex = validator =>
+        this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
 
     submitListener() {
         return this.submitForm();
@@ -178,7 +212,7 @@ class Form extends React.Component {
     }
 
     runSubmit(validationErrors, modelData) {
-        const model = cloneObject(modelData);
+        const model = cloneDeep(modelData);
         if (Object.keys(validationErrors).length > 0) {
             if (this.props.onError) this.props.onError(validationErrors, model);
             return undefined;
@@ -245,6 +279,8 @@ Form.childContextTypes = {
     hasBeenTouched: PropTypes.func,
     validateOnChange: PropTypes.bool,
     isFormSubmitted: PropTypes.bool,
+    setValidator: PropTypes.func,
+    removeValidator: PropTypes.func,
 };
 
 Form.propTypes = {
