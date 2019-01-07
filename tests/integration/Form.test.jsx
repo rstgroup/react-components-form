@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import Schema from 'form-schema-validation';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import {
     Form,
     TextField,
@@ -12,7 +12,8 @@ import {
     ErrorField,
 } from '../../src/components';
 import FormController from '../../src/components/FormController';
-import { titleSchema, bookSchema } from '../data/schemas';
+import FieldConnect from '../../src/components/FieldConnect';
+import { titleSchema, bookSchema, fooBarSchema } from '../data/schemas';
 
 
 describe('Form', () => {
@@ -635,59 +636,164 @@ describe('Form', () => {
         formInstance.markFieldAsTouched('form.title');
         expect(mockedSetState).toHaveBeenCalledTimes(1);
     });
-    // it('should validate field using field validator - with errors', () => {
-    //     const barValidator = value => (value === 'test' ? true : 'barError');
-    //     class InputWithValidator extends React.Component {
-    //         componentWillMount() {
-    //             this.context.setFieldValidator(this.fieldValidator);
-    //         }
-    //         onChangeValue = ({ target: { value } }) => {
-    //             this.props.onChange(value);
-    //         };
-    //         fieldValidator = () => {
-    //             if (this.props.value === 'test') {
-    //                 return true;
-    //             }
-    //             return 'fooError';
-    //         };
-    //         render() {
-    //             const { name, value } = this.props;
-    //             return (
-    //                 <div>
-    //                     <input name={name} onChange={this.onChangeValue} value={value} />
-    //                 </div>
-    //             );
-    //         }
-    //     }
-    //     InputWithValidator.contextTypes = {
-    //         setFieldValidator: PropTypes.func,
-    //     };
-    //     const FieldWithValidator = FieldConnect(InputWithValidator);
-    //
-    //     const model = {
-    //         foo: 'foo',
-    //         bar: 'bar',
-    //     };
-    //
-    //     const wrapper = mount(
-    //         <Form
-    //             onSubmit={() => {}}
-    //             model={model}
-    //             schema={fooBarSchema}
-    //             validateOnChange
-    //         >
-    //             <FieldWithValidator
-    //                 name="foo"
-    //             />
-    //             <TextField
-    //                 name="bar"
-    //                 validator={barValidator}
-    //             />
-    //             <SubmitField value="Submit" />
-    //         </Form>,
-    //     );
-    //
-    //     const formInstance = wrapper.instance();
-    //     formInstance.submitForm();
-    // });
+    describe('fieldValidators', () => {
+        const barValidator = value => (value === 'test' ? true : 'barError');
+        class InputWithValidator extends React.Component {
+            componentWillMount() {
+                this.context.setFieldValidator(this.fieldValidator);
+            }
+            onChangeValue = ({ target: { value } }) => {
+                this.props.onChange(value);
+            };
+            fieldValidator = () => {
+                if (this.props.value === 'test') {
+                    return true;
+                }
+                return 'fooError';
+            };
+            render() {
+                const { name, value } = this.props;
+                return (
+                    <div>
+                        <input name={name} onChange={this.onChangeValue} value={value} />
+                    </div>
+                );
+            }
+        }
+        InputWithValidator.contextTypes = {
+            setFieldValidator: PropTypes.func,
+        };
+        InputWithValidator.propTypes = {
+            onChange: PropTypes.func.isRequired,
+            value: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+        };
+
+        const FieldWithValidator = FieldConnect(InputWithValidator);
+        it('should validate field using field validator - with errors', () => {
+            const model = {
+                foo: 'foo',
+                bar: 'bar',
+            };
+
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    model={model}
+                    schema={fooBarSchema}
+                    validateOnChange
+                >
+                    <FieldWithValidator
+                        name="foo"
+                    />
+                    <TextField
+                        name="bar"
+                        validator={barValidator}
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            const formInstance = wrapper.instance();
+            formInstance.submitForm();
+            expect(formInstance.state.validationErrors).toEqual({
+                bar: ['barError'],
+                foo: ['fooError'],
+            });
+            wrapper.unmount();
+        });
+        it('should validate field using field validator - without errors', () => {
+            const model = {
+                foo: 'test',
+                bar: 'test',
+            };
+
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    model={model}
+                    schema={fooBarSchema}
+                    validateOnChange
+                >
+                    <FieldWithValidator
+                        name="foo"
+                    />
+                    <TextField
+                        name="bar"
+                        validator={barValidator}
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            const formInstance = wrapper.instance();
+            formInstance.submitForm();
+            expect(formInstance.state.validationErrors).toEqual({});
+        });
+        it('should set field validator and remove field validator with schema', () => {
+            const model = {
+                foo: 'test',
+                bar: 'test',
+            };
+
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    model={model}
+                    schema={fooBarSchema}
+                    validateOnChange
+                >
+                    <TextField
+                        name="bar"
+                        validator={barValidator}
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            const formInstance = wrapper.instance();
+            formInstance.submitForm();
+            expect(formInstance.fieldsValidators.length).toBe(1);
+            formInstance.setValidator('foo', barValidator);
+            expect(formInstance.fieldsValidators.length).toBe(2);
+            formInstance.setValidator('foo', barValidator);
+            expect(formInstance.fieldsValidators.length).toBe(2);
+            formInstance.removeValidator(barValidator);
+            expect(formInstance.fieldsValidators.length).toBe(1);
+            formInstance.removeValidator(barValidator);
+            expect(formInstance.fieldsValidators.length).toBe(1);
+        });
+        it('should set field validator and remove field validator without schema', () => {
+            const model = {
+                foo: 'test',
+                bar: 'test',
+            };
+
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    model={model}
+                    validateOnChange
+                >
+                    <TextField
+                        name="bar"
+                        validator={barValidator}
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            const formInstance = wrapper.instance();
+            formInstance.submitForm();
+            expect(formInstance.fieldsValidators.length).toBe(1);
+            formInstance.setValidator('foo', barValidator);
+            expect(formInstance.fieldsValidators.length).toBe(2);
+            formInstance.setValidator('foo', barValidator);
+            expect(formInstance.fieldsValidators.length).toBe(2);
+            formInstance.removeValidator(barValidator);
+            expect(formInstance.fieldsValidators.length).toBe(1);
+            formInstance.removeValidator(barValidator);
+            expect(formInstance.fieldsValidators.length).toBe(1);
+        });
+    });
 });
