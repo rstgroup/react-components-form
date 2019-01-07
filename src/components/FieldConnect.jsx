@@ -347,11 +347,13 @@ export const FieldConnect = (Component) => {
             onFocus: PropTypes.func,
             onBlur: PropTypes.func,
         }),
+        validator: PropTypes.func,
     };
 
     FieldConnector.defaultProps = {
         fieldAttributes: {},
         callbacks: {},
+        validator: undefined,
     };
 
     return FieldConnector;
