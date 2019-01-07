@@ -1,6 +1,6 @@
 {
   "name": "react-components-form",
-  "version": "3.6.0-rc-7",
+  "version": "3.6.0",
   "description": "React form components",
   "main": "main.js",
   "jsnext:main": "src/index.js",
