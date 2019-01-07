@@ -1,6 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
-import { get } from '../helpers';
+import get from 'lodash/get';
 
 const extendStyles = (
     styles,

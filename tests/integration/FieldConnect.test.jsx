@@ -172,4 +172,93 @@ describe('FieldConnect', () => {
         wrapper.find('input').first().simulate('blur');
         expect(props.callbacks.onBlur).toHaveBeenCalled();
     });
+    it('should set field validator', () => {
+        const context = {
+            setValidator: jest.fn(),
+            removeValidator: jest.fn(),
+            getPath: () => 'form.user.user-1',
+        };
+        const props = {
+            name: 'name',
+        };
+        const validator = jest.fn();
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        wrapper.instance().setFieldValidator(validator);
+        expect(context.setValidator).toHaveBeenCalledWith('user.1.name', validator);
+    });
+    it('should remove field validator when validator exist', () => {
+        const context = {
+            setValidator: jest.fn(),
+            removeValidator: jest.fn(),
+            getPath: () => 'form.user.user-1',
+        };
+        const props = {
+            name: 'name',
+        };
+        const validator = jest.fn();
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        wrapper.instance().setFieldValidator(validator);
+        wrapper.instance().removeFieldValidator(validator);
+        expect(context.removeValidator).toHaveBeenCalledWith(validator);
+    });
+    it('should not remove field validator when validator not exist', () => {
+        const context = {
+            setValidator: jest.fn(),
+            removeValidator: jest.fn(),
+            getPath: () => 'form.user.user-1',
+        };
+        const props = {
+            name: 'name',
+        };
+        const validator = jest.fn();
+        const validator2 = jest.fn();
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        wrapper.instance().setFieldValidator(validator);
+        wrapper.instance().removeFieldValidator(validator2);
+        expect(context.removeValidator).not.toHaveBeenCalled();
+    });
+    it('should register field validator when validator passed by props', () => {
+        const context = {
+            setValidator: jest.fn(),
+            removeValidator: jest.fn(),
+            getPath: () => 'form.user.user-1',
+        };
+        const props = {
+            name: 'name',
+            validator: jest.fn(),
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        expect(context.setValidator).toHaveBeenCalled();
+        wrapper.unmount();
+        expect(context.removeValidator).toHaveBeenCalled();
+    });
+    it('should call validator passed by props', () => {
+        const context = {
+            setValidator: jest.fn(),
+            removeValidator: jest.fn(),
+            getPath: () => 'form.user.user-1',
+            getModel: () => 'foo',
+        };
+        const props = {
+            name: 'name',
+            validator: jest.fn(),
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        wrapper.instance().fieldValidators[0]('bar', 'foo');
+        expect(props.validator).toHaveBeenCalledWith('foo', 'bar', 'foo');
+    });
+    it('should call validator passed by props when getModel method not exist', () => {
+        const context = {
+            setValidator: jest.fn(),
+            removeValidator: jest.fn(),
+            getPath: () => 'form.user.user-1',
+        };
+        const props = {
+            name: 'name',
+            validator: jest.fn(),
+        };
+        const wrapper = mount(<TextFieldWithFormConnect {...props} />, { context });
+        wrapper.instance().fieldValidators[0]('bar', 'foo');
+        expect(props.validator).toHaveBeenCalledWith('', 'bar', 'foo');
+    });
 });

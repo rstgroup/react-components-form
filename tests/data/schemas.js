@@ -66,3 +66,12 @@ export const bookSchema = new Schema({
         type: titleSchema,
     }
 });
+
+export const fooBarSchema = new Schema({
+    foo: {
+        type: String,
+    },
+    bar: {
+        type: String,
+    }
+});

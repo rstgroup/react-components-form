@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Autocomplete from 'react-autosuggest';
-import FieldConnect from './FieldConnect';
+import cloneDeep from 'lodash/cloneDeep';
+import get from 'lodash/get';
+import { FieldConnect } from './FieldConnect';
 import ErrorField from './ErrorField';
-import { get, cloneArray } from '../helpers';
 import { fieldDefaultPropTypes } from '../constants/propTypes';
 import { fieldDefaultProps } from '../constants/defaultProps';
 
@@ -93,7 +94,7 @@ export class AutocompleteField extends Component {
 
     applySectionFilter(sections, escapedValue, searchKey) {
         const { sectionSuggestionsIndex } = this.props;
-        const copiedSections = cloneArray(sections);
+        const copiedSections = cloneDeep(sections);
         const newSections = [];
         copiedSections.forEach((section) => {
             const clonedSection = Object.assign({}, section);
