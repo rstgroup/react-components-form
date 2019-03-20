@@ -5,5 +5,8 @@ export {SelectField} from '../SelectField';
 export {NumberField} from '../NumberField';
 export {DateField} from '../DateField';
 export {CheckboxField} from '../CheckboxField';
+export {RadioField} from '../RadioField';
+export {ObjectField} from '../ObjectField';
+export {ListField} from '../ListField';
 export {ErrorField} from '../ErrorField';
 export {ErrorsContainer} from '../ErrorsContainer';
