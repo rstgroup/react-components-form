@@ -16,7 +16,7 @@ describe('ErrorsContainer', () => {
 
     it('should prepare errors list properly', () => {
         const context = {
-            getAllErrors: () => errors,
+            getAllValidationErrors: () => errors,
         };
         const wrapper = mount(<ErrorsContainer />, { context });
         expect(wrapper.find(ErrorField).props().errors.length).toBe(3);
@@ -69,7 +69,7 @@ describe('ErrorsContainer', () => {
             },
         };
         const context = {
-            getAllErrors: () => listFieldErrors,
+            getAllValidationErrors: () => listFieldErrors,
         };
         const wrapper = mount(<ErrorsContainer />, { context });
         expect(wrapper.find(ErrorField).props().errors).toEqual(availableErrors);
@@ -81,7 +81,7 @@ describe('ErrorsContainer', () => {
             'error1',
         ];
         const context = {
-            getAllErrors: () => errorsArray,
+            getAllValidationErrors: () => errorsArray,
         };
         const wrapper = mount(<ErrorsContainer />, { context });
         expect(wrapper.find(ErrorField).props().errors).toEqual(errorsArray);
@@ -90,7 +90,7 @@ describe('ErrorsContainer', () => {
     it('should prepare errors list properly when errors data is string', () => {
         const errorsArray = ['error0'];
         const context = {
-            getAllErrors: () => errorsArray[0],
+            getAllValidationErrors: () => errorsArray[0],
         };
         const wrapper = mount(<ErrorsContainer />, { context });
         expect(wrapper.find(ErrorField).props().errors).toEqual(errorsArray);
@@ -98,7 +98,7 @@ describe('ErrorsContainer', () => {
 
     it('should prepare errors list properly when errors data is undefined', () => {
         const context = {
-            getAllErrors: () => undefined,
+            getAllValidationErrors: () => undefined,
         };
         const wrapper = mount(<ErrorsContainer />, { context });
         expect(wrapper.find(ErrorField).props().errors).toEqual([]);
@@ -106,7 +106,7 @@ describe('ErrorsContainer', () => {
 
     it('should pass ErrorComponent prop to ErrorField', () => {
         const context = {
-            getAllErrors: () => errors,
+            getAllValidationErrors: () => errors,
         };
         const ErrorComponent = () => (
             <div>error</div>

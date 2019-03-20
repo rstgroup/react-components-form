@@ -35,8 +35,8 @@ const parseErrors = (data) => {
 
 class ErrorsContainer extends Component {
     getErrors() {
-        const { getAllErrors } = this.context;
-        return parseErrors(getAllErrors());
+        const { getAllValidationErrors } = this.context;
+        return parseErrors(getAllValidationErrors());
     }
     render() {
         const errors = this.getErrors();
@@ -50,7 +50,7 @@ class ErrorsContainer extends Component {
 }
 
 ErrorsContainer.contextTypes = {
-    getAllErrors: PropTypes.func,
+    getAllValidationErrors: PropTypes.func,
 };
 
 export default ErrorsContainer;
