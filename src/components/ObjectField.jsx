@@ -68,8 +68,8 @@ export class ObjectField extends React.Component {
     getValidationErrors(name) {
         const { getValidationErrors } = this.context;
         const validationErrors = getValidationErrors(this.props.name);
-        if (Array.isArray(validationErrors) && validationErrors.length === 1) {
-            return validationErrors[0][name] || [];
+        if (Array.isArray(validationErrors) && validationErrors.length > 0) {
+            return validationErrors.map(error => error[name]);
         }
         return validationErrors[name] || [];
     }
