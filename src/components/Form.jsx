@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
+import get from 'lodash/get';
 import Storage from './Storage';
 
 class Form extends React.Component {
@@ -107,7 +108,8 @@ class Form extends React.Component {
         const index = this.findValidatorIndex(validator);
         if (index < 0) {
             const schemaValidator = (model, schema) => {
-                const validationResults = validator(model);
+                const fieldValue = get(model, path);
+                const validationResults = validator(model, fieldValue);
                 if (validationResults && typeof validationResults === 'boolean') {
                     return;
                 }

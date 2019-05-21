@@ -645,8 +645,8 @@ describe('Form', () => {
             onChangeValue = ({ target: { value } }) => {
                 this.props.onChange(value);
             };
-            fieldValidator = () => {
-                if (this.props.value === 'test') {
+            fieldValidator = (model, value) => {
+                if (value === 'test') {
                     return true;
                 }
                 return 'fooError';
