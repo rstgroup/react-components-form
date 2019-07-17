@@ -9,6 +9,7 @@ export const FieldConnect = (Component) => {
             super(props);
             this.listeners = [];
             this.fieldValue = null;
+            this.shouldShowValidationErrors = false;
             this.fieldValidationErrors = null;
             this.fieldValidators = [];
         }
@@ -36,7 +37,8 @@ export const FieldConnect = (Component) => {
             return (
                 !isEqual(getModel(name), this.fieldValue) ||
                 !isEqual(getValidationErrors(name), this.fieldValidationErrors) ||
-                !isEqual(newProps, oldProps)
+                !isEqual(newProps, oldProps) ||
+                !isEqual(this.shouldShowErrors(), this.shouldShowValidationErrors)
             );
         }
 
@@ -118,8 +120,9 @@ export const FieldConnect = (Component) => {
         getValidationErrors = () => {
             const { name, callbacks: { onError } } = this.props;
             const { getValidationErrors } = this.context;
+            this.shouldShowValidationErrors = this.shouldShowErrors();
             let results = [];
-            if (!this.shouldShowErrors()) return results;
+            if (!this.shouldShowValidationErrors) return results;
             if (typeof getValidationErrors === 'function') results = getValidationErrors(name);
             this.fieldValidationErrors = results;
             if (typeof onError === 'function' && Object.keys(results).length > 0) onError(results);
@@ -192,8 +195,10 @@ export const FieldConnect = (Component) => {
         shouldShowErrors() {
             const { hasBeenTouched, validateOnChange, isFormSubmitted } = this.context;
             if (!validateOnChange || isFormSubmitted) {
+                this.shouldShowValidationErrors = true;
                 return true;
             }
+            this.shouldShowValidationErrors = false;
             return hasBeenTouched(this.getPath());
         }
 
