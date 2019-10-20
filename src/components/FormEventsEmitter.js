@@ -1,6 +1,15 @@
 class FormEventsEmitter {
     constructor() {
         this.listeners = {};
+        this.formDebugger = undefined;
+    }
+
+    setFormDebugger(formDebugger) {
+        this.formDebugger = formDebugger;
+    }
+
+    isDebuggerEnabled() {
+        return !!this.formDebugger;
     }
 
     listen(name, listener) {
@@ -37,6 +46,9 @@ class FormEventsEmitter {
 
     emit(name, data) {
         const responseFromListeners = [];
+        if (this.isDebuggerEnabled()) {
+            this.formDebugger.registerEmittedEvent(name, data);
+        }
         if (this.listeners[name] && Array.isArray(this.listeners[name])) {
             this.listeners[name].forEach((listener) => {
                 const response = listener(data);

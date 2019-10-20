@@ -18,9 +18,13 @@ class Form extends React.Component {
         if (props.controller) {
             props.controller.setForm(this);
         }
+        if (props.formDebugger) {
+            this.useFormDebugger();
+        }
         this.fieldsValidators = [];
         this.storage = new Storage(this.state.model);
         this.eventsEmitter = props.eventsEmitter;
+        this.formDebugger = props.formDebugger;
         this.setModel = this.setModel.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
         this.getModel = this.getModel.bind(this);
@@ -39,6 +43,18 @@ class Form extends React.Component {
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
         this.markFieldAsTouched = this.markFieldAsTouched.bind(this);
         this.hasBeenTouched = this.hasBeenTouched.bind(this);
+        this.findValidatorIndex = this.findValidatorIndex.bind(this);
+        this.removeValidator = this.removeValidator.bind(this);
+        this.setValidator = this.setValidator.bind(this);
+    }
+
+    useFormDebugger() {
+        const { formDebugger, eventEmitter } = this.props;
+        formDebugger.registerFormInstance(this);
+        if (eventEmitter) {
+            formDebugger.registerEventEmitter(eventEmitter);
+            eventEmitter.setFormDebugger(formDebugger);
+        }
     }
 
     getChildContext() {
@@ -51,6 +67,7 @@ class Form extends React.Component {
             getAllValidationErrors: this.getAllValidationErrors,
             getPath: this.getPath,
             eventsEmitter: this.eventsEmitter,
+            formDebugger: this.formDebugger,
             markFieldAsTouched: this.markFieldAsTouched,
             hasBeenTouched: this.hasBeenTouched,
             validateOnChange: this.state.validateOnChange,
@@ -104,7 +121,7 @@ class Form extends React.Component {
         return this.state.schema.getField(name);
     }
 
-    setValidator = (path, validator) => {
+    setValidator(path, validator) {
         const index = this.findValidatorIndex(validator);
         if (index < 0) {
             const schemaValidator = (model, schema) => {
@@ -134,7 +151,7 @@ class Form extends React.Component {
         return this.props.id;
     }
 
-    removeValidator = (validator) => {
+    removeValidator(validator) {
         const index = this.findValidatorIndex(validator);
         if (index > -1) {
             const fieldValidator = this.fieldsValidators[index];
@@ -145,8 +162,9 @@ class Form extends React.Component {
         }
     };
 
-    findValidatorIndex = validator =>
-        this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
+    findValidatorIndex(validator) {
+        return this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
+    }
 
     submitListener() {
         return this.submitForm();
@@ -277,6 +295,13 @@ Form.childContextTypes = {
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
     }),
+    formDebugger: PropTypes.shape({
+        registerEventEmitter: PropTypes.func,
+        registerFormInstance: PropTypes.func,
+        registerStateHistory: PropTypes.func,
+        registerFieldListener: PropTypes.func,
+        registerFieldRerender: PropTypes.func,
+    }),
     markFieldAsTouched: PropTypes.func,
     hasBeenTouched: PropTypes.func,
     validateOnChange: PropTypes.bool,
@@ -303,6 +328,13 @@ Form.propTypes = {
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
     }),
+    formDebugger: PropTypes.shape({
+        registerEventEmitter: PropTypes.func,
+        registerFormInstance: PropTypes.func,
+        registerStateHistory: PropTypes.func,
+        registerFieldListener: PropTypes.func,
+        registerFieldRerender: PropTypes.func,
+    }),
     controller: PropTypes.shape({
         setForm: PropTypes.func,
         getFrom: PropTypes.func,
@@ -325,6 +357,7 @@ Form.defaultProps = {
     subform: false,
     children: '',
     eventsEmitter: undefined,
+    formDebugger: undefined,
     controller: undefined,
 };
 

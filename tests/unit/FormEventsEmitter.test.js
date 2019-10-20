@@ -1,6 +1,24 @@
 import FormEventsEmitter from '../../src/components/FormEventsEmitter';
 
 describe('FormEventsEmitter', () => {
+    describe('debugger', () => {
+        const eventsEmitter = new FormEventsEmitter();
+        const formDebugger = {
+            registerEmittedEvent: jest.fn(),
+        };
+
+        it('should set form debugger', () => {
+            eventsEmitter.setFormDebugger(formDebugger);
+            expect(eventsEmitter.formDebugger).toEqual(formDebugger);
+        });
+
+        it('should form debugger register emitted event', () => {
+            const eventName = 'testEvent';
+            const eventData = { test: 'test' };
+            eventsEmitter.emit(eventName, eventData);
+            expect(formDebugger.registerEmittedEvent).toHaveBeenCalledWith(eventName, eventData);
+        })
+    });
     describe('listen', () => {
         const eventsEmitter = new FormEventsEmitter();
         const mockListener = jest.fn();
