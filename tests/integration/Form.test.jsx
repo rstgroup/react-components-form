@@ -796,4 +796,52 @@ describe('Form', () => {
             expect(formInstance.fieldsValidators.length).toBe(1);
         });
     });
+    describe('debugger mode', () => {
+        it('should register form instance in debugger', () => {
+            const formDebugger = {
+                registerFormInstance: jest.fn(),
+                registerFieldRerender: jest.fn(),
+                registerFieldListener: jest.fn(),
+            };
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    formDebugger={formDebugger}
+                >
+                    <TextField
+                        name="bar"
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            expect(formDebugger.registerFormInstance).toHaveBeenCalledWith(wrapper.instance());
+        });
+        it('should register event emitter in debugger', () => {
+            const eventEmitter = {
+                setFormDebugger: jest.fn(),
+            };
+            const formDebugger = {
+                registerFormInstance: jest.fn(),
+                registerFieldRerender: jest.fn(),
+                registerFieldListener: jest.fn(),
+                registerEventEmitter: jest.fn(),
+            };
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    formDebugger={formDebugger}
+                    eventEmitter={eventEmitter}
+                >
+                    <TextField
+                        name="bar"
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            expect(formDebugger.registerFormInstance).toHaveBeenCalledWith(wrapper.instance());
+            expect(eventEmitter.setFormDebugger).toHaveBeenCalledWith(formDebugger);
+        });
+    })
 });

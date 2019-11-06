@@ -21,6 +21,9 @@ describe('FormDebugger', () => {
     it('should register form instance', () => {
         const formMockInstance = {
             getPath: () => 'form',
+            storage: {
+                listen: jest.fn(),
+            }
         };
         formDebugger.registerFormInstance(formMockInstance);
         expect(formDebugger.forms).toEqual({
@@ -45,19 +48,17 @@ describe('FormDebugger', () => {
         formState.fieldTwo = 'test2';
         formDebugger.registerStateHistory(formMockInstance);
 
-        expect(formDebugger.formStateHistory[0].formId).toEqual(formId);
-        expect(formDebugger.formStateHistory[0].state).toEqual({
+        expect(formDebugger.formStateHistory[formId][0].state).toEqual({
             fieldOne: 'test1',
             fieldTwo: 'test1',
         });
-        expect(formDebugger.formStateHistory[0]).toHaveProperty('time');
+        expect(formDebugger.formStateHistory[formId][0]).toHaveProperty('time');
 
-        expect(formDebugger.formStateHistory[1].formId).toEqual(formId);
-        expect(formDebugger.formStateHistory[1].state).toEqual({
+        expect(formDebugger.formStateHistory[formId][1].state).toEqual({
             fieldOne: 'test1',
             fieldTwo: 'test2',
         });
-        expect(formDebugger.formStateHistory[1]).toHaveProperty('time');
+        expect(formDebugger.formStateHistory[formId][1]).toHaveProperty('time');
     });
 
     it('should not register form state history when register form state history feature is disabled', () => {
@@ -75,7 +76,7 @@ describe('FormDebugger', () => {
         formDebugger.settings[FEATURES.FORM_STATE_HISTORY] = false;
         formDebugger.registerStateHistory(formMockInstance);
 
-        expect(formDebugger.formStateHistory.length).toEqual(0);
+        expect(formDebugger.formStateHistory[formId]).toEqual(undefined);
     });
 
     it('should set form state when form instance is registered', () => {
@@ -83,6 +84,7 @@ describe('FormDebugger', () => {
             getPath: () => 'form',
             storage: {
                 setModel: jest.fn(),
+                listen: jest.fn(),
             }
         };
         const mockedState = { test: 'test' };

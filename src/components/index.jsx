@@ -15,3 +15,4 @@ export { default as FormEventsEmitter } from './FormEventsEmitter';
 export { default as ErrorField } from './ErrorField';
 export { default as ErrorsContainer } from './ErrorsContainer';
 export { default as FormController } from './FormController';
+export { default as FormDebugger } from './FormDebugger';

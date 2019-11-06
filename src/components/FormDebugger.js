@@ -16,7 +16,7 @@ export class FormDebugger {
     constructor(settings = {}) {
         this.settings = { ...defaultFormDebuggerSettings, ...settings };
         this.forms = {};
-        this.formStateHistory = [];
+        this.formStateHistory = {};
         this.fieldListeners = {};
         this.fieldRerenders = {};
         this.eventEmitter = {};
@@ -33,6 +33,10 @@ export class FormDebugger {
     }
     registerFormInstance(formInstance) {
         this.forms[formInstance.getPath()] = formInstance;
+        const formHistoryListener = () => {
+            this.registerStateHistory(formInstance)
+        };
+        formInstance.storage.listen(formHistoryListener);
     }
     registerEventEmitter(eventEmitter) {
         this.eventEmitter = eventEmitter;
@@ -41,12 +45,15 @@ export class FormDebugger {
         if (this.isFeatureEnabled(FEATURES.FORM_STATE_HISTORY)) {
             const formId = formInstance.getPath();
             const state = formInstance.storage.getModel();
+            if (!Array.isArray(this.formStateHistory[formId])) {
+                this.formStateHistory[formId] = [];
+            }
             const currentState = {
                 formId,
                 state: cloneDeep(state),
                 time: new Date().toTimeString(),
             };
-            this.formStateHistory.push(currentState);
+            this.formStateHistory[formId].push(currentState);
         }
     }
     setFormState(formId, state) {

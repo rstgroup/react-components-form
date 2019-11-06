@@ -10,7 +10,7 @@ import {
     SubmitField,
 } from '../../components/styled/Bootstrap';
 import { listWrapper, objectFormField, objectFieldClassName } from '../demo.css';
-import { FormEventsEmitter } from '../../components';
+import { FormEventsEmitter, FormDebugger } from '../../components';
 import { consoleData } from '../demoHelpers';
 
 const options = [
@@ -105,6 +105,8 @@ const resetModel = {
 };
 
 const eventsEmitter = new FormEventsEmitter();
+const formDebugger = new FormDebugger();
+window.formDebugger = formDebugger;
 const BookForm = () => (
     <Form
         id="BookForm"
@@ -112,6 +114,7 @@ const BookForm = () => (
         onSubmit={data => consoleData(data)}
         onError={(validationErrors, data) => consoleData('error', validationErrors, data)}
         eventsEmitter={eventsEmitter}
+        formDebugger={formDebugger}
     >
         <h4>BOOK FORM</h4>
         <TextField name="title" type="text" />

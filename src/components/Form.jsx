@@ -18,13 +18,11 @@ class Form extends React.Component {
         if (props.controller) {
             props.controller.setForm(this);
         }
-        if (props.formDebugger) {
-            this.useFormDebugger();
-        }
         this.fieldsValidators = [];
         this.storage = new Storage(this.state.model);
         this.eventsEmitter = props.eventsEmitter;
         this.formDebugger = props.formDebugger;
+        this.useFormDebugger();
         this.setModel = this.setModel.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
         this.getModel = this.getModel.bind(this);
@@ -50,10 +48,12 @@ class Form extends React.Component {
 
     useFormDebugger() {
         const { formDebugger, eventEmitter } = this.props;
-        formDebugger.registerFormInstance(this);
-        if (eventEmitter) {
-            formDebugger.registerEventEmitter(eventEmitter);
-            eventEmitter.setFormDebugger(formDebugger);
+        if (this.formDebugger) {
+            formDebugger.registerFormInstance(this);
+            if (eventEmitter) {
+                formDebugger.registerEventEmitter(eventEmitter);
+                eventEmitter.setFormDebugger(formDebugger);
+            }
         }
     }
 

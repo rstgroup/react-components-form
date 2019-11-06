@@ -1,7 +1,12 @@
 import React from 'react';
-import isEqual from 'lodash/isEqual';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
+
+export const DEBUGGER_ACTIONS = {
+    RERENDER: 'rerender',
+    REGISTER_LISTENER: 'registerListener',
+};
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
@@ -25,6 +30,7 @@ export const FieldConnect = (Component) => {
             this.registerFieldValidators = this.registerFieldValidators.bind(this);
             this.unregisterFieldValidators = this.unregisterFieldValidators.bind(this);
             this.submit = this.submit.bind(this);
+            this.registerActionInDebugger = this.registerActionInDebugger.bind(this);
         }
 
         getChildContext() {
@@ -238,6 +244,17 @@ export const FieldConnect = (Component) => {
             }
         }
 
+        registerActionInDebugger(actionType) {
+            const { formDebugger } = this.context;
+            if (formDebugger) {
+                switch (actionType) {
+                    case DEBUGGER_ACTIONS.RERENDER: formDebugger.registerFieldRerender(this); break;
+                    case DEBUGGER_ACTIONS.REGISTER_LISTENER: formDebugger.registerFieldListener(this); break;
+                    default: break;
+                }
+            }
+        }
+
         registerListeners() {
             const { onModelChange, onEmitEvents } = this.props;
             const { eventsEmitter } = this.context;
@@ -245,6 +262,7 @@ export const FieldConnect = (Component) => {
                 if (typeof onModelChange === 'function') {
                     this.onModelChangeMethod = data => onModelChange(data, this);
                     eventsEmitter.listen('modelChange', this.onModelChangeMethod);
+                    this.registerActionInDebugger(DEBUGGER_ACTIONS.REGISTER_LISTENER);
                 }
                 if (onEmitEvents) {
                     if (Array.isArray(onEmitEvents)) {
@@ -255,6 +273,7 @@ export const FieldConnect = (Component) => {
                             };
                             this.listeners.push(listener);
                             eventsEmitter.listen(name, listener.method);
+                            this.registerActionInDebugger(DEBUGGER_ACTIONS.REGISTER_LISTENER);
                         });
                         return;
                     }
@@ -265,6 +284,7 @@ export const FieldConnect = (Component) => {
                     };
                     this.listeners.push(listener);
                     eventsEmitter.listen(name, listener.method);
+                    this.registerActionInDebugger(DEBUGGER_ACTIONS.REGISTER_LISTENER);
                 }
             }
         }
@@ -289,6 +309,7 @@ export const FieldConnect = (Component) => {
         }
 
         render() {
+            this.registerActionInDebugger(DEBUGGER_ACTIONS.RERENDER);
             return (<Component
                 {...this.getPropsFromSchema()}
                 {...this.props}
@@ -317,6 +338,13 @@ export const FieldConnect = (Component) => {
             listen: PropTypes.func,
             unregisterEvent: PropTypes.func,
             unlisten: PropTypes.func,
+        }),
+        formDebugger: PropTypes.shape({
+            registerEventEmitter: PropTypes.func,
+            registerFormInstance: PropTypes.func,
+            registerStateHistory: PropTypes.func,
+            registerFieldListener: PropTypes.func,
+            registerFieldRerender: PropTypes.func,
         }),
         markFieldAsTouched: PropTypes.func,
         hasBeenTouched: PropTypes.func,
