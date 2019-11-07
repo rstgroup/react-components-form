@@ -638,6 +638,14 @@ describe('Form', () => {
     });
     describe('fieldValidators', () => {
         const barValidator = value => (value === 'test' ? true : 'barError');
+        const asyncBarValidator = value =>
+            new Promise((resolve) => {
+                if (value === 'test') {
+                    resolve(true);
+                    return;
+                }
+                resolve('barError');
+            });
         class InputWithValidator extends React.Component {
             componentWillMount() {
                 this.context.setFieldValidator(this.fieldValidator);
@@ -702,6 +710,39 @@ describe('Form', () => {
             });
             wrapper.unmount();
         });
+        it('should validate field using async field validator - with errors', () => {
+            const model = {
+                foo: 'foo',
+                bar: 'bar',
+            };
+
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    model={model}
+                    schema={fooBarSchema}
+                    validateOnChange
+                >
+                    <FieldWithValidator
+                        name="foo"
+                    />
+                    <TextField
+                        name="bar"
+                        validator={asyncBarValidator}
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            const formInstance = wrapper.instance();
+            return formInstance.submitForm().then(() => {
+                expect(formInstance.state.validationErrors).toEqual({
+                    bar: ['barError'],
+                    foo: ['fooError'],
+                });
+                wrapper.unmount();
+            });
+        });
         it('should validate field using field validator - without errors', () => {
             const model = {
                 foo: 'test',
@@ -729,6 +770,36 @@ describe('Form', () => {
             const formInstance = wrapper.instance();
             formInstance.submitForm();
             expect(formInstance.state.validationErrors).toEqual({});
+        });
+        it('should validate field using async field validator - without errors', () => {
+            const model = {
+                foo: 'test',
+                bar: 'test',
+            };
+
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    model={model}
+                    schema={fooBarSchema}
+                    validateOnChange
+                >
+                    <FieldWithValidator
+                        name="foo"
+                    />
+                    <TextField
+                        name="bar"
+                        validator={asyncBarValidator}
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            const formInstance = wrapper.instance();
+            return formInstance.submitForm().then(() => {
+                expect(formInstance.state.validationErrors).toEqual({});
+                wrapper.unmount();
+            });
         });
         it('should set field validator and remove field validator with schema', () => {
             const model = {
