@@ -128,9 +128,17 @@ class Form extends React.Component {
                 const fieldValue = get(model, path);
                 const validationResults = validator(model, fieldValue);
                 if (validationResults && typeof validationResults === 'boolean') {
-                    return;
+                    return validationResults;
                 }
-                schema.setModelError(path, validationResults);
+                if (validationResults instanceof Promise) {
+                    return validationResults.then((asyncValidationError) => {
+                        if (asyncValidationError && typeof asyncValidationError === 'boolean') {
+                            return asyncValidationError;
+                        }
+                        return schema.setModelError(path, asyncValidationError);
+                    });
+                }
+                return schema.setModelError(path, validationResults);
             };
             this.fieldsValidators.push({ path, validator, schemaValidator });
             if (typeof this.state.schema.validate === 'function') {
