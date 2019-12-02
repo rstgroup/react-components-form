@@ -11,6 +11,7 @@ import {
     FormEventsEmitter,
     ErrorField,
 } from '../../src/components';
+import { setErrorOnSchema } from '../../src/components/Form';
 import FormController from '../../src/components/FormController';
 import FieldConnect from '../../src/components/FieldConnect';
 import { titleSchema, bookSchema, fooBarSchema } from '../data/schemas';
@@ -866,5 +867,23 @@ describe('Form', () => {
             formInstance.removeValidator(barValidator);
             expect(formInstance.fieldsValidators.length).toBe(1);
         });
+    });
+});
+
+describe('setErrorOnSchema', () => {
+    let schema;
+    beforeEach(() => {
+        schema = {
+            setModelError: jest.fn(),
+        };
+    });
+
+    it('should set error on schema when error has object structure', () => {
+        setErrorOnSchema(schema, 'foo.0', { bar: 'barError' });
+        expect(schema.setModelError).toHaveBeenCalledWith('foo.0.bar', 'barError');
+    });
+    it('should set error on schema when error is string', () => {
+        setErrorOnSchema(schema, 'foo.bar', 'barError');
+        expect(schema.setModelError).toHaveBeenCalledWith('foo.bar', 'barError');
     });
 });
