@@ -2,7 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
+import isObject from 'lodash/isObject';
 import Storage from './Storage';
+
+export const setErrorOnSchema = (schema, path, error) => {
+    if (isObject(error)) {
+        Object.keys(error).forEach((key) => {
+            schema.setModelError(`${path}.${key}`, error[key]);
+        });
+        return;
+    }
+    schema.setModelError(path, error);
+};
 
 class Form extends React.Component {
     constructor(props) {
@@ -118,10 +129,10 @@ class Form extends React.Component {
                         if (asyncValidationError && typeof asyncValidationError === 'boolean') {
                             return asyncValidationError;
                         }
-                        return schema.setModelError(path, asyncValidationError);
+                        return setErrorOnSchema(schema, path, asyncValidationError);
                     });
                 }
-                return schema.setModelError(path, validationResults);
+                return setErrorOnSchema(schema, path, validationResults);
             };
             this.fieldsValidators.push({ path, validator, schemaValidator });
             if (typeof this.state.schema.validate === 'function') {
