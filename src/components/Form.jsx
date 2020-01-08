@@ -2,7 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
+import isObject from 'lodash/isObject';
 import Storage from './Storage';
+
+export const setErrorOnSchema = (schema, path, error) => {
+    if (isObject(error)) {
+        Object.keys(error).forEach((key) => {
+            schema.setModelError(`${path}.${key}`, error[key]);
+        });
+        return;
+    }
+    schema.setModelError(path, error);
+};
 
 class Form extends React.Component {
     constructor(props) {
@@ -44,17 +55,6 @@ class Form extends React.Component {
         this.findValidatorIndex = this.findValidatorIndex.bind(this);
         this.removeValidator = this.removeValidator.bind(this);
         this.setValidator = this.setValidator.bind(this);
-    }
-
-    useFormDebugger() {
-        const { formDebugger, eventEmitter } = this.props;
-        if (this.formDebugger) {
-            formDebugger.registerFormInstance(this);
-            if (eventEmitter) {
-                formDebugger.registerEventEmitter(eventEmitter);
-                eventEmitter.setFormDebugger(formDebugger);
-            }
-        }
     }
 
     getChildContext() {
@@ -135,17 +135,17 @@ class Form extends React.Component {
                         if (asyncValidationError && typeof asyncValidationError === 'boolean') {
                             return asyncValidationError;
                         }
-                        return schema.setModelError(path, asyncValidationError);
+                        return setErrorOnSchema(schema, path, asyncValidationError);
                     });
                 }
-                return schema.setModelError(path, validationResults);
+                return setErrorOnSchema(schema, path, validationResults);
             };
             this.fieldsValidators.push({ path, validator, schemaValidator });
             if (typeof this.state.schema.validate === 'function') {
                 this.state.schema.addValidator(schemaValidator);
             }
         }
-    };
+    }
 
     getValidationErrors(name) {
         return this.state.validationErrors[name] || {};
@@ -159,6 +159,17 @@ class Form extends React.Component {
         return this.props.id;
     }
 
+    useFormDebugger() {
+        const { formDebugger, eventsEmitter } = this.props;
+        if (this.formDebugger) {
+            formDebugger.registerFormInstance(this);
+            if (eventsEmitter) {
+                formDebugger.registerEventEmitter(eventsEmitter);
+                eventsEmitter.setFormDebugger(formDebugger);
+            }
+        }
+    }
+
     removeValidator(validator) {
         const index = this.findValidatorIndex(validator);
         if (index > -1) {
@@ -168,10 +179,12 @@ class Form extends React.Component {
             }
             this.fieldsValidators.splice(index, 1);
         }
-    };
+    }
 
     findValidatorIndex(validator) {
-        return this.fieldsValidators.findIndex(fieldValidator => fieldValidator.validator === validator);
+        return this.fieldsValidators.findIndex(
+            fieldValidator => fieldValidator.validator === validator,
+        );
     }
 
     submitListener() {
@@ -302,6 +315,7 @@ Form.childContextTypes = {
         listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
+        setFormDebugger: PropTypes.func,
     }),
     formDebugger: PropTypes.shape({
         registerEventEmitter: PropTypes.func,
@@ -335,6 +349,7 @@ Form.propTypes = {
         listen: PropTypes.func,
         unregisterEvent: PropTypes.func,
         unlisten: PropTypes.func,
+        setFormDebugger: PropTypes.func,
     }),
     formDebugger: PropTypes.shape({
         registerEventEmitter: PropTypes.func,

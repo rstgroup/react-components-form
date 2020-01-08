@@ -106,7 +106,6 @@ const resetModel = {
 
 const eventsEmitter = new FormEventsEmitter();
 const formDebugger = new FormDebugger();
-window.formDebugger = formDebugger;
 const BookForm = () => (
     <Form
         id="BookForm"

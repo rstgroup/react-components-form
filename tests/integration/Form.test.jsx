@@ -11,6 +11,7 @@ import {
     FormEventsEmitter,
     ErrorField,
 } from '../../src/components';
+import { setErrorOnSchema } from '../../src/components/Form';
 import FormController from '../../src/components/FormController';
 import FieldConnect from '../../src/components/FieldConnect';
 import { titleSchema, bookSchema, fooBarSchema } from '../data/schemas';
@@ -889,8 +890,9 @@ describe('Form', () => {
             expect(formDebugger.registerFormInstance).toHaveBeenCalledWith(wrapper.instance());
         });
         it('should register event emitter in debugger', () => {
-            const eventEmitter = {
+            const eventsEmitter = {
                 setFormDebugger: jest.fn(),
+                listen: jest.fn(),
             };
             const formDebugger = {
                 registerFormInstance: jest.fn(),
@@ -902,7 +904,7 @@ describe('Form', () => {
                 <Form
                     onSubmit={() => {}}
                     formDebugger={formDebugger}
-                    eventEmitter={eventEmitter}
+                    eventsEmitter={eventsEmitter}
                 >
                     <TextField
                         name="bar"
@@ -912,7 +914,25 @@ describe('Form', () => {
             );
 
             expect(formDebugger.registerFormInstance).toHaveBeenCalledWith(wrapper.instance());
-            expect(eventEmitter.setFormDebugger).toHaveBeenCalledWith(formDebugger);
+            expect(eventsEmitter.setFormDebugger).toHaveBeenCalledWith(formDebugger);
         });
-    })
+    });
+});
+
+describe('setErrorOnSchema', () => {
+    let schema;
+    beforeEach(() => {
+        schema = {
+            setModelError: jest.fn(),
+        };
+    });
+
+    it('should set error on schema when error has object structure', () => {
+        setErrorOnSchema(schema, 'foo.0', { bar: 'barError' });
+        expect(schema.setModelError).toHaveBeenCalledWith('foo.0.bar', 'barError');
+    });
+    it('should set error on schema when error is string', () => {
+        setErrorOnSchema(schema, 'foo.bar', 'barError');
+        expect(schema.setModelError).toHaveBeenCalledWith('foo.bar', 'barError');
+    });
 });

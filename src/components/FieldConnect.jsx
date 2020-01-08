@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
+import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
 
 export const DEBUGGER_ACTIONS = {
@@ -18,19 +19,19 @@ export const FieldConnect = (Component) => {
             this.fieldValidationErrors = null;
             this.fieldValidators = [];
 
-            this.onChangeData = this.onChangeData.bind(this);
+            this.registerActionInDebugger = this.registerActionInDebugger.bind(this);
             this.setFieldValidator = this.setFieldValidator.bind(this);
-            this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
-            this.getEventsEmitter = this.getEventsEmitter.bind(this);
-            this.getValidationErrors = this.getValidationErrors.bind(this);
-            this.hasValidationError = this.hasValidationError.bind(this);
-            this.getPath = this.getPath.bind(this);
-            this.getFieldAttributes = this.getFieldAttributes.bind(this);
             this.removeFieldValidator = this.removeFieldValidator.bind(this);
             this.registerFieldValidators = this.registerFieldValidators.bind(this);
             this.unregisterFieldValidators = this.unregisterFieldValidators.bind(this);
+            this.onChangeData = this.onChangeData.bind(this);
+            this.getPath = this.getPath.bind(this);
+            this.getPropsFromSchema = this.getPropsFromSchema.bind(this);
+            this.getEventsEmitter = this.getEventsEmitter.bind(this);
+            this.getValidationErrors = this.getValidationErrors.bind(this);
+            this.getFieldAttributes = this.getFieldAttributes.bind(this);
+            this.hasValidationError = this.hasValidationError.bind(this);
             this.submit = this.submit.bind(this);
-            this.registerActionInDebugger = this.registerActionInDebugger.bind(this);
         }
 
         getChildContext() {
@@ -107,7 +108,7 @@ export const FieldConnect = (Component) => {
             const modelPath = this.getModelPath();
             this.context.setValidator(modelPath, validator);
             this.fieldValidators.push(validator);
-        };
+        }
 
         setCurrentFieldValue(value) {
             this.fieldValue = cloneDeep(value);
@@ -155,7 +156,7 @@ export const FieldConnect = (Component) => {
             const { getPath } = this.context;
             if (typeof getPath !== 'function') return name;
             return `${getPath()}.${name}`;
-        };
+        }
 
         getFieldAttributes() {
             const { validateOnChange, isFormSubmitted } = this.context;
@@ -194,7 +195,7 @@ export const FieldConnect = (Component) => {
                 this.context.removeValidator(validator);
                 this.fieldValidators.splice(index, 1);
             }
-        };
+        }
 
         registerFieldValidators() {
             if (this.props.validator) {
@@ -205,13 +206,13 @@ export const FieldConnect = (Component) => {
                 };
                 this.setFieldValidator(fieldValidator);
             }
-        };
+        }
 
         unregisterFieldValidators() {
             this.fieldValidators.forEach((validator) => {
                 this.context.removeValidator(validator);
             });
-        };
+        }
 
         shouldShowErrors() {
             const { hasBeenTouched, validateOnChange, isFormSubmitted } = this.context;
@@ -248,9 +249,11 @@ export const FieldConnect = (Component) => {
             const { formDebugger } = this.context;
             if (formDebugger) {
                 switch (actionType) {
-                    case DEBUGGER_ACTIONS.RERENDER: formDebugger.registerFieldRerender(this); break;
-                    case DEBUGGER_ACTIONS.REGISTER_LISTENER: formDebugger.registerFieldListener(this); break;
-                    default: break;
+                case DEBUGGER_ACTIONS.RERENDER:
+                    formDebugger.registerFieldRerender(this); break;
+                case DEBUGGER_ACTIONS.REGISTER_LISTENER:
+                    formDebugger.registerFieldListener(this); break;
+                default: break;
                 }
             }
         }
@@ -305,7 +308,7 @@ export const FieldConnect = (Component) => {
         }
 
         hasValidationError() {
-            return this.getValidationErrors().length > 0;
+            return !isEmpty(this.getValidationErrors());
         }
 
         render() {
