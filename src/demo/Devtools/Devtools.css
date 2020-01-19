@@ -1,0 +1,47 @@
+.wrapper {
+    border: 1px solid #e3e3e3;
+    height: 200px;
+    display: flex;
+}
+
+.formStateHistoryWrapper {
+    width: 400px;
+}
+
+.historyListContainer {
+    display: flex;
+}
+
+.historyTitle {
+    font-weight: 600;
+    width: 100%;
+    background: #333;
+    color: #FFF;
+    padding: 6px 10px;
+}
+
+.historyList {
+    width: 400px;
+    height: 170px;
+    overflow-y: auto;
+}
+
+.historyItem {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #e3e3e3;
+    padding: 6px 10px;
+}
+
+.historyItem:hover {
+    cursor: pointer;
+    background: #f5f5f5;
+}
+
+
+.formFields {
+    width: 500px;
+}

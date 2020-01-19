@@ -92,6 +92,15 @@ export class FormDebugger {
             data,
         });
     }
+    getDevtoolsData() {
+        return JSON.stringify({
+            settings: this.settings,
+            formStateHistory: this.formStateHistory,
+            fieldListeners: this.fieldListeners,
+            fieldRerenders: this.fieldRerenders,
+            emittedEvents: this.emittedEvents,
+        });
+    }
 }
 
 export default FormDebugger;
