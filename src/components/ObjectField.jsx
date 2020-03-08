@@ -9,7 +9,7 @@ export class ObjectField extends React.Component {
         super(props);
         this.state = {
             schema: {},
-            model: props.value,
+            model: props.value ? props.value : {},
             validationErrors: {},
         };
 
@@ -37,7 +37,7 @@ export class ObjectField extends React.Component {
         this.storage.listen(this.setStateModel);
     }
 
-    componentWillReceiveProps({ value }) {
+    componentWillReceiveProps({ value = {} }) {
         this.setState({ model: value });
         this.storage.setModel(value, null, true);
     }
@@ -112,7 +112,7 @@ ObjectField.propTypes = {
 };
 
 ObjectField.defaultProps = {
-    value: {},
+    value: undefined,
     name: undefined,
     children: '',
     wrapperClassName: '',
