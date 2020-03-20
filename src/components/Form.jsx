@@ -6,9 +6,15 @@ import isObject from 'lodash/isObject';
 import Storage from './Storage';
 
 export const setErrorOnSchema = (schema, path, error) => {
-    if (isObject(error)) {
+    if (isObject(error) || Array.isArray(error)) {
         Object.keys(error).forEach((key) => {
-            schema.setModelError(`${path}.${key}`, error[key]);
+            if (error[key]) {
+                if (typeof error[key] === 'string') {
+                    schema.setModelError(path, error[key]);
+                    return;
+                }
+                setErrorOnSchema(schema, `${path}.${key}`, error[key]);
+            }
         });
         return;
     }

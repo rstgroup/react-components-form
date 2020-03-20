@@ -880,7 +880,7 @@ describe('setErrorOnSchema', () => {
 
     it('should set error on schema when error has object structure', () => {
         setErrorOnSchema(schema, 'foo.0', { bar: 'barError' });
-        expect(schema.setModelError).toHaveBeenCalledWith('foo.0.bar', 'barError');
+        expect(schema.setModelError).toHaveBeenCalledWith('foo.0', 'barError');
     });
     it('should set error on schema when error is string', () => {
         setErrorOnSchema(schema, 'foo.bar', 'barError');

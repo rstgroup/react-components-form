@@ -12,6 +12,7 @@ import {
 import { listWrapper, objectFormField, objectFieldClassName } from '../demo.css';
 import { FormEventsEmitter } from '../../components';
 import { consoleData } from '../demoHelpers';
+import CustomField from './CustomField';
 
 const options = [
     {
@@ -32,6 +33,16 @@ const personSchema = new Schema({
     name: {
         type: String,
         required: true,
+        validators: [
+            {
+                validator: (value) => {
+                    if (value.length < 3) {
+                        return 'personError';
+                    }
+                    return true;
+                },
+            },
+        ],
     },
     surname: {
         type: String,
@@ -104,6 +115,7 @@ const resetModel = {
     status: true,
 };
 
+
 const eventsEmitter = new FormEventsEmitter();
 const BookForm = () => (
     <Form
@@ -116,6 +128,7 @@ const BookForm = () => (
         <h4>BOOK FORM</h4>
         <TextField name="title" type="text" />
         <SelectField name="category" />
+        <CustomField name="authors" />
         <ListField
             name="authors"
             className={listWrapper}
