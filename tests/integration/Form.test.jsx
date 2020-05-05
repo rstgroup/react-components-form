@@ -11,6 +11,7 @@ import {
     FormEventsEmitter,
     ErrorField,
 } from '../../src/components';
+import { setErrorOnSchema } from '../../src/components/Form';
 import FormController from '../../src/components/FormController';
 import FieldConnect from '../../src/components/FieldConnect';
 import { titleSchema, bookSchema, fooBarSchema } from '../data/schemas';
@@ -638,6 +639,14 @@ describe('Form', () => {
     });
     describe('fieldValidators', () => {
         const barValidator = value => (value === 'test' ? true : 'barError');
+        const asyncBarValidator = value =>
+            new Promise((resolve) => {
+                if (value === 'test') {
+                    resolve(true);
+                    return;
+                }
+                resolve('barError');
+            });
         class InputWithValidator extends React.Component {
             componentWillMount() {
                 this.context.setFieldValidator(this.fieldValidator);
@@ -702,6 +711,39 @@ describe('Form', () => {
             });
             wrapper.unmount();
         });
+        it('should validate field using async field validator - with errors', () => {
+            const model = {
+                foo: 'foo',
+                bar: 'bar',
+            };
+
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    model={model}
+                    schema={fooBarSchema}
+                    validateOnChange
+                >
+                    <FieldWithValidator
+                        name="foo"
+                    />
+                    <TextField
+                        name="bar"
+                        validator={asyncBarValidator}
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            const formInstance = wrapper.instance();
+            return formInstance.submitForm().then(() => {
+                expect(formInstance.state.validationErrors).toEqual({
+                    bar: ['barError'],
+                    foo: ['fooError'],
+                });
+                wrapper.unmount();
+            });
+        });
         it('should validate field using field validator - without errors', () => {
             const model = {
                 foo: 'test',
@@ -729,6 +771,36 @@ describe('Form', () => {
             const formInstance = wrapper.instance();
             formInstance.submitForm();
             expect(formInstance.state.validationErrors).toEqual({});
+        });
+        it('should validate field using async field validator - without errors', () => {
+            const model = {
+                foo: 'test',
+                bar: 'test',
+            };
+
+            const wrapper = mount(
+                <Form
+                    onSubmit={() => {}}
+                    model={model}
+                    schema={fooBarSchema}
+                    validateOnChange
+                >
+                    <FieldWithValidator
+                        name="foo"
+                    />
+                    <TextField
+                        name="bar"
+                        validator={asyncBarValidator}
+                    />
+                    <SubmitField value="Submit" />
+                </Form>,
+            );
+
+            const formInstance = wrapper.instance();
+            return formInstance.submitForm().then(() => {
+                expect(formInstance.state.validationErrors).toEqual({});
+                wrapper.unmount();
+            });
         });
         it('should set field validator and remove field validator with schema', () => {
             const model = {
@@ -795,5 +867,23 @@ describe('Form', () => {
             formInstance.removeValidator(barValidator);
             expect(formInstance.fieldsValidators.length).toBe(1);
         });
+    });
+});
+
+describe('setErrorOnSchema', () => {
+    let schema;
+    beforeEach(() => {
+        schema = {
+            setModelError: jest.fn(),
+        };
+    });
+
+    it('should set error on schema when error has object structure', () => {
+        setErrorOnSchema(schema, 'foo.0', { bar: 'barError' });
+        expect(schema.setModelError).toHaveBeenCalledWith('foo.0', 'barError');
+    });
+    it('should set error on schema when error is string', () => {
+        setErrorOnSchema(schema, 'foo.bar', 'barError');
+        expect(schema.setModelError).toHaveBeenCalledWith('foo.bar', 'barError');
     });
 });
