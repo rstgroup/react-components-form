@@ -33,7 +33,7 @@ const parseErrors = (data) => {
 };
 
 
-class ErrorsContainer extends Component {
+export class ErrorsContainer extends Component {
     getErrors() {
         const { getAllValidationErrors } = this.context;
         return parseErrors(getAllValidationErrors());

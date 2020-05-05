@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ['babel-polyfill', "./src/demo/index.jsx"],
+    entry: ['@babel/polyfill', "./src/demo/index.jsx"],
     output: {
         path: '/dist/',
         filename: "demo.js"
@@ -10,18 +10,25 @@ module.exports = {
         extensions: ['.js', '.jsx']
     },
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader?modules=true&localIdentName=[name]__[local]___[hash:base64:5]'
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: {
+                                localIdentName: '[name]__[hash:base64:5]'
+                            }
+                        }
+                    }
+                ],
             },
             {
                 test: /.jsx?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
-                query: {
-                    presets: ['es2015', 'stage-0', 'es2017', 'react']
-                }
             }
         ]
     },
