@@ -16,7 +16,7 @@ export class CheckboxField extends React.Component {
         this.toggleValue = this.toggleValue.bind(this);
     }
 
-    componentWillReceiveProps({ value, checkboxValue }) {
+    UNSAFE_componentWillReceiveProps({ value, checkboxValue }) {
         this.setState({ checked: value, value: checkboxValue });
     }
 

@@ -77,7 +77,7 @@ class Form extends React.Component {
         };
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.storage.listen(this.setStateModel);
         if (this.eventsEmitter) {
             this.eventsEmitter.listen('submit', this.submitListener);

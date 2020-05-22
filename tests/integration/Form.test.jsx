@@ -648,7 +648,7 @@ describe('Form', () => {
                 resolve('barError');
             });
         class InputWithValidator extends React.Component {
-            componentWillMount() {
+            UNSAFE_componentWillMount() {
                 this.context.setFieldValidator(this.fieldValidator);
             }
             onChangeValue = ({ target: { value } }) => {
