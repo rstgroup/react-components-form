@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
+import get from 'lodash/get';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
 
@@ -45,7 +46,7 @@ export class ListField extends React.Component {
     componentWillReceiveProps({ value }) {
         let shouldSetState = false;
         value.forEach((item, key) => {
-            if (!isEqual(item, this.state.model[key].value)) shouldSetState = true;
+            if (!isEqual(item, get(this.state, `model.${key}.value`))) shouldSetState = true;
         });
         if (shouldSetState || value.length !== this.state.model.length) {
             this.storage.setModel(ListField.getModelFromProps({ value }));
