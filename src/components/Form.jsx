@@ -77,7 +77,7 @@ class Form extends React.Component {
         };
     }
 
-    UNSAFE_componentWillMount() {
+    UNSAFE_componentWillMount() { // eslint-disable-line
         this.storage.listen(this.setStateModel);
         if (this.eventsEmitter) {
             this.eventsEmitter.listen('submit', this.submitListener);

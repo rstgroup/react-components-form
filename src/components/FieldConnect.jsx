@@ -37,7 +37,7 @@ export const FieldConnect = (Component) => {
             };
         }
 
-        UNSAFE_componentWillMount() {
+        UNSAFE_componentWillMount() { // eslint-disable-line
             this.updateModelWithValueOrOptions();
             this.registerListeners();
             this.registerFieldValidators();

@@ -648,7 +648,7 @@ describe('Form', () => {
                 resolve('barError');
             });
         class InputWithValidator extends React.Component {
-            UNSAFE_componentWillMount() {
+            UNSAFE_componentWillMount() { // eslint-disable-line
                 this.context.setFieldValidator(this.fieldValidator);
             }
             onChangeValue = ({ target: { value } }) => {

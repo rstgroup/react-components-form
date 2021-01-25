@@ -30,14 +30,14 @@ export class ObjectField extends React.Component {
         };
     }
 
-    UNSAFE_componentWillMount() {
+    UNSAFE_componentWillMount() { // eslint-disable-line
         const { getSchema } = this.context;
         const schema = getSchema(this.props.name).type;
         this.setState({ schema });
         this.storage.listen(this.setStateModel);
     }
 
-    UNSAFE_componentWillReceiveProps({ value = {} }) {
+    UNSAFE_componentWillReceiveProps({ value = {} }) { // eslint-disable-line
         this.setState({ model: value });
         this.storage.setModel(value, null, true);
     }
