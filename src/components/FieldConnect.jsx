@@ -37,7 +37,7 @@ export const FieldConnect = (Component) => {
             };
         }
 
-        componentWillMount() {
+        UNSAFE_componentWillMount() {
             this.updateModelWithValueOrOptions();
             this.registerListeners();
             this.registerFieldValidators();

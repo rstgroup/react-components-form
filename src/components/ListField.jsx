@@ -39,11 +39,11 @@ export class ListField extends React.Component {
         };
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.storage.listen(this.setStateModel);
     }
 
-    componentWillReceiveProps({ value }) {
+    UNSAFE_componentWillReceiveProps({ value }) {
         let shouldSetState = false;
         value.forEach((item, key) => {
             if (!isEqual(item, get(this.state, `model.${key}.value`))) shouldSetState = true;
