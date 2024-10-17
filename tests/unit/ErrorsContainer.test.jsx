@@ -1,7 +1,9 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, within, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { ErrorsContainer } from '../../src/components';
 import { ErrorField } from '../../src/components/separate';
+import FormContext from '../../src/context';
 
 describe('ErrorsContainer', () => {
     const errors = {
@@ -15,12 +17,17 @@ describe('ErrorsContainer', () => {
     };
 
     it('should prepare errors list properly', () => {
-        const context = {
+        const contextValue = {
             getAllValidationErrors: () => errors,
         };
-        const wrapper = mount(<ErrorsContainer />, { context });
-        expect(wrapper.find(ErrorField).props().errors.length).toBe(3);
-        expect(wrapper.find(ErrorField).props().errors[0]).toBe(errors.name[0]);
+        render(
+            <FormContext.Provider value={contextValue}>
+                <ErrorsContainer />
+            </FormContext.Provider>
+        );
+        const errorField = screen.getByTestId('error-field');
+        expect(within(errorField).getAllByRole('listitem').length).toBe(3);
+        expect(within(errorField).getByText(errors.name[0])).toBeInTheDocument();
     });
 
     it('should prepare errors list properly when example errors from ListField given', () => {
@@ -68,11 +75,18 @@ describe('ErrorsContainer', () => {
                 },
             },
         };
-        const context = {
+        const contextValue = {
             getAllValidationErrors: () => listFieldErrors,
         };
-        const wrapper = mount(<ErrorsContainer />, { context });
-        expect(wrapper.find(ErrorField).props().errors).toEqual(availableErrors);
+        render(
+            <FormContext.Provider value={contextValue}>
+                <ErrorsContainer />
+            </FormContext.Provider>
+        );
+        const errorField = screen.getByTestId('error-field');
+        availableErrors.forEach(error => {
+            expect(within(errorField).getByText(error)).toBeInTheDocument();
+        });
     });
 
     it('should prepare errors list properly when errors data is array', () => {
@@ -80,32 +94,49 @@ describe('ErrorsContainer', () => {
             'error0',
             'error1',
         ];
-        const context = {
+        const contextValue = {
             getAllValidationErrors: () => errorsArray,
         };
-        const wrapper = mount(<ErrorsContainer />, { context });
-        expect(wrapper.find(ErrorField).props().errors).toEqual(errorsArray);
+        render(
+            <FormContext.Provider value={contextValue}>
+                <ErrorsContainer />
+            </FormContext.Provider>
+        );
+        const errorField = screen.getByTestId('error-field');
+        errorsArray.forEach(error => {
+            expect(within(errorField).getByText(error)).toBeInTheDocument();
+        });
     });
 
     it('should prepare errors list properly when errors data is string', () => {
         const errorsArray = ['error0'];
-        const context = {
+        const contextValue = {
             getAllValidationErrors: () => errorsArray[0],
         };
-        const wrapper = mount(<ErrorsContainer />, { context });
-        expect(wrapper.find(ErrorField).props().errors).toEqual(errorsArray);
+        render(
+            <FormContext.Provider value={contextValue}>
+                <ErrorsContainer />
+            </FormContext.Provider>
+        );
+        const errorField = screen.getByTestId('error-field');
+        expect(within(errorField).getByText(errorsArray[0])).toBeInTheDocument();
     });
 
     it('should prepare errors list properly when errors data is undefined', () => {
-        const context = {
+        const contextValue = {
             getAllValidationErrors: () => undefined,
         };
-        const wrapper = mount(<ErrorsContainer />, { context });
-        expect(wrapper.find(ErrorField).props().errors).toEqual([]);
+        render(
+            <FormContext.Provider value={contextValue}>
+                <ErrorsContainer />
+            </FormContext.Provider>
+        );
+        const errorField = screen.getByTestId('error-field');
+        expect(within(errorField).queryAllByRole('listitem').length).toBe(0);
     });
 
     it('should pass ErrorComponent prop to ErrorField', () => {
-        const context = {
+        const contextValue = {
             getAllValidationErrors: () => errors,
         };
         const ErrorComponent = () => (
@@ -114,7 +145,12 @@ describe('ErrorsContainer', () => {
         const props = {
             ErrorComponent,
         };
-        const wrapper = mount(<ErrorsContainer {...props} />, { context });
-        expect(wrapper.find(ErrorField).props().ErrorComponent).toBe(ErrorComponent);
+        render(
+            <FormContext.Provider value={contextValue}>
+                <ErrorsContainer {...props} />
+            </FormContext.Provider>
+        );
+        const errorField = screen.getByTestId('error-field');
+        expect(within(errorField).getByText('error')).toBeInTheDocument();
     });
 });

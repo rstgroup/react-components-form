@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { TextareaField } from '../../src/components/TextareaField';
 
 describe('TextareaField', () => {
@@ -11,13 +12,16 @@ describe('TextareaField', () => {
             onChange: onChangeData,
             hasValidationError: true,
             validationErrors: ['testError'],
-            errorsStyles: {
+            errorStyles: {
                 className: 'errorClassName',
             },
             className: 'testComponent',
         };
-        const wrapper = mount(<TextareaField {...props} />);
-        wrapper.find('textarea').simulate('change', { target: { value: 'testValue' } });
+        render(<TextareaField {...props} />);
+
+        const textarea = screen.getByLabelText('first name');
+        fireEvent.change(textarea, { target: { value: 'testValue' } });
+
         expect(onChangeData).toBeCalledWith('testValue');
     });
 });

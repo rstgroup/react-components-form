@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
+import FormContext from '../context';
 
 export class ObjectField extends React.Component {
-    constructor(props) {
+    constructor(props, context) {
         super(props);
+        const { getSchema } = context;
+        const schema = getSchema(props.name).type;
         this.state = {
-            schema: {},
+            schema,
             model: props.value ? props.value : {},
             validationErrors: {},
         };
@@ -19,10 +22,9 @@ export class ObjectField extends React.Component {
         this.getSchema = this.getSchema.bind(this);
         this.getValidationErrors = this.getValidationErrors.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
-    }
 
-    getChildContext() {
-        return {
+        this.childContext = {
+            ...(this.context ? this.context : {}),
             setModel: this.setModel,
             getModel: this.getModel,
             getSchema: this.getSchema,
@@ -30,10 +32,7 @@ export class ObjectField extends React.Component {
         };
     }
 
-    UNSAFE_componentWillMount() { // eslint-disable-line
-        const { getSchema } = this.context;
-        const schema = getSchema(this.props.name).type;
-        this.setState({ schema });
+    componentDidMount() { // eslint-disable-line
         this.storage.listen(this.setStateModel);
     }
 
@@ -83,17 +82,16 @@ export class ObjectField extends React.Component {
     render() {
         const { children, wrapperClassName, fieldAttributes } = this.props;
         return (
-            <div className={wrapperClassName} {...fieldAttributes}>
-                {children}
-            </div>
+            <FormContext.Provider value={this.childContext}>
+                <div className={wrapperClassName} {...fieldAttributes}>
+                    {children}
+                </div>
+            </FormContext.Provider>
         );
     }
 }
 
-ObjectField.contextTypes = {
-    getSchema: PropTypes.func,
-    getValidationErrors: PropTypes.func,
-};
+ObjectField.contextType = FormContext;
 
 ObjectField.childContextTypes = {
     setModel: PropTypes.func,

@@ -23,6 +23,7 @@ export const SelectField = ({
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label htmlFor={name}>{label}</label>}
         <select
+            id={name}
             name={name}
             onChange={e => onChange(e.target.value)}
             value={value}

@@ -28,6 +28,7 @@ export const NumberField = ({
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label htmlFor={name}>{label}</label>}
         <input
+            id={name}
             type="number"
             name={name}
             onChange={e => onChange(parseByType(e.target.value, type))}

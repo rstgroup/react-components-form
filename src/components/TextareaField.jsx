@@ -21,6 +21,7 @@ export const TextareaField = ({
     <div className={classnames(wrapperClassName, hasValidationError && errorStyles.fieldClassName)}>
         {label && <label htmlFor={name}>{label}</label>}
         <textarea
+            id={name}
             name={name}
             onChange={e => onChange(e.target.value)}
             value={value}

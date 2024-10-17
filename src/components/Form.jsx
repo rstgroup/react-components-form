@@ -4,6 +4,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import isObject from 'lodash/isObject';
 import Storage from './Storage';
+import FormContext from '../context';
 
 export const setErrorOnSchema = (schema, path, error) => {
     if (isObject(error) || Array.isArray(error)) {
@@ -56,10 +57,8 @@ class Form extends React.Component {
         this.handlePromiseValidation = this.handlePromiseValidation.bind(this);
         this.markFieldAsTouched = this.markFieldAsTouched.bind(this);
         this.hasBeenTouched = this.hasBeenTouched.bind(this);
-    }
 
-    getChildContext() {
-        return {
+        this.childContext = {
             setModel: this.setModel,
             getModel: this.getModel,
             getSchema: this.getSchema,
@@ -274,41 +273,24 @@ class Form extends React.Component {
 
         if (subform) {
             return (
-                <div className={className}>
-                    {children}
-                </div>
+                <FormContext.Provider value={this.childContext}>
+                    <div className={className}>
+                        {children}
+                    </div>
+                </FormContext.Provider>
             );
         }
         return (
-            <form onSubmit={this.submitForm} id={id} className={className}>
-                {children}
-            </form>
+            <FormContext.Provider value={this.childContext}>
+                <form onSubmit={this.submitForm} id={id} className={className}>
+                    {children}
+                </form>
+            </FormContext.Provider>
         );
     }
 }
 
-Form.childContextTypes = {
-    setModel: PropTypes.func,
-    getModel: PropTypes.func,
-    getSchema: PropTypes.func,
-    submitForm: PropTypes.func,
-    getValidationErrors: PropTypes.func,
-    getAllValidationErrors: PropTypes.func,
-    getPath: PropTypes.func,
-    eventsEmitter: PropTypes.shape({
-        emit: PropTypes.func,
-        registerEvent: PropTypes.func,
-        listen: PropTypes.func,
-        unregisterEvent: PropTypes.func,
-        unlisten: PropTypes.func,
-    }),
-    markFieldAsTouched: PropTypes.func,
-    hasBeenTouched: PropTypes.func,
-    validateOnChange: PropTypes.bool,
-    isFormSubmitted: PropTypes.bool,
-    setValidator: PropTypes.func,
-    removeValidator: PropTypes.func,
-};
+Form.contextType = FormContext;
 
 Form.propTypes = {
     id: PropTypes.string,

@@ -18,9 +18,9 @@ export const ErrorField = ({
         );
     }
     return (
-        <div className={className}>
+        <div className={className} data-testid="error-field">
             {errorsList.map(error => (
-                <div className={itemClassName} key={error}>
+                <div className={itemClassName} key={error} role="listitem">
                     {error}
                 </div>
             ))}

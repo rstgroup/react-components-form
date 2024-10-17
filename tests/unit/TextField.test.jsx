@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { TextField } from '../../src/components/TextField';
 
 describe('TextField', () => {
@@ -11,22 +12,21 @@ describe('TextField', () => {
             onChange: onChangeData,
             hasValidationError: true,
             validationErrors: ['testError'],
-            errorsStyles: {
+            errorStyles: {
                 className: 'errorClassName',
             },
             className: 'testComponent',
         };
-        const wrapper = mount(<TextField {...props} />);
-        wrapper.setProps({ type: 'number' });
-        wrapper.find('input').simulate('change', { target: { value: 'testValue' } });
+        render(<TextField {...props} />);
+        fireEvent.change(screen.getByRole('textbox'), { target: { value: 'testValue' } });
         expect(onChangeData).toBeCalledWith('testValue');
     });
 
     it('should call onChange with trimmed value if trim flag is set', () => {
         const fakeOnChange = jest.fn();
         const fakeEvent = { target: { value: '  test value  ' } };
-        const wrapper = mount(<TextField onChange={fakeOnChange} trim />);
-        wrapper.find('input').simulate('change', fakeEvent);
+        render(<TextField onChange={fakeOnChange} trim />);
+        fireEvent.change(screen.getByRole('textbox'), fakeEvent);
         expect(fakeOnChange).toHaveBeenCalledWith('test value');
     });
 });

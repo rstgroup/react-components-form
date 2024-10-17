@@ -5,6 +5,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import get from 'lodash/get';
 import Storage from './Storage';
 import FieldConnect from './FieldConnect';
+import FormContext from '../context';
 
 export class ListField extends React.Component {
     static generateItemId() {
@@ -28,6 +29,14 @@ export class ListField extends React.Component {
         this.getSchema = this.getSchema.bind(this);
         this.getValidationErrors = this.getValidationErrors.bind(this);
         this.setStateModel = this.setStateModel.bind(this);
+
+        this.childContext = {
+            ...(this.context ? this.context : {}),
+            setModel: this.setModel,
+            getModel: this.getModel,
+            getSchema: this.getSchema,
+            getValidationErrors: this.getValidationErrors,
+        };
     }
 
     getChildContext() {
@@ -193,17 +202,19 @@ export class ListField extends React.Component {
         const isAddAllowed = this.isAddAllowed();
 
         return (
-            <div className={wrapperClassName}>
-                {label && <label htmlFor={name}>{label}</label>}
-                <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
-                {!hideAddButton && isAddAllowed && <button
-                    onClick={this.addListElement}
-                    className={addButton.className}
-                    type="button"
-                >
-                    {addButton.value || 'Add'}
-                </button>}
-            </div>
+            <FormContext.Provider value={this.childContext}>
+                <div className={wrapperClassName}>
+                    {label && <label htmlFor={name}>{label}</label>}
+                    <div className={className} {...fieldAttributes}>{this.getList(children)}</div>
+                    {!hideAddButton && isAddAllowed && <button
+                        onClick={this.addListElement}
+                        className={addButton.className}
+                        type="button"
+                    >
+                        {addButton.value || 'Add'}
+                    </button>}
+                </div>
+            </FormContext.Provider>
         );
     }
 }

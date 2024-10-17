@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import TextField from '../../src/components/TextField';
 import fieldsRestyle from '../../src/components/FieldsRestyle';
 
@@ -17,7 +18,8 @@ describe('FieldsRestyle', () => {
         }, { TextField });
         expect(Object.keys(Fields).length).toBe(1);
         const TextComponent = Fields.TextField;
-        const textComponentWrapper = mount(<TextComponent />);
-        expect(textComponentWrapper.find(TextField).props().className).toBe('form-control');
+        const { getByRole } = render(<TextComponent />);
+        const textField = getByRole('textbox'); // Assuming TextField renders an input element
+        expect(textField).toHaveClass('form-control');
     });
 });

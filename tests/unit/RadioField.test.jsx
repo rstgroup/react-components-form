@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { RadioField } from '../../src/components/RadioField';
 
 describe('RadioField', () => {
@@ -13,7 +14,7 @@ describe('RadioField', () => {
             onChange: onChangeData,
             hasValidationError: true,
             validationErrors: ['testError'],
-            errorsStyles: {
+            errorStyles: {
                 className: 'errorClassName',
             },
             className: 'testComponent',
@@ -25,22 +26,25 @@ describe('RadioField', () => {
     });
 
     it('should call onChange method on change event', () => {
-        const wrapper = mount(<RadioField {...props} />);
-        wrapper.find('input').first().simulate('change');
+        render(<RadioField {...props} />);
+        fireEvent.click(screen.getByLabelText('test1'));
         expect(onChangeData).toBeCalledWith('test1');
-        wrapper.find('input').at(1).simulate('change');
+        fireEvent.click(screen.getByLabelText('test2'));
         expect(onChangeData).toBeCalledWith('test2');
     });
 
     it('should render label and value if options is array of objects', () => {
         const firstLabel = 'test 1';
         const lastLabel = 'test 2';
-        const fieldProps = Object.assign({}, props, { options: [
-            { label: firstLabel, value: 'test1' },
-            { label: lastLabel, value: 'test2' },
-        ] });
-        const wrapper = mount(<RadioField {...fieldProps} />);
-        expect(wrapper.contains(firstLabel)).toEqual(true);
-        expect(wrapper.contains(lastLabel)).toEqual(true);
+        const fieldProps = {
+            ...props,
+            options: [
+                { label: firstLabel, value: 'test1' },
+                { label: lastLabel, value: 'test2' },
+            ],
+        };
+        render(<RadioField {...fieldProps} />);
+        expect(screen.getByLabelText(firstLabel)).toBeInTheDocument();
+        expect(screen.getByLabelText(lastLabel)).toBeInTheDocument();
     });
 });

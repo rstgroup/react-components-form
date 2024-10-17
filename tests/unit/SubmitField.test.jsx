@@ -1,18 +1,20 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { SubmitField } from '../../src/components/SubmitField';
 
 describe('SubmitField', () => {
-    it('should receive props and call onChange method on change value', () => {
+    it('should receive props and call submit method on button click', () => {
         const mockFunction = jest.fn();
         const props = {
             submit: mockFunction,
             value: 'Submit',
         };
-        const wrapper = mount(<SubmitField {...props} />);
-        expect(wrapper.props().value).toBe(props.value);
-        expect(wrapper.props().submit).toBe(props.submit);
-        wrapper.find('button').simulate('click');
-        expect(mockFunction.mock.calls.length).toBe(1);
+        render(<SubmitField {...props} />);
+
+        const button = screen.getByText('Submit');
+        expect(button).toBeInTheDocument();
+        fireEvent.click(button);
+        expect(mockFunction).toHaveBeenCalledTimes(1);
     });
 });

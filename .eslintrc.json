@@ -24,7 +24,20 @@
             "variables": false
         }],
         "import/no-named-as-default": 0,
-        "jsx-a11y/heading-has-content": 0
+        "jsx-a11y/heading-has-content": 0,
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": [
+                    "**/tests/**/*.js",
+                    "**/*.test.js",
+                    "**/*.spec.js",
+                    "**/tests/**/*.jsx",
+                    "**/*.test.jsx",
+                    "**/*.spec.jsx"
+                ]
+            }
+        ]
     },
     "globals": {
         "document": true

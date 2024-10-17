@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import ErrorField from './ErrorField';
+import FormContext from '../context';
 
 const parseArrayOfErrors = (array) => {
     let parsedErrors = [];
@@ -49,8 +49,6 @@ export class ErrorsContainer extends Component {
     }
 }
 
-ErrorsContainer.contextTypes = {
-    getAllValidationErrors: PropTypes.func,
-};
+ErrorsContainer.contextType = FormContext;
 
 export default ErrorsContainer;

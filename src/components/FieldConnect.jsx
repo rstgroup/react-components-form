@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import cloneDeep from 'lodash/cloneDeep';
+import FormContext from '../context';
 
 export const FieldConnect = (Component) => {
     class FieldConnector extends React.Component {
@@ -26,11 +27,10 @@ export const FieldConnect = (Component) => {
             this.getFieldAttributes = this.getFieldAttributes.bind(this);
             this.hasValidationError = this.hasValidationError.bind(this);
             this.submit = this.submit.bind(this);
-        }
 
-        getChildContext() {
-            return {
-                getSchema: this.context.getSchema,
+            this.childContext = {
+                ...(this.context ? this.context : {}),
+                getSchema: this.context?.getSchema,
                 getPath: this.getPath,
                 setFieldValidator: this.setFieldValidator,
                 removeFieldValidator: this.removeFieldValidator,
@@ -290,49 +290,26 @@ export const FieldConnect = (Component) => {
         }
 
         render() {
-            return (<Component
-                {...this.getPropsFromSchema()}
-                {...this.props}
-                onChange={this.onChangeData}
-                submit={this.submit}
-                validationErrors={this.getValidationErrors()}
-                hasValidationError={this.hasValidationError()}
-                value={this.getValue()}
-                eventsEmitter={this.getEventsEmitter()}
-                path={this.getPath()}
-                fieldAttributes={this.getFieldAttributes()}
-            />);
+            return (
+                <FormContext.Provider value={this.childContext}>
+                    <Component
+                        {...this.getPropsFromSchema()}
+                        {...this.props}
+                        onChange={this.onChangeData}
+                        submit={this.submit}
+                        validationErrors={this.getValidationErrors()}
+                        hasValidationError={this.hasValidationError()}
+                        value={this.getValue()}
+                        eventsEmitter={this.getEventsEmitter()}
+                        path={this.getPath()}
+                        fieldAttributes={this.getFieldAttributes()}
+                    />
+                </FormContext.Provider>
+            );
         }
     }
 
-    FieldConnector.contextTypes = {
-        setModel: PropTypes.func,
-        getModel: PropTypes.func,
-        getSchema: PropTypes.func,
-        submitForm: PropTypes.func,
-        getValidationErrors: PropTypes.func,
-        getPath: PropTypes.func,
-        eventsEmitter: PropTypes.shape({
-            emit: PropTypes.func,
-            registerEvent: PropTypes.func,
-            listen: PropTypes.func,
-            unregisterEvent: PropTypes.func,
-            unlisten: PropTypes.func,
-        }),
-        markFieldAsTouched: PropTypes.func,
-        hasBeenTouched: PropTypes.func,
-        validateOnChange: PropTypes.bool,
-        isFormSubmitted: PropTypes.bool,
-        setValidator: PropTypes.func,
-        removeValidator: PropTypes.func,
-    };
-
-    FieldConnector.childContextTypes = {
-        getSchema: PropTypes.func,
-        getPath: PropTypes.func,
-        setFieldValidator: PropTypes.func,
-        removeFieldValidator: PropTypes.func,
-    };
+    FieldConnector.contextType = FormContext;
 
     FieldConnector.propTypes = {
         /* eslint-disable */

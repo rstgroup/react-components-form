@@ -1,5 +1,6 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { SelectField } from '../../src/components/SelectField';
 
 describe('SelectField', () => {
@@ -12,14 +13,14 @@ describe('SelectField', () => {
             onChange: onChangeData,
             hasValidationError: true,
             validationErrors: ['testError'],
-            errorsStyles: {
+            errorStyles: {
                 className: 'errorClassName',
             },
             className: 'testComponent',
+            options,
         };
-        const wrapper = mount(<SelectField {...props} />);
-        wrapper.setProps({ options });
-        wrapper.find('select').simulate('change', { target: { value: 'option3' } });
+        render(<SelectField {...props} />);
+        fireEvent.change(screen.getByLabelText('first name'), { target: { value: 'option3' } });
         expect(onChangeData).toBeCalledWith('option3');
     });
 
@@ -49,12 +50,12 @@ describe('SelectField', () => {
             onChange: onChangeData,
             hasValidationError: true,
             validationErrors: testError,
-            errorsStyles: errorStyles,
+            errorStyles,
             className: 'testComponent',
             options,
         };
-        const wrapper = mount(<SelectField {...props} />);
-        wrapper.find('select').simulate('change', { target: { value: 'opt2' } });
+        render(<SelectField {...props} />);
+        fireEvent.change(screen.getByLabelText('Options'), { target: { value: 'opt2' } });
         expect(onChangeData).toBeCalledWith('opt2');
     });
 
@@ -84,12 +85,12 @@ describe('SelectField', () => {
             onChange: () => {},
             hasValidationError: true,
             validationErrors: testError,
-            errorsStyles: errorStyles,
+            errorStyles,
             className: 'testComponent',
             options,
         };
-        const wrapper = mount(<SelectField {...props} />);
-        expect(wrapper.find('option[value="opt1"]').html().includes('disabled=""')).toBe(true);
-        expect(wrapper.find('option[value="opt2"]').html().includes('disabled=""')).toBe(false);
+        render(<SelectField {...props} />);
+        expect(screen.getByText('option 1')).toBeDisabled();
+        expect(screen.getByText('option 2')).not.toBeDisabled();
     });
 });

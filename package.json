@@ -39,14 +39,13 @@
     "form-schema-validation": "^1.15.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.6.0",
-    "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
+    "react": "^18.0.0",
     "react-autosuggest": "^9.4.0",
-    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0"
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.0",
-    "@babel/polyfill": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.2.1",
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
@@ -55,16 +54,17 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
     "@babel/plugin-proposal-throw-expressions": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.7.1",
-    "babel-loader": "^8.0.6",
     "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.6.3",
     "@babel/traverse": "^7.7.0",
+    "@testing-library/jest-dom": "^6.6.1",
+    "@testing-library/react": "^16.0.1",
     "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.6",
     "coveralls": "^3.1.0",
     "css-loader": "^3.5.3",
-    "enzyme": "^3.4.4",
-    "enzyme-adapter-react-16": "^1.2.0",
     "eslint": "^4.4.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.6.1",
@@ -79,9 +79,6 @@
     "webpack-dev-server": "3.9.0"
   },
   "jest": {
-    "setupFiles": [
-      "./tests/enzymeConfig.js"
-    ],
     "verbose": true,
     "coverageThreshold": {
       "global": {
@@ -91,6 +88,12 @@
         "statements": 85
       }
     },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
     "collectCoverage": true
   }
 }
