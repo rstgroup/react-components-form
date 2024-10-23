@@ -33,7 +33,6 @@
         - clone field component (array of fields)
     - [SubmitField](https://rstgroup.gitbooks.io/react-components-form/content/fields/submitfield.html) (button to submit form)
 - [custom fields](https://rstgroup.gitbooks.io/react-components-form/content/fields/create-field.html) (FieldConnect)
-- [FieldConnect](/documentation/FieldConnect.md)
 - field can have object structure (ObjectField)
 - field can have array structure (ListField)
 - [FormEventsEmitter](https://rstgroup.gitbooks.io/react-components-form/content/advanced/formeventsemitter.html)
