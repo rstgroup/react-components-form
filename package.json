@@ -1,7 +1,7 @@
 {
   "name": "react-components-form",
   "private": true,
-  "version": "6.0.0",
+  "version": "6.0.0-rc-0",
   "type": "module",
   "description": "A simple ui library for React",
   "scripts": {
