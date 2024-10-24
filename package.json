@@ -1,9 +1,10 @@
 {
   "name": "react-components-form",
-  "private": true,
   "version": "6.0.0-rc-0",
   "type": "module",
   "description": "A simple ui library for React",
+  "repository": "https://github.com/mprzodala/react-components-form",
+  "homepage": "https://github.com/mprzodala/react-components-form",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -18,6 +19,20 @@
   "publishConfig": {
     "access": "public"
   },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "keywords": [
+    "react-components-form",
+    "react",
+    "forms",
+    "react-forms",
+    "react-form",
+    "form",
+    "inputs",
+    "input"
+  ],
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
   "exports": {
@@ -65,6 +80,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
+  "author": "Mariusz Przodała",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.25.8",
     "@babel/preset-env": "^7.25.8",
