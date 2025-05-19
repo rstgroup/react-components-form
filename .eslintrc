@@ -1,0 +1,48 @@
+{
+    "plugins": ["react", "@typescript-eslint", "import", "react-hooks"],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"],
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jest": true,
+        "node": true
+    },
+    "rules": {
+        "no-empty": "off",
+        "no-empty-function": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "comma-dangle": ["error", "only-multiline"],
+        "complexity": ["warn", 4],
+        "curly": ["error", "all"],
+        "@typescript-eslint/no-var-requires": "off",
+        "linebreak-style": 0,
+        "react/display-name": 0,
+        "max-nested-callbacks": ["error", 4],
+        "no-console": "warn",
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allowAfterThis": true,
+                "allowAfterSuper": true
+            }
+        ],
+        "react/forbid-prop-types": [
+            "warn",
+            {
+                "forbid": ["any", "array", "object"]
+            }
+        ],
+        "react/no-deprecated": 1,
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+    },
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalDecorators": true,
+            "legacyDecorators": true,
+            "jsx": true
+        }
+    }
+}

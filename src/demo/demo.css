@@ -26,6 +26,14 @@ label {
     color: #666;
 }
 
+.listWrapper {
+    display: block;
+    width: 100%;
+    border-bottom: 2px solid #ddd;
+    vertical-align: top;
+    padding: 15px 0;
+}
+
 .listWrapper:not(:empty) {
     background-color: #fafafa;
     border: 1px solid #ddd;
@@ -85,4 +93,53 @@ label {
     position: absolute;
     top: 100%;
     width: 100%;
+}
+
+.addButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.removeButton {
+    background-color: #f44336;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.defaultButton {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.footbar {
+    display: flex;
+    width: 100%;
+    padding: 10px 0;
+    justify-content: space-between;
 }
