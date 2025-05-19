@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { render, waitFor, act } from '@testing-library/react';
 import Form from '../Form';
 import FormController from '../FormController';
