@@ -1,6 +1,12 @@
 import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import pkgJson from "./package.json";
+
+const {
+  peerDependencies,
+  dependencies,
+} = pkgJson;
 
 export default defineConfig({
   build: {
@@ -11,7 +17,10 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: [...Object.keys({
+        ...peerDependencies,
+        ...dependencies,
+      }), 'react/jsx-runtime'],
       output: {
         globals: {
           react: "React",
